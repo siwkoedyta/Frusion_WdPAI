@@ -1,0 +1,106 @@
+.pierwsza_kolumna {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    margin-right: 4rem;
+}
+
+.prostokat_pola_rekordu {
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    width: 100%;
+    background: #FFF;
+    border-radius: 2.5rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.lewa_strona,
+.prawa_strona{
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+    padding: 0.6rem;
+}
+
+#imie_nazwisko,
+.waga_cena,
+.cala_waga,
+.cala_cena,
+.cale_skrzynki,
+.cala_wartosc {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 0.4rem;
+}
+
+#imie_nazwisko {
+    width: 20rem;
+    color: #9A9A9A;
+    font-size: 1.5625rem;
+    font-weight: 700;
+}
+
+.waga_cena {
+    width: 20rem;
+    display: flex;
+    align-items: baseline;
+}
+
+.cala_waga {
+    color: #351431;
+    text-align: center;
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+.cala_cena {
+    color: #9A9A9A;
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding-left: 1rem;
+}
+
+.cale_skrzynki {
+    color: #9A9A9A;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+#waga,
+#ilosc_skrzynek,
+#wartość_ceny,
+#wartość_kwoty {
+    padding-right: 0.6rem;
+}
+
+.prostokat_zielony {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    background: #D1D3C4;
+    border-radius: 2.5rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+    padding: 1rem 5rem;
+}
+
+.cala_wartosc {
+    color: #351431;
+    text-align: center;
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+#nazwa_owoca {
+    color: #9A9A9A;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-left: auto;
+    padding-right: 1rem;
+    padding-top: 0.6rem;
+}

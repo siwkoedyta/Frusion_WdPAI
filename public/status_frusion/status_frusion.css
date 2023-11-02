@@ -1,0 +1,96 @@
+.kalendarze {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.kalendarz_data_poczatkowa,
+.kalendarz_data_koncowa {
+    padding-right: 6rem;
+}
+
+.daty {
+    color: #9A9A9A;
+    font-size: 1.875rem;
+    font-weight: 700;
+    padding-right: 1rem;
+
+}
+
+.wartosc_cala {
+    display: flex;
+    flex-direction: row;
+    color: #351431;
+    text-align: center;
+    font-size: 1.5625rem;
+    font-weight: 700;
+    padding-right: 1rem;
+}
+
+#złotówki {
+    padding-left: 0.4rem;
+}
+
+#rodzaj_owoca {
+    color: #9A9A9A;
+    font-size: 1.5625rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    padding-left: 1rem;
+}
+
+.pierwsza_kolumna {
+    width: 40rem;
+    align-items: center;
+}
+
+.druga_kolumna {
+    align-items: center;
+}
+
+.trzecia_kolumna {
+    align-items: center;
+}
+
+.trzecia_kolumna {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    margin-left: 4rem;
+}
+
+.prostokat_bialy_status {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    background: #FFF;
+    border-radius: 2.5rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+    padding-left: 0.5rem;
+    margin-top: 1rem;
+
+}
+
+.prostokat_bialy,
+.prostokat_bialy_zielony {
+    width: 20rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.prostokat_bialy_zielony {
+    background: #D1D3C4;
+}
+
+.naglowek_summary_status,
+.calkowita_wartosc {
+    color: #351431;
+}

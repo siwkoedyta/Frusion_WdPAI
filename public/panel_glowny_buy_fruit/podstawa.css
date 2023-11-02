@@ -1,0 +1,37 @@
+.panel_glowny {
+    display: flex;
+    background: #E9E9E9;
+    font-family: 'Century Gothic';
+    font-style: normal;
+    line-height: normal;
+    justify-content: center;
+    align-items: center;
+
+    overflow-y: scroll;
+}
+
+
+.panel_glowny_add_client {
+    display: flex;
+    background: #E9E9E9;
+    font-family: 'Century Gothic';
+    font-style: normal;
+    line-height: normal;
+    justify-content: center;
+    align-items: center;
+    min-width: 50rem;
+    overflow-y: scroll;
+}
+
+.panel_glowny_boxes,
+.panel_glowny_fruit_list {
+    display: flex;
+    background: #E9E9E9;
+    font-family: 'Century Gothic';
+    font-style: normal;
+    line-height: normal;
+    justify-content: center;
+    align-items: center;
+    min-width: 75rem;
+    overflow-y: scroll;
+}

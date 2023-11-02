@@ -1,0 +1,145 @@
+body.login {
+    background: #E9E9E9;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-family: 'Century Gothic';
+    font-style: normal;
+    line-height: normal;
+}
+
+.fala {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo_z_napisem {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    margin-right: 1.4rem;
+}
+
+#Frusion {
+    font-size: 3.125rem;
+    letter-spacing: 0.6rem;
+    text-transform: capitalize;
+    color: #351431;
+}
+
+#Sign {
+    width: 26.8125rem;
+    height: 2.625rem;
+    color: #262626;
+    text-align: center;
+    font-size: 1.5625rem;
+    font-weight: 400;
+}
+
+.Sign_in_z_strzalka {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    height: 15vh;
+}
+
+#Sign-in {
+    width: 5.9rem;
+    height: 2.125rem;
+    color: #262626;
+    font-size: 1.875rem;
+    font-weight: 700;
+    padding-right: 0.5rem;
+
+}
+
+.strzalka {
+    border: none;
+    outline: none;
+    background: transparent;
+    border-radius: 1.25rem;
+    background: linear-gradient(135deg, #775253 0%, #351431 100%);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.strzalka:active {
+    transform: scale(0.95); /* Zmniejsz przycisk po kliknięciu */
+}
+
+.create-button {
+    font-size: 1.25rem;
+
+    background: none;
+    border: none;
+    padding: 0;
+    /* Usunięcie wewnętrznego wypełnienia przycisku */
+    text-decoration: underline;
+    /* Podkreślenie tekstu */
+    cursor: pointer;
+    /* Kursor wskazujący na to, że to jest interaktywny element */
+    color: #262626;
+    /* Kolor tekstu (możesz dostosować do swojego projektu) */
+    transition: color 0.2s;
+    /* Efekt płynnego przejścia koloru */
+}
+
+input {
+    width: 27rem;
+    height: 4.5rem;
+    border: none;
+    border-radius: 2.5rem;
+    padding: 0.5rem 1rem;
+    /* Wewnętrzne wypełnienie */
+    font-size: 1.25rem;
+    color: #262626;
+    margin: 0.5rem 0;
+    /* Odstęp między inputami */
+    background: linear-gradient(to bottom, #FFF, #FFF) padding-box, linear-gradient(to bottom, #EEE, #EEE) border-box;
+    /* Gradient tła */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    /* Wewnętrzny cień */
+    background: #FFF;
+    display: block;
+
+}
+
+input:focus {
+    outline: none;
+    /* Usunięcie obramowania po kliknięciu */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Cień po kliknięciu */
+}
+
+
+.create-button:hover {
+    color: #351431;
+    /* Kolor tekstu po najechaniu myszą (możesz dostosować do swojego projektu) */
+}
+
+
+#dont_z_create {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3vh;
+}
+
+
+#dont {
+    width: 15.2rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    margin-right: 5px;
+    color: #262626;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 400;
+}

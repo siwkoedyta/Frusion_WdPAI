@@ -1,0 +1,71 @@
+.kontent {
+    display: flex;
+    flex: 1;
+    padding: 1.5rem;
+    margin-left: 20rem;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+
+}
+
+.zawartosc_strony_kolumny {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+}
+
+.kontener{
+    display: flex;
+}
+
+.gorna_stopka {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#naglowek_panel {
+    display: flex;
+    color: #262626;
+    font-size: 2.8125rem;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.19688rem;
+    padding-top: 0.7rem;
+    margin-left: 23rem;
+    width: 100%;
+    justify-content: center;
+
+}
+
+#naglowek{
+    color: #262626;
+    font-size: 2.8125rem;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.19688rem;
+    padding-top: 0.7rem;
+}
+
+.kalendarz {
+    display: flex;
+    align-items: center;
+}
+
+#selectedDate {
+    font-size: 1.5rem;
+    /* Zwiększ rozmiar czcionki dla napisu daty */
+    padding-left: 2rem;
+    font-family: 'Century Gothic';
+}
+
+/* Zmień kolor ikony kalendarza na #9A9A9A */
+#selectedDate::-webkit-calendar-picker-indicator {
+    padding-right: 1rem;
+    width: 2rem;
+    height: 2rem;
+}

@@ -1,0 +1,37 @@
+.cena_owocu_cala {
+    display: flex;
+    flex-direction: row;
+    color: #351431;
+    text-align: center;
+    font-size: 1.5625rem;
+    font-weight: 700;
+    padding-right: 1rem;
+}
+
+#złotówki {
+    padding-left: 0.4rem;
+}
+
+#rodzaj_owocu {
+    color: #9A9A9A;
+    font-size: 1.5625rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    padding-left: 1rem;
+}
+
+.prostokat_bialy {
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.pierwsza_kolumna {
+    width: 22rem;
+}
