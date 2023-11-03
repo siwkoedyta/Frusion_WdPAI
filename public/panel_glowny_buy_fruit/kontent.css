@@ -1,30 +1,22 @@
 .kontent {
+    position: relative;
     display: flex;
     flex: 1;
     padding: 1.5rem;
-    margin-left: 20rem;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
-
 }
 
 .zawartosc_strony_kolumny {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    
+    justify-content: space-evenly;
+    width: 100%;
 }
 
 .kontener{
     display: flex;
-}
-
-.gorna_stopka {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
 }
 
@@ -36,7 +28,6 @@
     line-height: normal;
     letter-spacing: 0.19688rem;
     padding-top: 0.7rem;
-    margin-left: 23rem;
     width: 100%;
     justify-content: center;
 

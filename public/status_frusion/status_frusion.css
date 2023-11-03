@@ -1,14 +1,17 @@
 .kalendarze {
     display: flex;
-    flex-direction: row;
+    align-items: center;
+
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.napis_kalendarz{
+    display: flex;
     align-items: center;
 }
 
-
-.kalendarz_data_poczatkowa,
-.kalendarz_data_koncowa {
-    padding-right: 6rem;
-}
 
 .daty {
     color: #9A9A9A;
@@ -58,7 +61,6 @@
     display: flex;
     flex-direction: column;
     margin-top: 2rem;
-    margin-left: 4rem;
 }
 
 .prostokat_bialy_status {
@@ -69,8 +71,9 @@
     background: #FFF;
     border-radius: 2.5rem;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
-    padding-left: 0.5rem;
     margin-top: 1rem;
+    max-width: 100%;
+
 
 }
 
@@ -94,3 +97,13 @@
 .calkowita_wartosc {
     color: #351431;
 }
+
+/* Ustawienia na mniejsze ekrany */
+@media (max-width: 760px) {
+
+    .prostokat_bialy_status{
+        /* Zmniejsz szerokość na mniejszych ekranach */
+        width: 35rem;
+      }
+
+  }

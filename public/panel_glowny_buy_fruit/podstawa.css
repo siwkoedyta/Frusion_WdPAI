@@ -1,37 +1,24 @@
+html {
+    height: 100%;
+  }
+  body {
+    min-height: 100%;
+  }
+
 .panel_glowny {
     display: flex;
     background: #E9E9E9;
     font-family: 'Century Gothic';
     font-style: normal;
     line-height: normal;
-    justify-content: center;
-    align-items: center;
-
-    overflow-y: scroll;
+    justify-content: start;
+    margin: 0;
+    overflow-y:scroll;
 }
 
-
-.panel_glowny_add_client {
-    display: flex;
-    background: #E9E9E9;
-    font-family: 'Century Gothic';
-    font-style: normal;
-    line-height: normal;
-    justify-content: center;
-    align-items: center;
-    min-width: 50rem;
-    overflow-y: scroll;
-}
-
-.panel_glowny_boxes,
-.panel_glowny_fruit_list {
-    display: flex;
-    background: #E9E9E9;
-    font-family: 'Century Gothic';
-    font-style: normal;
-    line-height: normal;
-    justify-content: center;
-    align-items: center;
-    min-width: 75rem;
-    overflow-y: scroll;
-}
+/* Ustawienia na mniejsze ekrany */
+@media (min-width: 760px) {
+    .kontener{
+        width: 70%;
+    }
+  }

@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     margin-top: 2rem;
-    margin-right: 4rem;
 }
 
 .prostokat_pola_rekordu {
@@ -13,16 +12,14 @@
     background: #FFF;
     border-radius: 2.5rem;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
-    padding: 0.5rem;
     margin-bottom: 1rem;
 }
 
 .lewa_strona,
-.prawa_strona{
+.prawa_strona {
     display: flex;
     flex-direction: column;
-    margin-left: 1rem;
-    padding: 0.6rem;
+    padding: 1.5rem;
 }
 
 #imie_nazwisko,
@@ -41,12 +38,14 @@
     color: #9A9A9A;
     font-size: 1.5625rem;
     font-weight: 700;
+
 }
 
 .waga_cena {
     width: 20rem;
     display: flex;
     align-items: baseline;
+
 }
 
 .cala_waga {
