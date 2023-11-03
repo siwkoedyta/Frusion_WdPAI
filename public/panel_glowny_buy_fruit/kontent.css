@@ -23,7 +23,7 @@
 #naglowek_panel {
     display: flex;
     color: #262626;
-    font-size: 2.8125rem;
+    font-size: 2.8rem;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0.19688rem;
@@ -35,7 +35,7 @@
 
 #naglowek{
     color: #262626;
-    font-size: 2.8125rem;
+    font-size: 2.8rem;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0.19688rem;
@@ -45,6 +45,7 @@
 .kalendarz {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 #selectedDate {

@@ -16,9 +16,186 @@ html {
     overflow-y:scroll;
 }
 
-/* Ustawienia na mniejsze ekrany */
-@media (min-width: 760px) {
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (min-width: 1550px) {
     .kontener{
-        width: 70%;
+        width: 100vw;
     }
+
+    .pierwsza_kolumna, .druga_kolumna, #buy_fruit{
+        width: 30vw;
+    }
+
+    .prawa_strona, .lewa_strona{
+        width: 42%;
+
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
   }
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 1550px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna, .druga_kolumna, #buy_fruit{
+        width: 50vw;
+    }
+
+    .prawa_strona, .lewa_strona{
+        width: 42%;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
+  }
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 900px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna, .druga_kolumna, #buy_fruit{
+        width: 90vw;
+        height: auto;
+    }
+
+    #buy_fruit{
+        height:10vh;
+    }
+
+    .prawa_strona, .lewa_strona{
+        width: 42%;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
+}
+
+
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 600px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna, .druga_kolumna, #buy_fruit{
+        width: 90vw;
+        height: auto;
+    }
+
+    .prawa_strona, .lewa_strona{
+        width: 42%;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+        width: 20%;
+    }
+
+    .kalendarz, #naglowek_panel, #naglowek{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #naglowek_panel, #naglowek {
+        font-size: 2rem;
+        color: #351431;
+    }
+
+    #selectedDate{
+        width: 13rem;
+        height: 3rem;
+        font-size: 1.2rem;
+    }
+
+    #buy_fruit{
+        height: 15vw;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #summary{
+        font-size: 1.5rem;
+    }
+
+    .prostokat{
+        padding: 0.7rem;
+    }
+
+    .prostokat_bialy{
+        margin-top: 0.7rem;
+    }
+
+    .prostokat_pola_rekordu{
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+    }
+
+    .wartość_nazwa_owocu{
+        font-size: 1.5rem;
+    }
+
+    #imie_nazwisko, .cala_waga{
+        font-size: 1.3rem;
+        padding-bottom: 0.2rem;
+    }
+
+    #waga{
+        padding-right: 0.1rem;
+    }
+
+    .cala_cena, .cale_skrzynki, #nazwa_owoca{
+        font-size: 1rem;
+        padding: 0rem;
+        padding-bottom: 0.2rem;
+    }
+
+    .cala_cena{
+        padding-left: 0.4rem;
+    }
+
+    #wartość_ceny{
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+    }
+
+    #ilosc_skrzynek{
+        padding-right: 0.3rem;
+    }
+
+    .prawa_strona, .lewa_strona, .prostokat_zielony{
+        padding:0.7rem;
+        box-shadow:none;
+    }
+
+    #nazwa_owoca{
+        padding-top: 0.1rem;
+        padding-right: 0.5rem;
+    }
+
+    .cala_wartosc{
+        font-size: 1.5rem;
+    }
+
+    #wartość_kwoty{
+        padding-right: 0.2rem
+    }
+}
