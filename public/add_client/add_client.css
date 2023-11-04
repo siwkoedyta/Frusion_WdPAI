@@ -1,0 +1,47 @@
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (min-width: 900px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
+    .druga_kolumna{
+        width: 30rem;
+    }
+
+  }
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 900px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .druga_kolumna{
+        width: 30vw;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
+    .druga_kolumna{
+        width: 30rem;
+    }
+
+  }
+
+  
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 600px) {
+
+
+}
+  

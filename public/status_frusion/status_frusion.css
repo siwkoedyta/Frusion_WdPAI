@@ -7,7 +7,7 @@
     width: 100%;
 }
 
-.napis_kalendarz{
+.kalendarz{
     display: flex;
     align-items: center;
 }
@@ -15,11 +15,12 @@
 
 .daty {
     color: #9A9A9A;
-    font-size: 1.875rem;
+    font-size: 1.5rem;
     font-weight: 700;
     padding-right: 1rem;
 
 }
+
 
 .wartosc_cala {
     display: flex;
@@ -39,28 +40,26 @@
     color: #9A9A9A;
     font-size: 1.5625rem;
     font-style: normal;
-    font-weight: 700;
     line-height: normal;
     padding-left: 1rem;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .pierwsza_kolumna {
     width: 40rem;
     align-items: center;
-}
-
-.druga_kolumna {
-    align-items: center;
-}
-
-.trzecia_kolumna {
-    align-items: center;
+    padding-top: 1rem;
 }
 
 .trzecia_kolumna {
     display: flex;
     flex-direction: column;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    align-items: center;
+    padding: 2rem;
 }
 
 .prostokat_bialy_status {
@@ -79,7 +78,7 @@
 
 .prostokat_bialy,
 .prostokat_bialy_zielony {
-    width: 20rem;
+    width:100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -98,12 +97,139 @@
     color: #351431;
 }
 
-/* Ustawienia na mniejsze ekrany */
-@media (max-width: 760px) {
+#selectedDate{
+    height: 4rem;
+    width: 15rem;
+}
 
-    .prostokat_bialy_status{
-        /* Zmniejsz szerokość na mniejszych ekranach */
-        width: 35rem;
-      }
+.test{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trzecie_kolumny{
+    display: flex;
+    
+}
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (min-width: 1510px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna{
+        width: 30vw;
+    }
+
+    .trzecia_kolumna{
+        width: 18vw;
+    }
+
+    .prawa_strona, .lewa_strona{
+        width: 42%;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
 
   }
+
+
+  /* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 1000px) {
+    .pasek_boczny{
+        display: none;
+    }
+}
+
+/* Ustawienia na średni ekran ekrany */
+@media (max-width: 1510px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna{
+        width: 50vw;
+    }
+
+    .trzecia_kolumna{
+        width: 25vw;
+    }
+
+
+    .prawa_strona, .lewa_strona{
+        width: 42%;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+    
+  }
+
+  /* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 900px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna{
+        width: 90vw;
+        height: auto;
+    }
+
+    .trzecia_kolumna{
+        width: 40vw;
+    }
+
+    .prawa_strona, .lewa_strona{
+        width: 42%;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
+
+}
+
+@media (max-width: 600px) {
+    #selectedDate{
+        width: 13rem;
+        height: 3rem;
+        font-size: 1.2rem;
+    }
+
+    .daty{
+        font-size: 1rem;
+        padding: 0.2rem;
+    }
+
+    .trzecie_kolumny{
+        flex-direction: column;
+    }
+
+    .trzecia_kolumna{
+        width: 75vw;
+        padding: 0rem;
+    }
+    
+    .naglowek_summary_status{
+        font-size: 1.5rem;
+    }
+
+    .pierwsza_kolumna{
+        margin-top: 0rem;
+    }
+
+    #wartosc_dnia_jeden_owoc, #calkowita_wartosc, #rodzaj_owoca, #kilogramy, #ALL, #rodzaj_skrzynki, #wartosc_dnia, #waga_skrzynki{
+        font-size: 1.3rem;
+    }
+
+    
+}

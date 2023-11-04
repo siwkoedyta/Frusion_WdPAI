@@ -24,6 +24,11 @@
     padding: 1.5rem;
 }
 
+#kilogramy{
+    padding-left: 0.4rem;
+}
+
+#nazwa_owoca_klient,
 #imie_nazwisko,
 .waga_cena,
 .cala_waga,
@@ -35,11 +40,16 @@
     padding-bottom: 0.4rem;
 }
 
-#imie_nazwisko {
+#imie_nazwisko,
+#nazwa_owoca_klient {
     width: 20rem;
     color: #9A9A9A;
     font-size: 1.5625rem;
     font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
 }
 
@@ -61,16 +71,16 @@
 .cala_cena {
     color: #9A9A9A;
     font-size: 1.25rem;
-    font-weight: 700;
     padding-left: 1rem;
 }
 
 .cale_skrzynki {
     color: #9A9A9A;
     font-size: 1.25rem;
-    font-weight: 700;
 }
 
+#wartość_ceny_srednia
+#waga_suma
 #waga,
 #ilosc_skrzynek,
 #wartość_ceny,

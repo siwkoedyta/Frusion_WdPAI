@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frusion</title>
-    <link rel="stylesheet" href="kontent.css">
-    <link rel="stylesheet" href="lewa_kolumna.css">
-    <link rel="stylesheet" href="prawa_kolumna.css">
-    <link rel="stylesheet" href="podstawa.css">
-    <link rel="stylesheet" href="sidebar.css">
-    <link rel="stylesheet" href="okno_modalne_kup_owoc.css">
+    <link rel="stylesheet" href="../panel_glowny_buy_fruit/kontent.css">
+    <link rel="stylesheet" href="../panel_glowny_buy_fruit/prawa_kolumna.css">
+    <link rel="stylesheet" href="../panel_glowny_buy_fruit/lewa_kolumna.css">
+    <link rel="stylesheet" href="../panel_glowny_buy_fruit/podstawa.css">
+    <link rel="stylesheet" href="../panel_glowny_buy_fruit/sidebar.css">
+    <link rel="stylesheet" href="../panel_glowny_buy_fruit/okno_modalne_kup_owoc.css">
+    <link rel="stylesheet" href="panel_klienta.css">
 
 
 </head>
@@ -37,11 +38,6 @@
             </div>
     
             <ul class="menu">
-                <li id="home" class="active"><a href="panel_glowny_buy_fruit.html">Home</a></li>
-                <li id="status_frusion"><a href="../status_frusion/status_frusion.html">Status Frusion</a></li>
-                <li id="fruit_list"><a href="../fruit_list/fruit_list.html">Fruit list</a></li>
-                <li id="boxes_li"><a href="../boxes/boxes.html">Boxes</a></li>
-                <li id="add_client"><a href="../add_client/add_client.html">Add client</a></li>
                 <li id="log_out"><a href="../panel_logowania/panel_logowania.html">Log out</a></li>
             </ul>
 
@@ -51,17 +47,6 @@
 
     
         <div class="kontent">
-            <svg class="fala" xmlns="http://www.w3.org/2000/svg" width="375" height="92" viewBox="0 0 375 92" fill="none">
-                <path d="M16.0578 91.9536C-40.1229 90.6361 -54.1931 54.2002 -110.373 52.8676C-115.69 52.7414 -124 52.8676 -124 52.8676V0H465C465 0 425.907 27.238 386.265 41.2706C314.024 66.8424 249.722 27.2684 168.229 41.2706C102.277 52.6025 84.9093 93.5682 16.0578 91.9536Z" fill="url(#paint0_linear_3_1452)"/>
-                <defs>
-                  <linearGradient id="paint0_linear_3_1452" x1="170.5" y1="-9.84186" x2="170.5" y2="92" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#775253"/>
-                    <stop offset="1" stop-color="#351431"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-
-            <button id="hamburger">TEST</button>
             <h1 id="naglowek_panel">Your Frusion</h1>
             <div class="kalendarz">
                 <div class="date-input-container">
@@ -74,54 +59,34 @@
 
                 <div class="druga_kolumna">
 
-                    <button id="buy_fruit">Buy fruit</button>
-                    
                     <div class="prostokat">
                         <div id="summary">Summary</div>
-        
-                        <div class="prostokat_bialy">
-                            <div class="wartość_nazwa_owocu">Raspbeerry</div>
-                            <div class="kontener_cena_waga_skrzynki">
-                                <div class="kontener_skrzynki_cena">
-                                    <div class="kontener_cena">
-                                        <div id="price">Price:</div>
-                                        <div id="wartość_ceny">3,40</div>
-                                        <div id="zł">zł</div>
-                                    </div>
-                                    <div class="kontener_skrzynki">
-                                        <div id="boxes">Boxes:</div>
-                                        <div id="wartość_skrzynek">124</div>
-                                        <div id="rodzaj_skrzynki_wykaz">SVZ</div>
-                                    </div>
-                                </div>
-                                <div class="kontener_waga">
-                                    <div id="wartość_waga">1020,30</div>
-                                    <div id="kg">kg</div>
-                            </div>
-                            </div>
-                        </div>
 
-                        <div class="prostokat_bialy">
-                            <div class="wartość_nazwa_owocu">Raspbeerry</div>
-                            <div class="kontener_cena_waga_skrzynki">
-                                <div class="kontener_skrzynki_cena">
-                                    <div class="kontener_cena">
-                                        <div id="price">Price:</div>
-                                        <div id="wartość_ceny">3,40</div>
-                                        <div id="zł">zł</div>
+                        <div class="prostokat_pola_rekordu">
+                            <div class="lewa_strona">
+                                <div id="nazwa_owoca_klient">raspberry</div>
+                                <div class="waga_cena">
+                                    <div class="cala_waga">
+                                        <div id="waga_suma">224,50</div>
+                                        <div id="kilogramy">kg</div>
                                     </div>
-                                    <div class="kontener_skrzynki">
-                                        <div id="boxes">Boxes:</div>
-                                        <div id="wartość_skrzynek">124</div>
-                                        <div id="rodzaj_skrzynki_wykaz">SVZ</div>
+                                    <div class="cala_cena">
+                                        <div id="mnoznik">x</div>
+                                        <div id="wartość_ceny_srednia">3,40</div>
+                                        <div id="złoty_cena">zł</div>
                                     </div>
                                 </div>
-                                <div class="kontener_waga">
-                                    <div id="wartość_waga">1020,30</div>
-                                    <div id="kg">kg</div>
                             </div>
+                            <div class="prawa_strona">
+                                <div class="prostokat_zielony">
+                                    <div class="cala_wartosc">
+                                        <div id="wartość_kwoty">83,30</div>
+                                        <div id="złoty_wartosc">zł</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        
 
         
                     </div>
@@ -133,10 +98,10 @@
 
                     <div class="prostokat_pola_rekordu">
                         <div class="lewa_strona">
-                            <div id="imie_nazwisko">Edyta Siwko</div>
+                            <div id="nazwa_owoca_klient">raspberry</div>
                             <div class="waga_cena">
                                 <div class="cala_waga">
-                                    <div id="waga">24,50</div>
+                                    <div id="waga_suma">24,50</div>
                                     <div id="kilogramy">kg</div>
                                 </div>
                                 <div class="cala_cena">
@@ -157,7 +122,6 @@
                                     <div id="złoty_wartosc">zł</div>
                                 </div>
                             </div>
-                            <div id="nazwa_owoca">raspberry</div>
                         </div>
                     </div>
 

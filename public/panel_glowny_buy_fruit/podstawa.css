@@ -16,6 +16,19 @@ html {
     overflow-y:scroll;
 }
 
+#selectedDate{
+    height: 4rem;
+    width: 15rem;
+}
+
+#hamburger {
+    display: none; /* Ukryj przycisk domyślnie */
+  }
+
+.fala{
+    display: none;
+}
+  
 
 /* Ustawienia na zwykły ekran ekrany */
 @media (min-width: 1550px) {
@@ -37,9 +50,11 @@ html {
         align-items: center;
     }
 
+
+
   }
 
-/* Ustawienia na zwykły ekran ekrany */
+/* Ustawienia na średni ekran ekrany */
 @media (max-width: 1550px) {
     .kontener{
         width: 100vw;
@@ -48,6 +63,7 @@ html {
     .pierwsza_kolumna, .druga_kolumna, #buy_fruit{
         width: 50vw;
     }
+
 
     .prawa_strona, .lewa_strona{
         width: 42%;
@@ -58,6 +74,8 @@ html {
         align-items: center;
     }
 
+
+    
   }
 
 /* Ustawienia na zwykły ekran ekrany */
@@ -82,6 +100,20 @@ html {
     .kontent{
         display: flex;
         align-items: center;
+        padding: 0rem;
+    }
+
+    #hamburger{
+        display: block;
+    }
+
+    .fala{
+        display: block;
+        width: 100vw;
+    }
+
+    #naglowek, #naglowek_panel{
+        display: none;
     }
 
 }
@@ -95,18 +127,18 @@ html {
     }
 
     .pierwsza_kolumna, .druga_kolumna, #buy_fruit{
-        width: 90vw;
+        width: 85vw;
         height: auto;
     }
 
     .prawa_strona, .lewa_strona{
-        width: 42%;
+        width: 42vw;
     }
 
     .kontent{
         display: flex;
         align-items: center;
-        width: 20%;
+        width: 20vw;
     }
 
     .kalendarz, #naglowek_panel, #naglowek{
@@ -118,6 +150,7 @@ html {
     #naglowek_panel, #naglowek {
         font-size: 2rem;
         color: #351431;
+        display: none;
     }
 
     #selectedDate{
@@ -136,21 +169,19 @@ html {
         font-size: 1.5rem;
     }
 
-    .prostokat{
-        padding: 0.7rem;
-    }
 
     .prostokat_bialy{
         margin-top: 0.7rem;
     }
 
     .prostokat_pola_rekordu{
-        padding-left: 0.2rem;
-        padding-right: 0.2rem;
+        padding-left: 0.3rem;
+        padding-right: 0.3rem;
     }
 
     .wartość_nazwa_owocu{
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        padding-bottom:0.5rem;
     }
 
     #imie_nazwisko, .cala_waga{
@@ -162,7 +193,7 @@ html {
         padding-right: 0.1rem;
     }
 
-    .cala_cena, .cale_skrzynki, #nazwa_owoca{
+    .cala_cena, .cale_skrzynki, #nazwa_owoca, #nazwa_owoca_klient{
         font-size: 1rem;
         padding: 0rem;
         padding-bottom: 0.2rem;
@@ -172,21 +203,21 @@ html {
         padding-left: 0.4rem;
     }
 
-    #wartość_ceny{
-        padding-left: 0.1rem;
+    #wartość_ceny, #wartość_ceny_srednia{
+        padding-left: 0.4em;
         padding-right: 0.1rem;
     }
 
-    #ilosc_skrzynek{
+    #ilosc_skrzynek, #wartość_ceny, #wartość_ceny_srednia{
         padding-right: 0.3rem;
     }
 
     .prawa_strona, .lewa_strona, .prostokat_zielony{
-        padding:0.7rem;
+        padding:1rem;
         box-shadow:none;
     }
 
-    #nazwa_owoca{
+    #nazwa_owoca,  #nazwa_owoca_klient{
         padding-top: 0.1rem;
         padding-right: 0.5rem;
     }
@@ -198,4 +229,13 @@ html {
     #wartość_kwoty{
         padding-right: 0.2rem
     }
+
+    .kontener_waga{
+        font-size: 1.5rem;
+    }
+
+    .kontener_cena_waga_skrzynki{
+        padding: 0.3rem;
+    }
+
 }

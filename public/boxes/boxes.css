@@ -1,22 +1,20 @@
-.waga_skrzynki_cala, #ilosc_skrzynek_summary, .calkowita_wartosc {
+.ilosc_skrzynki_cala, #ilosc_skrzynek_summary, .calkowita_wartosc, .waga_skrzynki_cala {
     display: flex;
     flex-direction: row;
     color: #351431;
     text-align: center;
     font-size: 1.5625rem;
-    font-weight: 700;
     padding-right: 1rem;
 }
 
 #kilogramy {
-    padding-left: 0.4rem;
+    padding-left: 0.2rem;
 }
 
 #rodzaj_skrzynki, #ALL, .calkowita_wartosc {
     color: #9A9A9A;
     font-size: 1.5625rem;
     font-style: normal;
-    font-weight: 700;
     line-height: normal;
     padding-left: 1rem;
 }
@@ -33,5 +31,57 @@
 }
 
 .pierwsza_kolumna {
-    width: 22rem;
+    width:18rem;
 }
+
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (min-width: 1235px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
+    .pierwsza_kolumna{
+        width: 20vw;
+    }
+
+    .druga_kolumna{
+        width: 30rem;
+    }
+
+  }
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 1235px) {
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna, .druga_kolumna{
+        width: 30vw;
+    }
+
+    .kontent{
+        display: flex;
+        align-items: center;
+    }
+
+    .pierwsza_kolumna, .druga_kolumna{
+        width: 30rem;
+    }
+
+  }
+
+  
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 600px) {
+
+
+}
+  
