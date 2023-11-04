@@ -35,7 +35,7 @@ body.login {
 }
 
 #Sign {
-    width: 26.8125rem;
+    width: 100%;
     height: 2.625rem;
     color: #262626;
     text-align: center;
@@ -51,12 +51,15 @@ body.login {
 }
 
 #Sign-in {
+    display: flex;
     width: 5.9rem;
     height: 2.125rem;
     color: #262626;
     font-size: 1.875rem;
     font-weight: 700;
     padding-right: 0.5rem;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -128,13 +131,13 @@ input:focus {
 #dont_z_create {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
     height: 3vh;
 }
 
 
 #dont {
-    width: 15.2rem;
+    width: auto;
     height: 1.5rem;
     flex-shrink: 0;
     margin-right: 5px;
@@ -142,4 +145,70 @@ input:focus {
     text-align: center;
     font-size: 1.25rem;
     font-weight: 400;
+}
+
+
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 600px) {
+
+    .login-container, .registration-container{
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #Sign-in {
+        font-size: 1.5rem;
+        padding: 0rem;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+    }
+
+    #Create {
+        font-size: 1.5rem;
+        padding: 0rem;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+    }
+
+    #create_account{
+        font-size: 1.8rem;
+    }
+
+    input{
+        height: 4vh;
+        width: 60vw;
+    }
+
+    #Sign{
+        font-size:1rem;
+    }
+
+    #email, #password, .create-button, #dont, #mobile, #frusion_name {
+        font-size: 0.8rem;
+    }
+
+    svg{
+        width: 3rem;
+        height: 2rem;
+    }
+
+    #Frusion{
+        font-size: 2.5rem;
+    }
+
+    .logo{
+        width: 4rem;
+        height: 6rem;
+    }
+
+    #registration_form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
 }

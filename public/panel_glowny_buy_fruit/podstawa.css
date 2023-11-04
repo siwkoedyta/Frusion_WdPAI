@@ -21,14 +21,14 @@ html {
     width: 15rem;
 }
 
-#hamburger {
+#hamburgerL {
     display: none; /* Ukryj przycisk domyślnie */
   }
 
-.fala{
-    display: none;
-}
-  
+#hamburgerP {
+    display: none; /* Ukryj przycisk domyślnie */
+  }
+
 
 /* Ustawienia na zwykły ekran ekrany */
 @media (min-width: 1550px) {
@@ -49,7 +49,6 @@ html {
         display: flex;
         align-items: center;
     }
-
 
 
   }
@@ -103,17 +102,26 @@ html {
         padding: 0rem;
     }
 
-    #hamburger{
-        display: block;
+    .naglowek_hamburger{
+        display: flex;
+        flex-direction: row;
+        width: 90vw;
+        justify-content: space-between;
+        align-items:center;
     }
 
-    .fala{
-        display: block;
-        width: 100vw;
-    }
+    #hamburgerL {
+        display: block; /* Ukryj przycisk domyślnie */
+      }
+    
+    #hamburgerP {
+        display: block; /* Ukryj przycisk domyślnie */
+        opacity: 0; 
+      }
 
-    #naglowek, #naglowek_panel{
-        display: none;
+    .hamburger_svg{
+        width:4vw;
+        padding-top: 0.7rem;
     }
 
 }
@@ -122,6 +130,7 @@ html {
 
 /* Ustawienia na zwykły ekran ekrany */
 @media (max-width: 600px) {
+
     .kontener{
         width: 100vw;
     }
@@ -150,7 +159,6 @@ html {
     #naglowek_panel, #naglowek {
         font-size: 2rem;
         color: #351431;
-        display: none;
     }
 
     #selectedDate{
@@ -237,5 +245,33 @@ html {
     .kontener_cena_waga_skrzynki{
         padding: 0.3rem;
     }
+
+
+    .modal-content{
+        width: 60vw;
+        height: auto;
+    }
+
+
+    input{
+        height: 4vh;
+        width: 30vw;
+    }
+    
+    select{
+        height: 5.5vh;
+        width: 30vw;
+    }
+
+    #username, #fruit, #weight, #box, #Number_of_boxes{
+        font-size: 1.2rem;
+    }
+
+
+    .hamburger_svg{
+        width:7vw;
+        padding-top: 0.7rem;
+    }
+
 
 }
