@@ -1,19 +1,18 @@
-// Funkcja do otwierania sidebaru
-function openSidebar() {
-    document.getElementById("mySidebar").style.width = "250px";
-}
-
-// Funkcja do zamykania sidebaru
-function closeSidebar() {
-    document.getElementById("mySidebar").style.width = "0";
-}
-
-// Funkcja do przełączania sidebaru
-function toggleSidebar() {
-    var sidebar = document.getElementById("mySidebar");
-    if (sidebar.style.width === "250px") {
-        closeSidebar();
-    } else {
-        openSidebar();
+document.addEventListener("DOMContentLoaded", function() {
+    const hamburgerButton = document.getElementById("hamburgerL");
+    const sidebar = document.getElementById("mySidebar");
+    const overlay = document.getElementById("overlay");
+  
+    if (hamburgerButton && sidebar && overlay) {
+      hamburgerButton.addEventListener("click", function() {
+        if (sidebar.classList.contains("active")) {
+          sidebar.classList.remove("active");
+          overlay.classList.remove("active");
+        } else {
+          sidebar.classList.add("active");
+          overlay.classList.add("active");
+        }
+      });
     }
-}
+  });
+  

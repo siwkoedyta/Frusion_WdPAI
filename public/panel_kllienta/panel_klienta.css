@@ -2,3 +2,16 @@
     padding-bottom: 1rem;
 }
 
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 600px) {
+
+    .pasek_boczny a {
+        font-size: 1rem;
+    }
+
+    .prawa_strona, .lewa_strona, .prostokat_zielony {
+        padding: 0.5rem;
+        box-shadow: none;
+    }
+
+}

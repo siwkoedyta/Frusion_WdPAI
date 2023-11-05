@@ -1,3 +1,4 @@
+
 .pasek_boczny {
     display: flex;
     flex-direction: column;
@@ -84,6 +85,18 @@
 @media (max-width: 900px) {
     .pasek_boczny {
         display: none;
+    }
+
+    .pasek_boczny a{
+        font-size: 1.5rem;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+    .pasek_boczny a{
+        font-size: 1rem;
     }
 
 }

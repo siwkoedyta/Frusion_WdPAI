@@ -164,6 +164,8 @@ input:focus {
         display: flex;
         justify-content: left;
         align-items: center;
+        width: auto;
+        padding-right: 0.2rem;
     }
 
     #Create {
@@ -179,16 +181,16 @@ input:focus {
     }
 
     input{
-        height: 4vh;
-        width: 60vw;
+        height: 6vh;
+        width: 70vw;
     }
 
     #Sign{
-        font-size:1rem;
+        font-size:1.5rem;
     }
 
     #email, #password, .create-button, #dont, #mobile, #frusion_name {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 
     svg{
@@ -197,7 +199,7 @@ input:focus {
     }
 
     #Frusion{
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     .logo{
