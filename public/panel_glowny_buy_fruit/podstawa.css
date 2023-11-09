@@ -33,6 +33,7 @@ html {
     display: none;
 }
 
+
 /* Ustawienia na zwykły ekran ekrany */
 @media (min-width: 1550px) {
     .kontener{
@@ -123,7 +124,7 @@ html {
       }
 
     .hamburger_svg{
-        width:4vw;
+        width:5vw;
         padding-top: 0.7rem;
         cursor: pointer;
     }
@@ -170,6 +171,8 @@ html {
         padding: 0; /* Usunięcie wewnętrznego odstępu */
         color: #9A9A9A;
       }
+
+
 
 }
 
@@ -291,8 +294,8 @@ html {
 
     .kontener_cena_waga_skrzynki{
         padding: 0.3rem;
-    }
 
+    }
 
     .modal-content{
         width: 60vw;
@@ -312,13 +315,6 @@ html {
 
     #username, #fruit, #weight, #box, #Number_of_boxes{
         font-size: 1.2rem;
-    }
-
-
-    .hamburger_svg{
-        width:5vw;
-        padding-top: 0.7rem;
-        cursor: pointer;
     }
 
 
