@@ -30,17 +30,17 @@ body.registration {
 #create_account {
     color: #262626;
     text-align: center;
-    font-size: 3.125rem;
+    font-size:2.5rem;
     font-weight: 700;
 }
 
 input {
-    width: 27rem;
-    height: 4.5rem;
+    width: 20rem;
+    height: 3rem;
     border: none;
     border-radius: 2.5rem;
     padding: 0.5rem 1rem; /* Wewnętrzne wypełnienie */
-    font-size: 1.25rem;
+    font-size: 0.8rem;
     color: #262626;
     margin: 0.5rem 0; /* Odstęp między inputami */
     background: linear-gradient(to bottom, #FFF, #FFF) padding-box, linear-gradient(to bottom, #EEE, #EEE) border-box; /* Gradient tła */
@@ -54,6 +54,8 @@ input:focus {
     outline: none; /* Usunięcie obramowania po kliknięciu */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Cień po kliknięciu */
 }
+
+
 
 .dolne_przyciski{
     display: flex;
@@ -73,20 +75,30 @@ input:focus {
 }
 
 .Sign_in_z_strzalka, .Create_z_strzalka{
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     height: 15vh;
+    justify-content: right;
 }
 
-#Sign-in, #Create {
+
+#Sign-in_rejerstracja, #Create {
     width: 6.5rem;
     height: 2.125rem;
     flex-shrink: 0;
 
     color: #262626;
-    font-size: 1.875rem;
+    font-size: 1.5rem;
     font-weight: 700;
 }
+
+#Create{
+    display: flex;
+    justify-content: right;
+    font-size:1.87rem;
+}
+
+
 
 
 

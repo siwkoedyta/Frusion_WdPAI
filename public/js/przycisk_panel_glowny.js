@@ -4,8 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (przycisk) {
       przycisk.addEventListener("click", function (event) {
         event.preventDefault(); // Zapobiegnij domyślnej akcji przycisku
-        window.location.href = "/src/views/panel_glowny.html";
-
+        window.location.href = "panel_glowny";
       });
     }
 });
