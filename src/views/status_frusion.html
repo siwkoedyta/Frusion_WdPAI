@@ -3,23 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frusion - fruit list</title>
-    <link rel="stylesheet" href="../panel_glowny_buy_fruit/kontent.css">
-    <link rel="stylesheet" href="../panel_glowny_buy_fruit/prawa_kolumna.css">
-    <link rel="stylesheet" href="../panel_glowny_buy_fruit/lewa_kolumna.css">
-    <link rel="stylesheet" href="../panel_glowny_buy_fruit/podstawa.css">
-    <link rel="stylesheet" href="../panel_glowny_buy_fruit/sidebar.css">
-    <link rel="stylesheet" href="../panel_glowny_buy_fruit/okno_modalne_kup_owoc.css">
-    <link rel="stylesheet" href="fruit_list.css">
-    <link rel="stylesheet" href="../panel_glowny_buy_fruit/panel_glowny_buy_fruit.html">
-    <link rel="stylesheet" href="../boxes/boxes.css">
-
-
+    <title>Frusion - status frusion</title>
+    <link rel="stylesheet" href="/public/css/kontent.css">
+    <link rel="stylesheet" href="/public/css/prawa_kolumna.css">
+    <link rel="stylesheet" href="/public/css/podstawa.css">
+    <link rel="stylesheet" href="/public/css/sidebar.css">
+    <link rel="stylesheet" href="/public/css/okno_modalne_kup_owoc.css">
+    <link rel="stylesheet" href="/public/css/boxes.css">
+    <link rel="stylesheet" href="/public/css/lewa_kolumna.css">
+    <link rel="stylesheet" href="/public/css/status_frusion.css">
 
 
 </head>
 <body class="panel_glowny">
-
     <div class="kontener">
         <div id="overlay"></div>
         <div class="pasek_boczny" id="mySidebar">
@@ -45,23 +41,22 @@
             </div>
     
             <ul class="menu">
-                <li id="home"><a href="../panel_glowny_buy_fruit/panel_glowny_buy_fruit.html">Home</a></li>
-                <li id="status_frusion"><a href="../status_frusion/status_frusion.html">Status Frusion</a></li>
-                <li id="fruit_list" class="active"><a href="fruit_list.html">Fruit list</a></li>
-                <li id="boxes_li"><a href="../boxes/boxes.html">Boxes</a></li>
-                <li id="add_client"><a href="../add_client/add_client.html">Add client</a></li>
-                <li id="log_out"><a href="../panel_logowania/panel_logowania.html">Log out</a></li>
+                <li id="home"><a href="panel_glowny.html">Home</a></li>
+                <li id="status_frusion" class="active"><a href="status_frusion.html">Status Frusion</a></li>
+                <li id="fruit_list"><a href="fruit_list.html">Fruit list</a></li>
+                <li id="boxes_li"><a href="boxes.html">Boxes</a></li>
+                <li id="add_client"><a href="add_client.html">Add client</a></li>
+                <li id="log_out"><a href="panel_logowania.html">Log out</a></li>
             </ul>
 
-            <script src="sidebar.js"></script>
-            <script src="../panel_glowny_buy_fruit/otworz_panel_boczny.js"></script>
-            <script src="../panel_glowny_buy_fruit/zamknij_panel_boczny.js"></script>
+            <script src="/public/js/sidebar.js"></script>
+            <script src="/public/js/otworz_panel_boczny.js"></script>
+            <script src="/public/js/zamknij_panel_boczny.js"></script>
         </div>
 
 
-
+    
         <div class="kontent">
-
             <div class="naglowek_hamburger">
                 <div id="hamburgerL">
                     <svg  class="hamburger_svg" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 20" fill="none">
@@ -76,75 +71,106 @@
                 </div>
             </div>
 
-            <div class="zawartosc_strony_kolumny">
-
-
-
-                <div class="pierwsza_kolumna">
-                    <div class="prostokat_zielony"><h2 id="naglowek_modala">Fruit list</h2></div>
-                    <div class="prostokat_bialy">
-                        <div id="rodzaj_owocu">Raspbeerry</div>
-                        <div class="cena_owocu_cala">
-                            <div id="cena_owocu">3,40</div>
-                            <div id="złotówki">zł</div>
+            <div class="kalendarze">
+                <div class="kalendarz">
+                    <h1 class="daty">Starting date:</h1>
+                    <div class="kalendarz_data_poczatkowa">
+                        <div class="date-input-container">
+                            <input type="date" id="selectedDate" name="selectedDate">
                         </div>
                     </div>
                 </div>
-    
-                <div class="druga_kolumna">
 
-                    <div class="prostokat">
-                        <h2 id="naglowek_modala">Set the price</h2>
-                        <form class="set_the_price">
-                            <select id="name_of_the_fruit" name="Name of the fruit">
-                                <option value="" disabled selected>Name of the fruit</option>
-                                <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                                <option value="Raspbeerry">Raspbeerry</option>
-                                <option value="Strawberry">Strawberry</option>
-                            </select>
-                            <input id="price" type="number" placeholder="Price">
-                        </form>
-        
-                        <div class="przyciski">
-                            <button class="przycisk_add" id="przycisk_set_the_price">Add</button>
+                <div class="kalendarz">
+                    <h1 class="daty">End date:</h1>
+                    <div class="kalendarz_data_koncowa">
+                        <div class="date-input-container">
+                            <input type="date" id="selectedDate" name="selectedDate">
                         </div>
                     </div>
-        
-                    <div class="prostokat">
-                        <h2 id="naglowek_modala">Add fruit</h2>
-                        <form class="add_fruit">
-                            <input id="name_of_the_fruit_new_add" type="text" placeholder="Name of the fruit">
-                        </form>
-
-                        <div class="przyciski">
-                            <button class="przycisk_add" id="przycisk_add_fruit">Add</button>
-                        </div>
-                    </div>
-
-        
-                    <div class="prostokat">
-                        <h2 id="naglowek_modala">Remove fruit</h2>
-                        <form class="add_fruit">
-                            <select id="name_of_the_fruit" name="Name of the fruit">
-                                <option value="" disabled selected>Name of the fruit</option>
-                                <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                                <option value="Raspbeerry">Raspbeerry</option>
-                                <option value="Strawberry">Strawberry</option>
-                            </select>
-                        </form>
-
-                        <div class="przyciski">
-                            <button class="przycisk_remove" id="przycisk_remove_fruit">Remove</button>
-                        </div>
-                    </div>
-
-                    
                 </div>
-    
             </div>
 
+            
+            <div class="zawartosc_strony_kolumny">
+
+                <div class="pierwsza_kolumna">
+                    <h1 class="naglowek_summary_status">Weight</h1>
+                    
+                    <div class="prostokat_bialy_status">
+                        <div class="wartość_nazwa_owocu">Raspbeerry</div>
+                        <div class="kontener_cena_waga_skrzynki">
+                            <div class="kontener_skrzynki_cena">
+                                <div class="kontener_cena">
+                                    <div id="price">Price:</div>
+                                    <div id="wartość_ceny">3,40</div>
+                                    <div id="zł">zł</div>
+                                </div>
+                                <div class="kontener_skrzynki">
+                                    <div id="boxes">Boxes:</div>
+                                    <div id="wartość_skrzynek">124</div>
+                                    <div id="rodzaj_skrzynki_wykaz">SVZ</div>
+                                </div>
+                            </div>
+                            <div class="kontener_waga">
+                                <div id="wartość_waga">1020,30</div>
+                                <div id="kg">kg</div>
+                        </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                
+                <div class="trzecie_kolumny">
+                    <div class="trzecia_kolumna">
+                        <h1 class="naglowek_summary_status">Boxes</h1>
+    
+                        <div class="prostokat_bialy_zielony">
+                            <div id="ALL">ALL</div>
+                            <div id="ilosc_skrzynek_summary">2234</div>
+                        </div>
+                        
+                        <div class="prostokat_bialy">
+                            <div id="rodzaj_skrzynki">SVZ</div>
+                            <div class="ilosc_skrzynki_cala">
+                                <div id="ilosc_skrzynki">133</div>
+                            </div>
+                        </div>
+    
+    
+                    </div>
+                    
+                    <div class="trzecia_kolumna">
+                        <h1 class="naglowek_summary_status">Ammount</h1>
+    
+                        <div class="prostokat_bialy_zielony">
+                            <div id="ALL">ALL</div>
+                            <div class="calkowita_wartosc">
+                                <div id="wartosc_dnia">13245,20</div>
+                                <div id="kilogramy">zł</div>
+                            </div>
+                        </div>
+    
+                        <div class="prostokat_bialy">
+                            <div id="rodzaj_owoca">Raspberry</div>
+                            <div class="calkowita_wartosc">
+                                <div id="wartosc_dnia_jeden_owoc">1253,20</div>
+                                <div id="kilogramy">zł</div>
+                            </div>
+                        </div>
+    
+            
+                    </div>
+                </div>
+
+
+            </div>
+
+            
+
         </div>
-        
     </div>
 </body>
 </html>

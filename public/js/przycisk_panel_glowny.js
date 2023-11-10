@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (przycisk) {
       przycisk.addEventListener("click", function (event) {
         event.preventDefault(); // Zapobiegnij domyślnej akcji przycisku
-        window.location.href = "../panel_glowny_buy_fruit/panel_glowny_buy_fruit.html";
+        window.location.href = "/src/views/panel_glowny.html";
+
       });
     }
 });
