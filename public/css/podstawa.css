@@ -33,6 +33,12 @@ html {
     display: none;
 }
 
+.falka{
+    display: none;
+    width: 100%;
+    height:auto;
+}
+
 
 /* Ustawienia na zwykły ekran ekrany */
 @media (min-width: 1550px) {
@@ -172,6 +178,10 @@ html {
         color: #9A9A9A;
       }
 
+      .falka{
+        display: block;
+
+      }
 
 
 }

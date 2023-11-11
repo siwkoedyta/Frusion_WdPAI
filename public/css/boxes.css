@@ -34,6 +34,14 @@
     width:18rem;
 }
 
+input{
+    width: 20rem;
+}
+
+select{
+    width: 22rem;
+}
+
 
 /* Ustawienia na zwykły ekran ekrany */
 @media (min-width: 1235px) {
@@ -135,7 +143,7 @@
     
     select{
         height: 5.5vh;
-        width: 65vw;
+        width: 67vw;
     }
 
     #box_name, #box_weight, #box, #name_of_the_fruit, #name_of_the_fruit,#name_of_the_fruit_new_add, #username, #email, #password{

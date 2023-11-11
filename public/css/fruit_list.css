@@ -84,3 +84,73 @@
 
   }
 
+  
+/* Ustawienia na zwykły ekran ekrany */
+@media (max-width: 600px) {
+
+    .kontener{
+        width: 100vw;
+    }
+
+    .pierwsza_kolumna, .druga_kolumna, #buy_fruit{
+        width: 85vw;
+        height: auto;
+    }
+
+
+    .kontent{
+        display: flex;
+        align-items: center;
+        width: 20vw;
+    }
+
+
+    #naglowek_panel, #naglowek {
+        font-size: 2rem;
+        color: #351431;
+    }
+
+    .prostokat, .prostokat_add_client{
+        padding: 0rem;
+
+    }
+
+    #naglowek_modala{
+        font-size: 1.5rem;
+    }
+
+    .prostokat_zielony{
+        height: 3vh;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .prostokat_bialy{
+        height: 1vh;
+    }
+
+    #rodzaj_skrzynki, .waga_skrzynki_cala, .przycisk_add, .przycisk_remove, #rodzaj_owocu, .cena_owocu_cala{
+        font-size: 1.2rem;
+    }
+
+    input{
+        height: 4vh;
+        width: 60vw;
+    }
+    
+    select{
+        height: 5.5vh;
+        width: 67vw;
+    }
+
+    #box_name, #box_weight, #box, #name_of_the_fruit, #name_of_the_fruit,#name_of_the_fruit_new_add, #username, #email, #password, #price{
+        font-size: 1rem;
+    }
+
+    .pasek_boczny a {
+        font-size: 1rem;
+    }
+
+}
+
+
