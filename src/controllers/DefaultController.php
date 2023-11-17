@@ -3,6 +3,7 @@
 require_once 'AppController.php';
 
 class DefaultController extends AppController{
+
     function panel_logowania(){
         $this->render('panel_logowania');
     }

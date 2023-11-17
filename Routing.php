@@ -1,6 +1,8 @@
 <?php
 
 require_once 'src/controllers/DefaultController.php';
+require_once 'src/controllers/ErrorController.php';
+
 
 class Routing{
     public static $routes;
@@ -14,7 +16,8 @@ class Routing{
         $action = explode("/", $url)[0];
         
         if (!array_key_exists($action, self::$routes)) {
-          die("Wrong url!");
+            $error = new ErrorController();
+            return $error->FileNotFound();
         }
     
         $controller = self::$routes[$action];

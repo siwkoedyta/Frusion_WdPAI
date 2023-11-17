@@ -14,6 +14,9 @@ Routing::get('boxes', 'DefaultController');
 Routing::get('fruit_list', 'DefaultController');
 Routing::get('status_frusion', 'DefaultController');
 
+Routing::get('FileNotFound', 'ErrorController');
+
+
 
 
 Routing::run($path);
