@@ -55,7 +55,13 @@ input:focus {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Cień po kliknięciu */
 }
 
-
+.registration-container #message{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding-top: 1rem;
+    color: red;
+}
 
 .dolne_przyciski{
     display: flex;

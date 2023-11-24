@@ -48,7 +48,11 @@
                 <li id="fruit_list"><a href="fruit_list">Fruits</a></li>
                 <li id="boxes_li" class="active"><a href="boxes">Boxes</a></li>
                 <li id="add_client"><a href="add_client">Clients</a></li>
-                <li id="log_out"><a href="panel_logowania">Log out</a></li>
+                <li id="log_out">
+                    <form id="logoutForm" action="wyloguj" method="POST">
+                        <button type="submit">Log out</button>
+                    </form>
+                </li>
             </ul>
 
             <script src="/public/js/sidebar.js"></script>

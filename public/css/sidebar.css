@@ -36,6 +36,7 @@
     color: #9A9A9A;
 }
 
+
 .menu li {
     display: flex;
     align-items: center;
@@ -46,6 +47,16 @@
     list-style-type: none; /* Usuwamy domyślne kropki listy */
     padding-bottom: 1rem;
     transition: color 0.3s;
+}
+
+.menu li button{
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    color: #9A9A9A;
+    font-size: 1.5625rem;
+    padding: 10px 15px;
 }
 
 .menu li a:active {

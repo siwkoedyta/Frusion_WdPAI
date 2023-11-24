@@ -19,13 +19,23 @@
     </svg>
 
     <div class="registration-container">
-        <form id="registration_form">
+        <form class="panel_rejerstracji" action="panel_rejerstracji" method="POST" id="registration_form">
           <h1 id="create_account">Create account</h1>
-          <input id="email" type="email" placeholder="Email">
-          <input id="password" type="password" placeholder="Password"> 
-          <input id="mobile" type="tel" placeholder="Mobile">
-          <input id="frusion_name" type="text" placeholder="Frusion name"> 
+          <input name="email" id="email" type="email" placeholder="Email">
+          <input name="password" id="password" type="password" placeholder="Password">
+            <input name="repeat_password" id="repeat_passowrd" type="password" placeholder="Repeat password">
+            <input name="mobile" id="mobile" type="tel" placeholder="Phone" required>
+          <input name="frusion_name" id="frusion_name" type="text" placeholder="Frusion name">
 
+            <div id="message">
+                <?php
+                if (isset($messages)){
+                    foreach ($messages as $message){
+                        echo $message;
+                    }
+                }
+                ?>
+            </div>
           <div class="dolne_przyciski">
 
               <div class="Sign_in_z_strzalka">
@@ -46,7 +56,7 @@
   
               <div class="Create_z_strzalka">
                 <h2 id="Create">Create</h2>
-                <button class="strzalka_prawa" id="przycisk_create">
+                <button class="strzalka_prawa" id="przycisk_create" type="submit">
                   <svg xmlns="http://www.w3.org/2000/svg" width="71" height="43" viewBox="0 0 71 43" fill="none">
                     <rect width="71" height="43" rx="17" fill="url(#paint0_linear_10_1425)"/>
                     <path d="M24.0892 21.5C24.0892 22.2858 24.7262 22.9228 25.512 22.9228H41.4478L34.4933 29.8599C33.935 30.4169 33.935 31.3213 34.4933 31.8782C35.0497 32.4332 35.9502 32.4332 36.5066 31.8782L46.4329 21.9765C46.6966 21.7135 46.6966 21.2864 46.4329 21.0234L36.5066 11.1217C35.9502 10.5668 35.0497 10.5668 34.4933 11.1217C33.935 11.6787 33.935 12.5831 34.4933 13.14L41.4478 20.0772H25.512C24.7262 20.0772 24.0892 20.7142 24.0892 21.5Z" fill="#E9E9E9"/>
@@ -65,7 +75,46 @@
         </form>
     </div>
 
-    <script src="/public/js/przycisk_strona_logowania_create.js"></script>
+    <script>
+        var phoneNumberInput = document.getElementById('mobile');
+        var prefixAdded = false; // Dodajemy prefiks tylko raz
+
+        phoneNumberInput.addEventListener('input', function () {
+            formatPhoneNumber();
+        });
+
+        function formatPhoneNumber() {
+            var phoneNumberValue = phoneNumberInput.value.replace(/[^0-9]/g, ''); // Usunięcie niecyfrowych znaków
+
+            if (phoneNumberValue.length === 0) {
+                phoneNumberInput.value = ''; // Pozostawienie pola pustego, gdy brak cyfr
+                prefixAdded = false; // Resetowanie flagi, aby prefiks mógł być dodany ponownie
+                return;
+            }
+
+            if (!prefixAdded) {
+                phoneNumberValue = phoneNumberValue.substring(0, 9); // Ograniczenie do 9 cyfr
+                phoneNumberInput.value = '+48' + phoneNumberValue;
+                prefixAdded = true; // Ustawienie flagi, aby prefiks nie był dodawany ponownie
+            } else {
+                phoneNumberValue = phoneNumberValue.substring(0, 9); // Ograniczenie do 9 cyfr
+                phoneNumberInput.value = phoneNumberValue;
+            }
+
+            // Dodanie znaku "-" co trzy cyfry
+            var formattedPhoneNumber = '';
+
+            for (var i = 0; i < phoneNumberValue.length; i++) {
+                formattedPhoneNumber += phoneNumberValue[i];
+                if ((i + 1) % 3 === 0 && i + 1 < phoneNumberValue.length) {
+                    formattedPhoneNumber += '-';
+                }
+            }
+
+            phoneNumberInput.value = formattedPhoneNumber; // Ustawienie sformatowanego numeru w polu input
+        }
+
+    </script>
     <script src="/public/js/przycisk_strona_logowania_sign_in.js"></script>
 </body>
 </html>

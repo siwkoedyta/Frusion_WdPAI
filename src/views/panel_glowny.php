@@ -56,14 +56,22 @@
                 <h1 id="Frusion">Frusion</h1>
             </div>
 
+
+
             <ul class="menu">
                 <li id="home" class="active"><a href="panel_glowny">Home</a></li>
                 <li id="status_frusion"><a href="status_frusion">Status Frusion</a></li>
                 <li id="fruit_list"><a href="fruit_list">Fruits</a></li>
                 <li id="boxes_li"><a href="boxes">Boxes</a></li>
                 <li id="add_client"><a href="add_client">Clients</a></li>
-                <li id="log_out"><a href="panel_logowania">Log out</a></li>
+                <li id="log_out">
+                    <form id="logoutForm" action="wyloguj" method="POST">
+                        <button type="submit">Log out</button>
+                    </form>
+                </li>
             </ul>
+
+
 
             <script src="/public/js/sidebar.js"></script>
             <script src="/public/js/otworz_panel_boczny.js"></script>

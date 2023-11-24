@@ -42,7 +42,11 @@
             </div>
     
             <ul class="menu">
-                <li id="log_out"><a href="panel_logowania">Log out</a></li>
+                <li id="log_out">
+                    <form id="logoutForm" action="wyloguj" method="POST">
+                        <button type="submit">Log out</button>
+                    </form>
+                </li>
             </ul>
 
             <script src="/public/js/sidebar.js"></script>
