@@ -5,7 +5,9 @@ require 'Routing.php';
 $path = trim($_SERVER['REQUEST_URI'], '/');
 $path = parse_url( $path, PHP_URL_PATH);
 
-Routing::get('panel_logowania', 'DefaultController'); 
+Routing::get('panel_logowania', 'DefaultController');
+Routing::post('panel_logowania', 'SecurityController');
+
 Routing::get('panel_rejerstracji', 'DefaultController');
 Routing::get('panel_klienta', 'DefaultController');
 Routing::get('panel_glowny', 'DefaultController');

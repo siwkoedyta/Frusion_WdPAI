@@ -38,14 +38,24 @@
               </svg>
             <h1 id="Frusion">Frusion</h1>
         </div>
-        <form>
+        <form class="panel_logowania" action="panel_logowania" method="POST">
             <h3 id="Sign">Sign in to your account</h3>
-            <input id="email" type="email" placeholder="Email">
-            <input id="password" type="password" placeholder="Password"> 
+            <input name="email" id="email" type="email" placeholder="Email">
+            <input name="password" id="password" type="password" placeholder="Password">
+
+            <div id="message">
+                <?php
+                if (isset($messages)){
+                    foreach ($messages as $message){
+                        echo $message;
+                    }
+                }
+                ?>
+            </div>
             
             <div class="Sign_in_z_strzalka">
               <h2 id="Sign-in">Sign in</h2>
-              <button class="strzalka" id="przycisk_redirect">
+              <button class="strzalka" id="przycisk_redirect" type="submit">
                   <svg xmlns="http://www.w3.org/2000/svg" width="71" height="43" viewBox="0 0 71 43" fill="none">
                       <rect width="71" height="43" rx="17" fill="url(#paint0_linear_10_1362)"/>
                       <path d="M24.0893 21.5C24.0893 22.2858 24.7263 22.9228 25.5121 22.9228H41.4479L34.4934 29.8599C33.9351 30.4169 33.9351 31.3213 34.4934 31.8782C35.0498 32.4332 35.9503 32.4332 36.5067 31.8782L46.433 21.9765C46.6967 21.7135 46.6967 21.2864 46.433 21.0234L36.5067 11.1217C35.9503 10.5668 35.0498 10.5668 34.4934 11.1217C33.9351 11.6787 33.9351 12.5831 34.4934 13.14L41.4479 20.0772H25.5121C24.7263 20.0772 24.0893 20.7142 24.0893 21.5Z" fill="#E9E9E9"/>
@@ -65,6 +75,5 @@
         </form>
     </div>
 
-    <script src="/public/js/przycisk_panel_glowny.js"></script>
 </body>
 </html>
