@@ -7,6 +7,13 @@ class SecurityController extends AppController {
 
     public function panel_logowania()
     {
+        // Sprawdź, czy użytkownik jest już zalogowany
+        if (isset($_COOKIE['logged_user'])) {
+            // Użytkownik jest już zalogowany, przekieruj go na stronę główną
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/panel_glowny");
+            return;
+        }
 
         $users = [
             new User('alice@example.com', 'user', '777111222', 'Johnson'),
@@ -104,4 +111,76 @@ class SecurityController extends AppController {
 
         return $this->render('panel_logowania', ['messages' => ['You\'ve been succesfully registrated!']]);
     }
+
+    private function isUserLoggedIn()
+    {
+        return !empty($_COOKIE['logged_user']);
+    }
+    public function panel_glowny()
+    {
+        // Sprawdź, czy użytkownik jest zalogowany
+        if (!$this->isUserLoggedIn()) {
+            // Użytkownik nie jest zalogowany, przekieruj go na stronę logowania
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/panel_logowania", true, 303);
+            exit();
+        }
+
+        // Użytkownik jest zalogowany, kontynuuj wyświetlanie strony panel_glowny
+        $this->render('panel_glowny');
+    }
+
+    public function panel_klienta()
+    {
+        if (!$this->isUserLoggedIn()) {
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/panel_logowania", true, 303);
+        }else{
+            $this->render('panel_klienta');
+        }
+    }
+
+    public function add_client()
+    {
+        if (!$this->isUserLoggedIn()) {
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/panel_logowania", true, 303);
+        }else{
+            $this->render('add_client');
+        }
+    }
+
+    public function boxes()
+    {
+        if (!$this->isUserLoggedIn()) {
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/panel_logowania", true, 303);
+        }else{
+            $this->render('boxes');
+        }
+    }
+
+    public function fruit_list()
+    {
+        if (!$this->isUserLoggedIn()) {
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/panel_logowania", true, 303);
+        }else{
+            $this->render('fruit_list');
+        }
+    }
+
+    public function status_frusion()
+    {
+        if (!$this->isUserLoggedIn()) {
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/panel_logowania", true, 303);
+        }else{
+            $this->render('status_frusion');
+        }
+    }
+
+
+
+
 }

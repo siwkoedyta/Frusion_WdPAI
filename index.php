@@ -11,12 +11,12 @@ Routing::post('panel_logowania', 'SecurityController');
 Routing::get('panel_rejerstracji', 'DefaultController');
 Routing::post('panel_rejerstracji', 'SecurityController');
 
-Routing::get('panel_klienta', 'DefaultController');
-Routing::get('panel_glowny', 'DefaultController');
-Routing::get('add_client', 'DefaultController');
-Routing::get('boxes', 'DefaultController');
-Routing::get('fruit_list', 'DefaultController');
-Routing::get('status_frusion', 'DefaultController');
+Routing::get('panel_klienta', 'SecurityController');
+Routing::get('panel_glowny', 'SecurityController');
+Routing::get('add_client', 'SecurityController');
+Routing::get('boxes', 'SecurityController');
+Routing::get('fruit_list', 'SecurityController');
+Routing::get('status_frusion', 'SecurityController');
 
 Routing::get('FileNotFound', 'ErrorController');
 Routing::post('wyloguj', 'SecurityController');
