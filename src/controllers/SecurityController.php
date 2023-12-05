@@ -1,9 +1,22 @@
 <?php
 
 require_once 'AppController.php';
-require_once __DIR__ .'/../models/User.php';
+require_once __DIR__ . '/../models/User.php';
 
 class SecurityController extends AppController {
+    private $users;
+
+    public function __construct() {
+        parent::__construct();
+
+        $this->users = [
+            new User('alice@example.com', 'users', '777111222', 'Johnson', 'employee'),
+            new User('bob@example.com', 'admin', '555555555', 'Smith', 'employee'),
+            new User('charlie@example.com', 'user', '666666666', 'Brown', 'employee'),
+            new User('diana@example.com', 'admin', '444555666', 'Williams', 'client'),
+            new User('edward@example.com', 'user', '111222333', 'Miller', 'client'),
+        ];
+    }
     public function panel_rejerstracji()
     {
         if (!$this->isPost()) {
@@ -35,24 +48,29 @@ class SecurityController extends AppController {
 
         return $this->render('panel_logowania', ['messages' => ['You\'ve been succesfully registrated!']]);
     }
-    public function panel_logowania()
-    {
-        // Sprawdź, czy użytkownik jest już zalogowany
+    public function panel_logowania() {
         if (isset($_COOKIE['logged_user'])) {
-            // Użytkownik jest już zalogowany, przekieruj go na stronę główną
+            $decryptedEmail = $this->getDecryptedEmail();
+            $foundUser = $this->getUserByEmail($decryptedEmail);
+
+            if (!$foundUser) {
+                echo 'User not found!';
+                return;
+            }
+
+            $userRole = $foundUser->getRole();
             $url = "http://$_SERVER[HTTP_HOST]";
-            header("Location: {$url}/panel_glowny");
+
+            if ($userRole == 'client') {
+                header("Location: {$url}/panel_klienta");
+            } elseif ($userRole == 'employee') {
+                header("Location: {$url}/panel_glowny");
+            } else {
+                echo 'Invalid user role!';
+            }
+
             return;
         }
-
-        $users = [
-            new User('alice@example.com', 'user', '777111222', 'Johnson'),
-            new User('bob@example.com', 'admin', '555555555', 'Smith'),
-            new User('charlie@example.com', 'user', '666666666', 'Brown'),
-            new User('diana@example.com', 'admin', '444555666', 'Williams'),
-            new User('edward@example.com', 'user', '111222333', 'Miller'),
-        ];
-
 
         if (!$this->isPost()) {
             return $this->render('panel_logowania');
@@ -63,26 +81,38 @@ class SecurityController extends AppController {
 
         $foundUser = null;
 
-        foreach ($users as $user) {
+        foreach ($this->users as $user) {
             if ($user->getEmail() === $email) {
                 $foundUser = $user;
                 break;
             }
         }
 
-        if (!$foundUser) {
+        if (!$foundUser || $foundUser->getPassword() !== $password) {
             return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!']]);
         }
 
-        if ($foundUser->getPassword()!== $password) {
-            return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!']]);
-        }
-
-        // Logowanie udane - ustawienie ciasteczka
         $this->ustawCiasteczka($foundUser->getEmail());
-
+        $userRole = $foundUser->getRole();
         $url = "http://$_SERVER[HTTP_HOST]";
-        header("Location: {$url}/panel_glowny");
+
+        if ($userRole == 'client') {
+            header("Location: {$url}/panel_klienta");
+        } elseif ($userRole == 'employee') {
+            header("Location: {$url}/panel_glowny");
+        } else {
+            echo 'Invalid user role!';
+        }
+    }
+
+    private function getUserByEmail($email) {
+        foreach ($this->users as $user) {
+            if ($user->getEmail() === $email) {
+                return $user;
+            }
+        }
+
+        return null;
     }
 
     private function ustawCiasteczka($email) {
