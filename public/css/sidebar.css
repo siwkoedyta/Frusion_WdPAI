@@ -67,7 +67,6 @@
     color: #fff; /* Kolor tekstu dla aktywnego elementu menu */
 }
 
-
 #home::before {
     content: url(/public/css/icon/Home.png);
 }
@@ -81,7 +80,7 @@
 }
 
 #boxes_li::before {
-    content: url(/public/css/icon/Open\ Parcel.png);
+    content: url(/public/css/icon/OpenParcel.png);
 }
 
 #add_client::before {
@@ -90,6 +89,10 @@
 
 #log_out::before {
     content: url(/public/css/icon/Logout.png);
+}
+
+#change_password::before {
+    content: url(/public/css/icon/PadlockOutline.png);
 }
 
 

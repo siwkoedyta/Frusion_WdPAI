@@ -3,16 +3,18 @@
 class Transaction {
     private $transactionID;
     private $userID;
+    private $weight_with_boxes;
     private $weight;
     private $idBox;
     private $number_of_boxes;
     private $transactionDate;
     private $priceID;
 
-    public function __construct($transactionID, $userID, $weight, $idBox, $number_of_boxes, $transactionDate, $priceID)
+    public function __construct($transactionID, $userID, $weight_with_boxes, $weight, $idBox, $number_of_boxes, $transactionDate, $priceID)
     {
         $this->transactionID = $transactionID;
         $this->userID = $userID;
+        $this->weight_with_boxes = $weight_with_boxes;
         $this->weight = $weight;
         $this->idBox = $idBox;
         $this->number_of_boxes = $number_of_boxes;
@@ -59,6 +61,16 @@ class Transaction {
     public function setIdBox($idBox): void
     {
         $this->idBox = $idBox;
+    }
+
+    public function getWeightWithBoxes()
+    {
+        return $this->weight_with_boxes;
+    }
+
+    public function setWeightWithBoxes($weight_with_boxes): void
+    {
+        $this->weight_with_boxes = $weight_with_boxes;
     }
 
     public function getWeight()

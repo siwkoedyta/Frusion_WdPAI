@@ -82,7 +82,7 @@ class SecurityController extends AppController {
 
 
         if ($user===false || $admin===false) {
-            return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!test']]);
+            return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!']]);
         }
 
         $url = "http://$_SERVER[HTTP_HOST]";
@@ -167,6 +167,16 @@ class SecurityController extends AppController {
 
         $decryptedEmail = $this->getDecryptedEmail();
         $this->render('panel_klienta', ['email' => $decryptedEmail]);
+    }
+    public function change_password() {
+        if (!$this->isUserLoggedIn()) {
+            $url = "http://$_SERVER[HTTP_HOST]";
+            header("Location: {$url}/change_password", true, 303);
+            exit();
+        }
+
+        $decryptedEmail = $this->getDecryptedEmail();
+        $this->render('change_password', ['email' => $decryptedEmail]);
     }
 
     public function add_client() {

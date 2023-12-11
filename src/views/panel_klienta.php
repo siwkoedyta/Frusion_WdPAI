@@ -42,6 +42,8 @@
             </div>
     
             <ul class="menu">
+                <li id="home" class="active"><a href="panel_klienta">Home</a></li>
+                <li id="change_password"><a href="change_password">Password</a></li>
                 <li id="log_out">
                     <form id="logoutForm" action="wyloguj" method="POST">
                         <button type="submit">Log out</button>
@@ -57,6 +59,16 @@
 
     
         <div class="kontent">
+            <svg class="falka" xmlns="http://www.w3.org/2000/svg" width="375" height="51" viewBox="0 0 375 51" fill="none">
+                <path d="M296.687 50.9743C355.778 50.2439 370.577 30.0458 429.667 29.307C435.259 29.2371 444 29.307 444 29.307V0H-82.9518C-82.9518 0 -134.392 15.0993 -92.6965 22.8783C-16.7141 37.054 50.9193 15.1162 136.634 22.8783C206.002 29.1601 224.269 51.8693 296.687 50.9743Z" fill="url(#paint0_linear_3_1452)"/>
+                <defs>
+                    <linearGradient id="paint0_linear_3_1452" x1="134.245" y1="-5.45581" x2="134.245" y2="51" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#775253"/>
+                        <stop offset="1" stop-color="#351431"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
             <div class="naglowek_hamburger">
                 <div id="hamburgerL">
                     <svg  class="hamburger_svg" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 20" fill="none">
@@ -152,38 +164,6 @@
                 </div>
             </div>
 
-            <!-- Okienko modalne -->
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" id="closeModal">&times;</span>
-                    <h2 id="naglowek_modala">Buy fruit</h2>
-
-                    <form class="kup_owoc">
-                        <input id="username" type="text" placeholder="Username">
-                        <select id="fruit" name="fruit" placeholder="Fruit">
-                            <option value="" disabled selected>Fruit</option>
-                            <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                            <option value="raspberry">Raspbeerry</option>
-                            <option value="strawberry">Strawberry</option>
-                        </select>
-                        <input id="weight" type="number" placeholder="Weight">
-                        <select id="box" name="box">
-                            <option value="" disabled selected>Box</option>
-                            <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                            <option value="SVZ">SVZ</option>
-                            <option value="M5">M5</option>
-                        </select>
-                        <input id="Number of boxes" type="number" placeholder="Number of boxes"> 
-                    </form>
-                    
-                    <div class="przyciski">
-                        <button class="przycisk_add">Add</button>
-                        <button class="przycisk_cancel">Cancel</button>
-                    </div>
-
-                    
-                </div>
-            </div>
                              
 
         </div>
