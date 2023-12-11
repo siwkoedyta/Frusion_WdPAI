@@ -2,23 +2,16 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Admin.php';
+require_once __DIR__ .'/../repository/UserRepository.php';
+require_once __DIR__ .'/../repository/AdminRepository.php';
 
 class SecurityController extends AppController {
-    private $users;
 
-    public function __construct() {
-        parent::__construct();
-
-        $this->users = [
-            new User('alice@example.com', 'users', '777111222', 'Johnson', 'employee'),
-            new User('bob@example.com', 'admin', '555555555', 'Smith', 'employee'),
-            new User('charlie@example.com', 'user', '666666666', 'Brown', 'employee'),
-            new User('diana@example.com', 'admin', '444555666', 'Williams', 'client'),
-            new User('edward@example.com', 'user', '111222333', 'Miller', 'client'),
-        ];
-    }
     public function panel_rejerstracji()
     {
+        $AdminRepository = new AdminRepository();
+
         if (!$this->isPost()) {
             return $this->render('panel_rejerstracji');
         }
@@ -26,10 +19,10 @@ class SecurityController extends AppController {
         $email = isset($_POST['email']) ? $_POST['email'] : null;
         $password = isset($_POST['password']) ? $_POST['password'] : null;
         $confirmedPassword = isset($_POST['repeat_password']) ? $_POST['repeat_password'] : null;
-        $mobile = isset($_POST['mobile']) ? $_POST['mobile'] : null;
+        $phone = isset($_POST['mobile']) ? $_POST['mobile'] : null;
         $frusion_name = isset($_POST['frusion_name']) ? $_POST['frusion_name'] : null;
 
-        if (!$email || !$password || !$confirmedPassword || !$mobile || !$frusion_name) {
+        if (!$email || !$password || !$confirmedPassword || !$phone || !$frusion_name) {
             return $this->render('panel_rejerstracji', ['messages' => ['Please fill in all the fields']]);
         }
 
@@ -40,33 +33,35 @@ class SecurityController extends AppController {
         if ($password !== $confirmedPassword) {
             return $this->render('panel_rejerstracji', ['messages' => ['Please provide proper password']]);
         }
-        // Dodanie soli do hasła
-        $salt = bin2hex(random_bytes(16)); // Generowanie losowej soli
-        $hashedPassword = password_hash($password . $salt, PASSWORD_DEFAULT);
-        $user = new User($email, $hashedPassword, $mobile, $frusion_name);
 
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Dodanie administratora do bazy danych
+        $admin = new Admin($email, $hashedPassword, $phone, $frusion_name);
+        $AdminRepository->addAdmin($admin);
 
         return $this->render('panel_logowania', ['messages' => ['You\'ve been succesfully registrated!']]);
     }
     public function panel_logowania() {
-        if (isset($_COOKIE['logged_user'])) {
-            $decryptedEmail = $this->getDecryptedEmail();
-            $foundUser = $this->getUserByEmail($decryptedEmail);
 
-            if (!$foundUser) {
-                echo 'User not found!';
-                return;
-            }
+        $userRepository = new UserRepository();
+        $adminRepository = new AdminRepository();
 
-            $userRole = $foundUser->getRole();
+        // Sprawdź, czy użytkownik lub admin są już zalogowani
+        if ($this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
 
-            if ($userRole == 'client') {
-                header("Location: {$url}/panel_klienta");
-            } elseif ($userRole == 'employee') {
-                header("Location: {$url}/panel_glowny");
-            } else {
-                echo 'Invalid user role!';
+            // Tutaj możesz umieścić swoją logikę do sprawdzania, czy zalogowany użytkownik to admin czy klient
+            $decryptedEmail = $this->getDecryptedEmail();
+            $foundUser = $userRepository->getUser($decryptedEmail);
+            $foundAdmin = $adminRepository->getAdmin($decryptedEmail);
+
+            if ($foundUser) {
+                // Przykład: przekieruj na panel klienta, jeśli użytkownik jest zalogowany
+                header("Location: $url/panel_klienta");
+            } elseif ($foundAdmin) {
+                // Przykład: przekieruj na panel główny, jeśli admin jest zalogowany
+                header("Location: $url/panel_glowny");
             }
 
             return;
@@ -79,40 +74,43 @@ class SecurityController extends AppController {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        $foundUser = null;
+        // Sprawdź, czy email należy do użytkownika
+        $user = $userRepository->getUser($email);
 
-        foreach ($this->users as $user) {
-            if ($user->getEmail() === $email) {
-                $foundUser = $user;
-                break;
-            }
+        // Sprawdź, czy email należy do administratora
+        $admin = $adminRepository->getAdmin($email);
+
+
+        if ($user===false || $admin===false) {
+            return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!test']]);
         }
 
-        if (!$foundUser || $foundUser->getPassword() !== $password) {
-            return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!']]);
-        }
-
-        $this->ustawCiasteczka($foundUser->getEmail());
-        $userRole = $foundUser->getRole();
         $url = "http://$_SERVER[HTTP_HOST]";
 
-        if ($userRole == 'client') {
-            header("Location: {$url}/panel_klienta");
-        } elseif ($userRole == 'employee') {
-            header("Location: {$url}/panel_glowny");
+        //password_verify($password, $user->getPassword())
+        //password_verify($password, $admin->getPassword())
+        if ($user &&  $user->getPassword() === $password) {
+            $this->ustawCiasteczka($user->getEmail());
+            header("Location: $url/panel_klienta");
+        } elseif ($admin &&password_verify($password, $admin->getPassword())) {
+            $this->ustawCiasteczka($admin->getEmail());
+            header("Location: $url/panel_glowny");
         } else {
-            echo 'Invalid user role!';
+            return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!']]);
         }
     }
 
-    private function getUserByEmail($email) {
-        foreach ($this->users as $user) {
-            if ($user->getEmail() === $email) {
-                return $user;
-            }
-        }
+    private function isUserLoggedIn() {
+        return isset($_COOKIE['logged_user']);
+    }
+    private function getDecryptedEmail() {
+        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
+        $iv = '1234567891011121';
 
-        return null;
+        // Deszyfrowanie
+        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
+
+        return $decryptedData;
     }
 
     private function ustawCiasteczka($email) {
@@ -144,19 +142,6 @@ class SecurityController extends AppController {
     }
 
 
-    private function isUserLoggedIn()
-    {
-        return !empty($_COOKIE['logged_user']);
-    }
-    private function getDecryptedEmail() {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        // Deszyfrowanie
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
-    }
     public function panel_glowny() {
         // Sprawdź, czy użytkownik jest zalogowany
         if (!$this->isUserLoggedIn()) {

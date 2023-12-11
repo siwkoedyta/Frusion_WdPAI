@@ -109,7 +109,8 @@
                 <div class="prostokat_add_client">
                     <h2 id="naglowek_modala">Add client</h2>
                     <form class="add_client_strona">
-                        <input id="username" type="text" placeholder="Username">
+                        <input id="name" type="text" placeholder="First Name">
+                        <input id="last_name" type="text" placeholder="Last Name">
                         <input id="email" type="email" placeholder="E-mail">
                         <input id="password" type="password" placeholder="Password">
                     </form>

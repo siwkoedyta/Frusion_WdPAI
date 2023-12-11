@@ -1,66 +1,60 @@
 <?php
 
 class User {
+    private $firstName;
+    private $lastName;
     private $email;
     private $password;
-    private $mobile;
-    private $frusionName;
-    private $role;
 
-    public function __construct(string $email, string $password, string $mobile, string $frusionName, string $role) {
+
+    public function __construct($firstName, $lastName, $email, $password)
+    {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->email = $email;
         $this->password = $password;
-        $this->mobile = $mobile;
-        $this->frusionName = $frusionName;
-        $this->role = $role;
     }
 
-    public function getEmail(): string{
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName($firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName($lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail($email): void
     {
         $this->email = $email;
     }
 
-    public function getPassword(){
+    public function getPassword()
+    {
         return $this->password;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword($password): void
     {
         $this->password = $password;
     }
-    public function getMobile(): string
-    {
-        return $this->mobile;
-    }
 
-    public function setMobile(string $mobile): void
-    {
-        $this->mobile = $mobile;
-    }
-
-    public function getFrusionName(): string
-    {
-        return $this->frusionName;
-    }
-
-    public function setFrusionName(string $frusionName): void
-    {
-        $this->frusionName = $frusionName;
-    }
-
-    public function getRole(): string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): void
-    {
-        $this->role = $role;
-    }
 
 
 }
