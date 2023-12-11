@@ -89,7 +89,7 @@ class SecurityController extends AppController {
 
         //password_verify($password, $user->getPassword())
         //password_verify($password, $admin->getPassword())
-        if ($user &&  $user->getPassword() === $password) {
+        if ($user && password_verify($password, $user->getPassword())) {
             $this->ustawCiasteczka($user->getEmail());
             header("Location: $url/panel_klienta");
         } elseif ($admin &&password_verify($password, $admin->getPassword())) {

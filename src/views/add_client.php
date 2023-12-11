@@ -73,6 +73,7 @@
             <script src="/public/js/sidebar.js"></script>
             <script src="/public/js/otworz_panel_boczny.js"></script>
             <script src="/public/js/zamknij_panel_boczny.js"></script>
+            <script src="/public/js/add_client.js"></script>
 
         </div>
 
@@ -108,7 +109,7 @@
 
                 <div class="prostokat_add_client">
                     <h2 id="naglowek_modala">Add client</h2>
-                    <form id="addUserForm" class="add_client_strona">
+                    <form id="addUserForm" class="add_client_strona" action="addClient" method="post">
                         <input id="name" type="text" placeholder="First Name">
                         <input id="last_name" type="text" placeholder="Last Name">
                         <input id="email" type="email" placeholder="E-mail">
@@ -116,7 +117,7 @@
                     </form>
 
                     <div class="przyciski">
-                        <button class="przycisk_add">Add</button>
+                        <button id="addUserButton" class="przycisk_add">Add</button>
                     </div>
                 </div>
             </div>

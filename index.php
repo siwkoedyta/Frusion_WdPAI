@@ -16,7 +16,10 @@ Routing::get('change_password', 'SecurityController');
 
 
 Routing::get('panel_glowny', 'SecurityController');
-Routing::get('add_client', 'SecurityController');
+
+Routing::get('add_client', 'AddClientController');
+Routing::post('add_client_form', 'AddClientController');
+
 Routing::get('boxes', 'SecurityController');
 Routing::get('fruit_list', 'SecurityController');
 Routing::get('status_frusion', 'SecurityController');

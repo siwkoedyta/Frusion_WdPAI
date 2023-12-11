@@ -27,7 +27,7 @@ class UserRepository extends Repository
             $user['password']
         );
     }
-    public function addUser(User $user): bool
+    public function add_client_form(User $user): bool
     {
         try {
             $stmt = $this->database->connect()->prepare('
