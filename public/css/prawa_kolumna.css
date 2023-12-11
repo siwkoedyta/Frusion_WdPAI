@@ -4,6 +4,10 @@
     margin-top: 2rem;
 }
 
+#message{
+    font-size: 1.2rem;
+}
+
 #buy_fruit {
     white-space: nowrap;
     border: none;
@@ -125,6 +129,7 @@
     justify-self: center;
     align-items: center;
 }
+
 
 
 

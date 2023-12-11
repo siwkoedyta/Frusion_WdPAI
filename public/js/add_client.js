@@ -28,10 +28,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Przetwórz odpowiedź lub wykonaj odpowiednie działania po udanej operacji
                 console.log(data);
 
+                // Wyświetl komunikat na stronie
+                document.getElementById("message").innerHTML = '<p>' + data.message + '</p>';
+
                 // Przekieruj lub wyświetl odpowiednią wiadomość po dodaniu użytkownika
                 if (data.status === 'success') {
                     document.getElementById("addUserForm").reset();
-                    console.log("User został prawidłowo dodany.")
+                    console.log("The user has been successfully added.")
                 } else {
                     // Handle error
                     console.error('Error:', data.message);

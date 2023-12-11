@@ -174,9 +174,6 @@
         
     </div>
 
-
-    
-    <script src="/public/js/przycisk.js"></script>
     <script src="/public/js/obsluga_kalendarza.js"></script>
 </body>
 </html>

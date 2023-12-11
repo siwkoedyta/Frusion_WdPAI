@@ -116,6 +116,16 @@
                         <input id="password" type="password" placeholder="Password">
                     </form>
 
+                    <div id="message">
+                        <?php
+                        if (isset($messages)){
+                            foreach ($messages as $message){
+                                echo $message;
+                            }
+                        }
+                        ?>
+                    </div>
+
                     <div class="przyciski">
                         <button id="addUserButton" class="przycisk_add">Add</button>
                     </div>

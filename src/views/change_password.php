@@ -54,6 +54,8 @@
         <script src="/public/js/sidebar.js"></script>
         <script src="/public/js/otworz_panel_boczny.js"></script>
         <script src="/public/js/zamknij_panel_boczny.js"></script>
+        <script src="/public/js/change_password.js"></script>
+
     </div>
 
 
@@ -91,14 +93,24 @@
 
                 <div class="prostokat_add_client">
                     <h2 id="naglowek_modala">Change password</h2>
-                    <form class="add_client_strona">
+                    <form id="changePasswordForm" class="add_client_strona" action="change_password" method="post">
                         <input id="current_password" type="password" placeholder="Current password">
                         <input id="new_password" type="password" placeholder="New password">
                         <input id="repeat_new_password" type="password" placeholder="Repeat new password">
                     </form>
 
+                    <div id="message">
+                        <?php
+                        if (isset($messages)){
+                            foreach ($messages as $message){
+                                echo $message;
+                            }
+                        }
+                        ?>
+                    </div>
+
                     <div class="przyciski">
-                        <button class="przycisk_add">Change</button>
+                        <button id="changePasswordButton" class="przycisk_add">Change</button>
                     </div>
                 </div>
             </div>
@@ -116,9 +128,5 @@
 
 </div>
 
-
-
-<script src="/public/js/przycisk.js"></script>
-<script src="/public/js/obsluga_kalendarza.js"></script>
 </body>
 </html>

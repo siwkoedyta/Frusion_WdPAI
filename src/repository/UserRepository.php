@@ -51,5 +51,48 @@ class UserRepository extends Repository
             return false; // Błąd
         }
     }
+    public function change_password_form(string $email, string $newPassword): bool
+    {
+        try {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            $stmt = $this->database->connect()->prepare('
+                UPDATE public."User" SET "password" = :password WHERE "email" = :email
+            ');
+
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            return true; // Sukces
+        } catch (PDOException $e) {
+            // Obsługa błędów
+            echo "Error: " . $e->getMessage();
+            return false; // Błąd
+        }
+    }
+
+    public function updateUser(User $user): bool
+    {
+        try {
+            $stmt = $this->database->connect()->prepare('
+            UPDATE public."User" 
+            SET "password" = :password
+            WHERE "email" = :email
+        ');
+
+            $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
+            $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            return true; // Sukces
+        } catch (PDOException $e) {
+            // Obsługa błędów
+            echo "Error: " . $e->getMessage();
+            return false; // Błąd
+        }
+    }
 
 }

@@ -54,13 +54,12 @@ class AddClientController extends AppController{
 
             header('Content-Type: application/json');
             if ($result) {
-                echo json_encode(['status' => 'success']);
+                echo json_encode(['status' => 'success','message' => 'User added.']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to add user']);
+                echo json_encode(['status' => 'error', 'message' => 'Failed to add user.']);
             }
             exit;
         }
     }
-
 
 }
