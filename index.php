@@ -22,7 +22,9 @@ Routing::get('panel_glowny', 'SecurityController');
 Routing::get('add_client', 'AddClientController');
 Routing::post('add_client_form', 'AddClientController');
 
-Routing::get('boxes', 'SecurityController');
+Routing::get('boxes', 'BoxController');
+Routing::post('add_boxes_form', 'BoxController');
+
 Routing::get('fruit_list', 'SecurityController');
 Routing::get('status_frusion', 'SecurityController');
 

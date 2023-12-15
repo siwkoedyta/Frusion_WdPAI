@@ -1,8 +1,12 @@
 <?php
 require_once 'AppController.php';
+require_once __DIR__ . '/../models/Box.php';
+require_once __DIR__ . '/../repository/BoxRepository.php';
 
-class AddClientController extends AppController{
-    public function add_client() {
+class BoxController extends AppController
+{
+
+    public function boxes() {
         if (!$this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/panel_logowania", true, 303);
@@ -10,8 +14,9 @@ class AddClientController extends AppController{
         }
 
         $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('add_client', ['email' => $decryptedEmail]);
+        $this->render('boxes', ['email' => $decryptedEmail]);
     }
+
     private function isUserLoggedIn() {
         return isset($_COOKIE['logged_user']);
     }
@@ -24,34 +29,33 @@ class AddClientController extends AppController{
 
         return $decryptedData;
     }
-
-    public function add_client_form() {
+    public function add_boxes_form()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'];
-            $lastName = $_POST['last_name'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $typeBox = $_POST['box_name'];
+            $weightBox = $_POST['box_weight'];
 
-            if (empty($name) || empty($lastName) || empty($email) || empty($password)) {
+            if (empty($typeBox) || empty($weightBox)) {
                 header('Content-Type: application/json');
                 echo json_encode(['status' => 'error', 'message' => 'Invalid form data']);
                 exit;
             }
 
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-            $user = new User($name, $lastName, $email, $hashedPassword);
-            $userRepository = new UserRepository();
-            $result = $userRepository->addClient($user);
+            $box = new Box($typeBox, $weightBox);
+            $boxRepository = new BoxRepository();
+            $result = $boxRepository->addBoxes($box);
 
             header('Content-Type: application/json');
             if ($result) {
-                echo json_encode(['status' => 'success','message' => 'User added.']);
+                echo json_encode(['status' => 'success', 'message' => 'Box added successfully']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to add user.']);
+                echo json_encode(['status' => 'error', 'message' => 'Failed to add box']);
             }
             exit;
         }
     }
 
 }
+
+
+

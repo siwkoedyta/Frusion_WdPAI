@@ -5,6 +5,7 @@ require_once 'src/controllers/ErrorController.php';
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/AddClientController.php';
 require_once 'src/controllers/ChangePasswordController.php';
+require_once 'src/controllers/BoxController.php';
 
 
 class Routing{

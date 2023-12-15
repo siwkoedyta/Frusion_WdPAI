@@ -169,17 +169,6 @@ class SecurityController extends AppController {
         $this->render('panel_klienta', ['email' => $decryptedEmail]);
     }
 
-    public function boxes() {
-        if (!$this->isUserLoggedIn()) {
-            $url = "http://$_SERVER[HTTP_HOST]";
-            header("Location: {$url}/panel_logowania", true, 303);
-            exit();
-        }
-
-        $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('boxes', ['email' => $decryptedEmail]);
-    }
-
     public function fruit_list() {
         if (!$this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";

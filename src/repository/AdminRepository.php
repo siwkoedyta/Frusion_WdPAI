@@ -2,7 +2,6 @@
 
 
 require_once 'Repository.php';
-require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Admin.php';
 
 class AdminRepository extends Repository

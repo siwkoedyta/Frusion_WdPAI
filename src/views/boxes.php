@@ -58,6 +58,8 @@
             <script src="/public/js/sidebar.js"></script>
             <script src="/public/js/otworz_panel_boczny.js"></script>
             <script src="/public/js/zamknij_panel_boczny.js"></script>
+            <script src="/public/js/add_box.js"></script>
+
         </div>
 
 
@@ -103,29 +105,29 @@
                 <div class="druga_kolumna">
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Add box</h2>
-                        <form class="add_box">
+                        <form id="addBoxForm" class="add_box" action="addBoxes" method="post">
                             <input id="box_name" type="text" placeholder="Box name">
                             <input id="box_weight" type="number" placeholder="Box weight">
                         </form>
         
                         <div class="przyciski">
-                            <button class="przycisk_add" id="przycisk_add_box">Add</button>
+                            <button id="addBoxButton" class="przycisk_add">Add</button>
                         </div>
                     </div>
         
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Remove box</h2>
-                        <form class="remove_box">
+                        <form id="removeBoxForm" class="remove_box" action="removBox" method="POST">
                             <select id="box" name="box">
                                 <option value="" disabled selected>Box</option>
-                                <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
+                                <!-- Pobierz dynamicznie listę skrzynek i wygeneruj opcje -->
                                 <option value="SVZ">SVZ</option>
                                 <option value="M5">M5</option>
                             </select>
                         </form>
         
                         <div class="przyciski">
-                            <button class="przycisk_remove" id="przycisk_remove_box">Remove</button>
+                            <button class="przycisk_remove" id="removeBoxButton">Remove</button>
                         </div>
                     </div>
                 </div>
