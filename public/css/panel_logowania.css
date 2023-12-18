@@ -148,11 +148,10 @@ input:focus {
     font-weight: 400;
 }
 
-.panel_logowania #message{
+.panel_logowania #message, .error-message{
     display: flex;
     justify-content: center;
     align-content: center;
-    padding-top: 1rem;
     color: red;
 }
 

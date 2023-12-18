@@ -23,7 +23,7 @@ class SecurityController extends AppController {
         $frusion_name = isset($_POST['frusion_name']) ? $_POST['frusion_name'] : null;
 
         if (!$email || !$password || !$confirmedPassword || !$phone || !$frusion_name) {
-            return $this->render('panel_rejerstracji', ['messages' => ['Please fill in all the fields']]);
+            return $this->render('panel_rejerstracji', ['messages' => ['Please complete all fields']]);
         }
 
         if (strlen(preg_replace('/[^a-zA-Z]/', '', $password)) < 4) {

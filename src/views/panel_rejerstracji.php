@@ -19,15 +19,16 @@
     </svg>
 
     <div class="registration-container">
+        <h1 id="create_account">Create account</h1>
         <form class="panel_rejerstracji" action="panel_rejerstracji" method="POST" id="registration_form">
-          <h1 id="create_account">Create account</h1>
+
           <input name="email" id="email" type="email" placeholder="Email">
           <input name="password" id="password" type="password" placeholder="Password">
             <input name="repeat_password" id="repeat_passowrd" type="password" placeholder="Repeat password">
             <input name="mobile" id="mobile" type="tel" placeholder="Phone" required>
           <input name="frusion_name" id="frusion_name" type="text" placeholder="Frusion name">
 
-            <div id="message">
+            <div class="error-message" id="message">
                 <?php
                 if (isset($messages)){
                     foreach ($messages as $message){
@@ -36,6 +37,10 @@
                 }
                 ?>
             </div>
+            <p id="emailFormatMessage" class="error-message"></p>
+            <p id="passwordFormatMessage" class="error-message"></p>
+            <p id="passwordMismatchMessage" class="error-message"></p>
+
           <div class="dolne_przyciski">
 
               <div class="Sign_in_z_strzalka">
@@ -75,46 +80,8 @@
         </form>
     </div>
 
-    <script>
-        var phoneNumberInput = document.getElementById('mobile');
-        var prefixAdded = false; // Dodajemy prefiks tylko raz
+    <script defer src="/public/js/przycisk_strona_logowania_sign_in.js"></script>
+    <script defer src="/public/js/rejerstracja.js"></script>
 
-        phoneNumberInput.addEventListener('input', function () {
-            formatPhoneNumber();
-        });
-
-        function formatPhoneNumber() {
-            var phoneNumberValue = phoneNumberInput.value.replace(/[^0-9]/g, ''); // Usunięcie niecyfrowych znaków
-
-            if (phoneNumberValue.length === 0) {
-                phoneNumberInput.value = ''; // Pozostawienie pola pustego, gdy brak cyfr
-                prefixAdded = false; // Resetowanie flagi, aby prefiks mógł być dodany ponownie
-                return;
-            }
-
-            if (!prefixAdded) {
-                phoneNumberValue = phoneNumberValue.substring(0, 9); // Ograniczenie do 9 cyfr
-                phoneNumberInput.value = '+48' + phoneNumberValue;
-                prefixAdded = true; // Ustawienie flagi, aby prefiks nie był dodawany ponownie
-            } else {
-                phoneNumberValue = phoneNumberValue.substring(0, 9); // Ograniczenie do 9 cyfr
-                phoneNumberInput.value = phoneNumberValue;
-            }
-
-            // Dodanie znaku "-" co trzy cyfry
-            var formattedPhoneNumber = '';
-
-            for (var i = 0; i < phoneNumberValue.length; i++) {
-                formattedPhoneNumber += phoneNumberValue[i];
-                if ((i + 1) % 3 === 0 && i + 1 < phoneNumberValue.length) {
-                    formattedPhoneNumber += '-';
-                }
-            }
-
-            phoneNumberInput.value = formattedPhoneNumber; // Ustawienie sformatowanego numeru w polu input
-        }
-
-    </script>
-    <script src="/public/js/przycisk_strona_logowania_sign_in.js"></script>
 </body>
 </html>
