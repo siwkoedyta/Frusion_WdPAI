@@ -22,25 +22,13 @@ class SecurityController extends AppController {
         $phone = isset($_POST['mobile']) ? $_POST['mobile'] : null;
         $frusion_name = isset($_POST['frusion_name']) ? $_POST['frusion_name'] : null;
 
-        if (!$email || !$password || !$confirmedPassword || !$phone || !$frusion_name) {
-            return $this->render('panel_rejerstracji', ['messages' => ['Please complete all fields']]);
-        }
-
-        if (strlen(preg_replace('/[^a-zA-Z]/', '', $password)) < 4) {
-            return $this->render('panel_rejerstracji', ['messages' => ['Password must contain at least 4 letters']]);
-        }
-
-        if ($password !== $confirmedPassword) {
-            return $this->render('panel_rejerstracji', ['messages' => ['Please provide proper password']]);
-        }
-
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // Dodanie administratora do bazy danych
         $admin = new Admin($email, $hashedPassword, $phone, $frusion_name);
         $AdminRepository->addAdmin($admin);
 
-        return $this->render('panel_logowania', ['messages' => ['You\'ve been succesfully registrated!']]);
+        return $this->render('panel_logowania', ['messages' => ['You\'ve been successfully registered!']]);
     }
     public function panel_logowania() {
 

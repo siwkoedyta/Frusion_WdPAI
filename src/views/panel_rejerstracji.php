@@ -40,6 +40,10 @@
             <p id="emailFormatMessage" class="error-message"></p>
             <p id="passwordFormatMessage" class="error-message"></p>
             <p id="passwordMismatchMessage" class="error-message"></p>
+            <p id="phoneNumberErrorMessage" class="error-message"></p>
+            <p id="frusionNameErrorMessage" class="error-message"></p>
+
+
 
           <div class="dolne_przyciski">
 
@@ -82,6 +86,7 @@
 
     <script defer src="/public/js/przycisk_strona_logowania_sign_in.js"></script>
     <script defer src="/public/js/rejerstracja.js"></script>
+
 
 </body>
 </html>

@@ -2,57 +2,62 @@ const form = document.querySelector("form");
 const emailInput = form.querySelector('input[name="email"]');
 const passwordInput = form.querySelector('input[name="password"]');
 const confirmedPasswordInput = form.querySelector('input[name="repeat_password"]');
+const frusionNameInput = form.querySelector('input[name="frusion_name"]');
 const phoneNumberInput = form.querySelector('input[name="mobile"]');
-var prefixAdded = false; // Dodajemy prefiks tylko raz
+var prefixAdded = false;
 
 function isEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
 }
-function arePasswordsSame(password, confirmedPassword) {
-    return password === confirmedPassword;
+
+function arePasswordsSame(password, repeat_password) {
+    return password === repeat_password;
 }
 
-//w momencie gdy ściągniemy przycisk z klawiatury to będzie walidować nasze pole
 function markValidation(element, condition) {
-    !condition ? element.classList.add('no-valid') : element.classList.remove('no-valid')
+    !condition ? element.classList.add('no-valid') : element.classList.remove('no-valid');
 }
+
+function updateErrorMessage(message) {
+    document.getElementById("message").innerText = message;
+}
+
+emailInput.addEventListener('keyup', validateEmail);
+passwordInput.addEventListener('keyup', validatePasswordRequirements);
+confirmedPasswordInput.addEventListener('keyup', validatePasswordMatch);
+phoneNumberInput.addEventListener('input', formatPhoneNumber);
+phoneNumberInput.addEventListener('keyup', validatePhoneNumberLength);
+frusionNameInput.addEventListener('keyup', validateFrusionName);
+
 function validateEmail() {
     setTimeout(function () {
         const isValidEmail = isEmail(emailInput.value);
 
         markValidation(emailInput, isValidEmail);
 
-        // Dodaj warunek sprawdzający, czy e-mail ma poprawny format
         if (!isValidEmail) {
-            document.getElementById("emailFormatMessage").innerText = 'The email address has an incorrect format.';
+            updateErrorMessage('The email address has an incorrect format.');
         } else {
-            document.getElementById("emailFormatMessage").innerText = ''; // Wyczyść komunikat
+            updateErrorMessage('');
         }
     }, 500);
 }
-emailInput.addEventListener('keyup', validateEmail);
 
 function validatePasswordRequirements() {
-    const password = passwordInput.value;
-    const isValidLength = password.length >= 4;
-    const hasNumber = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    // Dodaj warunek sprawdzający wymagania dla hasła
-    if (!isValidLength || !hasNumber || !hasSpecialChar) {
-        markValidation(passwordInput, false);
-
-        let errorMessage = '';
+    setTimeout(function () {
+        const password = passwordInput.value;
+        const isValidLength = password.length >= 4;
+        const hasNumber = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
         if (!isValidLength || !hasNumber || !hasSpecialChar) {
-            errorMessage = 'Min 4 characters, a number, and a special character.';
+            markValidation(passwordInput, false);
+            updateErrorMessage('Min 4 characters, a number, and a special character.');
+        } else {
+            markValidation(passwordInput, true);
+            updateErrorMessage('');
         }
-
-        document.getElementById("passwordFormatMessage").innerText = errorMessage;
-    } else {
-        markValidation(passwordInput, true);
-        document.getElementById("passwordFormatMessage").innerText = ''; // Wyczyść komunikat o formacie hasła
-    }
+    }, 1000);
 }
 
 function validatePasswordMatch() {
@@ -62,44 +67,32 @@ function validatePasswordMatch() {
 
         if (!condition) {
             markValidation(confirmedPasswordInput, false);
-            document.getElementById("passwordMismatchMessage").innerText = 'The passwords are not identical.';
+            updateErrorMessage('The passwords are not identical.');
         } else {
             markValidation(confirmedPasswordInput, true);
-            document.getElementById("passwordMismatchMessage").innerText = ''; // Wyczyść komunikat o niezgodności haseł
+            updateErrorMessage('');
         }
     }, 500);
 }
 
-passwordInput.addEventListener('keyup', validatePasswordRequirements);
-confirmedPasswordInput.addEventListener('keyup', validatePasswordMatch);
-form.addEventListener("submit", e => {
-    e.preventDefault();
-    //TODO check again if form is valid after submitting it
-});
-
-phoneNumberInput.addEventListener('input', function () {
-    formatPhoneNumber();
-});
-
 function formatPhoneNumber() {
-    var phoneNumberValue = phoneNumberInput.value.replace(/[^0-9]/g, ''); // Usunięcie niecyfrowych znaków
+    var phoneNumberValue = phoneNumberInput.value.replace(/[^0-9]/g, '');
 
     if (phoneNumberValue.length === 0) {
-        phoneNumberInput.value = ''; // Pozostawienie pola pustego, gdy brak cyfr
-        prefixAdded = false; // Resetowanie flagi, aby prefiks mógł być dodany ponownie
+        phoneNumberInput.value = '';
+        prefixAdded = false;
         return;
     }
 
     if (!prefixAdded) {
-        phoneNumberValue = phoneNumberValue.substring(0, 9); // Ograniczenie do 9 cyfr
+        phoneNumberValue = phoneNumberValue.substring(0, 9);
         phoneNumberInput.value = '+48' + phoneNumberValue;
-        prefixAdded = true; // Ustawienie flagi, aby prefiks nie był dodawany ponownie
+        prefixAdded = true;
     } else {
-        phoneNumberValue = phoneNumberValue.substring(0, 9); // Ograniczenie do 9 cyfr
+        phoneNumberValue = phoneNumberValue.substring(0, 9);
         phoneNumberInput.value = phoneNumberValue;
     }
 
-    // Dodanie znaku "-" co trzy cyfry
     var formattedPhoneNumber = '';
 
     for (var i = 0; i < phoneNumberValue.length; i++) {
@@ -108,6 +101,65 @@ function formatPhoneNumber() {
             formattedPhoneNumber += '-';
         }
     }
-    phoneNumberInput.value = formattedPhoneNumber; // Ustawienie sformatowanego numeru w polu input
+    phoneNumberInput.value = formattedPhoneNumber;
 }
 
+function validatePhoneNumberLength() {
+    setTimeout(function () {
+        var phoneNumberValue = phoneNumberInput.value.replace(/[^0-9]/g, '');
+
+        if (phoneNumberValue.length !== 9) {
+            markValidation(phoneNumberInput, false);
+            updateErrorMessage('Numer telefonu musi zawierać dokładnie 9 cyfr.');
+        } else {
+            markValidation(phoneNumberInput, true);
+            updateErrorMessage('');
+        }
+    }, 2000);
+}
+
+function validateFrusionName() {
+    setTimeout(function () {
+        const frusionNameInput = form.querySelector('input[name="frusion_name"]');
+        const frusionName = frusionNameInput.value.trim();
+
+        if (frusionName.length < 1) {
+            markValidation(frusionNameInput, false);
+            updateErrorMessage('Frusion name must have at least 1 character.');
+        } else {
+            markValidation(frusionNameInput, true);
+            updateErrorMessage('');
+        }
+    }, 1000);
+}
+
+function validateAllFields() {
+    const fields = [emailInput, passwordInput, confirmedPasswordInput, phoneNumberInput, frusionNameInput];
+
+    for (const field of fields) {
+        if (!field.value.trim()) {
+            markValidation(field, false);
+            updateErrorMessage('All fields must be filled.');
+            return false;
+        } else {
+            markValidation(field, true);
+            updateErrorMessage('');
+        }
+    }
+
+    return true;
+}
+
+form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    if (!validateAllFields()) {
+        return;
+    }
+
+    await Promise.all([validateEmail(), validatePasswordRequirements(), validatePasswordMatch(), validateFrusionName()]);
+
+    if (document.querySelectorAll('.no-valid').length === 0) {
+        form.submit();
+    }
+});
