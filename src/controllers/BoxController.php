@@ -65,24 +65,6 @@ class BoxController extends AppController
         }
     }
 
-    public function remove_boxes_form(){
-        // Assuming you have a method to check if the user is logged in
-        if (!$this->isUserLoggedIn()) {
-            // Handle authentication error or redirect
-            // For example:
-            $this->render('login'); // Redirect to login page
-            return;
-        }
-
-        // Assuming you have a method to get the decrypted email
-        $decryptedEmail = $this->getDecryptedEmail();
-
-        // Assuming you have a method to get the list of available boxes from the repository
-        $boxes = $this->BoxRepository->getAllBoxes();
-
-        $this->render('boxes', ['email' => $decryptedEmail, 'boxes' => $boxes]);
-    }
-
 }
 
 

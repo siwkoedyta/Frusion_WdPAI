@@ -23,9 +23,9 @@ Routing::post('add_client_form', 'AddClientController');
 
 Routing::get('boxes', 'BoxController');
 Routing::post('add_boxes_form', 'BoxController');
-Routing::get('remove_boxes_form', 'BoxController');
 
 Routing::get('fruit_list', 'FruitController');
+Routing::post('add_fruit_form', 'FruitController');
 
 Routing::get('status_frusion', 'SecurityController');
 

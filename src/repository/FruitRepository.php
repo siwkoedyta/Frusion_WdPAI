@@ -51,6 +51,51 @@ class FruitRepository extends Repository
 
         return $fruits;
     }
+    public function addFruit(Fruit $fruit): bool
+    {
+        try {
+            $stmt = $this->database->connect();
 
+            // Start a transaction to ensure atomicity
+            $stmt->beginTransaction();
+
+            // Insert into "Fruit" table
+            $stmtFruit = $stmt->prepare('
+            INSERT INTO public."Fruit" ("typeFruit") 
+            VALUES (:typeFruit)
+        ');
+
+            $typeFruit = $fruit->getTypeFruit();
+            $stmtFruit->bindParam(':typeFruit', $typeFruit, PDO::PARAM_STR);
+            $stmtFruit->execute();
+
+            // Get the last inserted ID (idFruit)
+            $idFruit = $stmt->lastInsertId();
+
+            // Insert into "FruitPrices" table with a default price of 0
+            $stmtPrice = $stmt->prepare('
+            INSERT INTO public."FruitPrices" ("idFruit", "price", "datePrice") 
+            VALUES (:idFruit, :price, CURRENT_DATE)
+        ');
+
+            $defaultPrice = 0.0; // Set your default price here
+            $stmtPrice->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
+            $stmtPrice->bindParam(':price', $defaultPrice, PDO::PARAM_STR);
+            $stmtPrice->execute();
+
+            // Commit the transaction
+            $stmt->commit();
+
+            return true; // Success
+        } catch (PDOException $e) {
+            // Rollback the transaction in case of an error
+            $stmt = $this->database->connect();
+            $stmt->rollBack();
+
+            // Handle the error
+            echo "Error: " . $e->getMessage();
+            return false; // Error
+        }
+    }
 
 }

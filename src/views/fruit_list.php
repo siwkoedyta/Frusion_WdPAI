@@ -60,6 +60,7 @@
             <script src="/public/js/sidebar.js"></script>
             <script src="/public/js/otworz_panel_boczny.js"></script>
             <script src="/public/js/zamknij_panel_boczny.js"></script>
+            <script defer src="/public/js/add_fruit.js"></script>
         </div>
 
 
@@ -125,12 +126,22 @@
         
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Add fruit</h2>
-                        <form class="add_fruit">
-                            <input id="name_of_the_fruit_new_add" type="text" placeholder="Name of the fruit">
+                        <form class="addFruitForm" class="add_fruit" action="addFruit" method="post">
+                            <input id="type_fruit" type="text" placeholder="Name of the fruit">
                         </form>
 
+                        <div id="message">
+                            <?php
+                            if (isset($messages)){
+                                foreach ($messages as $message){
+                                    echo $message;
+                                }
+                            }
+                            ?>
+                        </div>
+
                         <div class="przyciski">
-                            <button class="przycisk_add" id="przycisk_add_fruit">Add</button>
+                            <button id="addFruitButton" class="przycisk_add">Add</button>
                         </div>
                     </div>
 

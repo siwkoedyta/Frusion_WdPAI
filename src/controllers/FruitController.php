@@ -44,6 +44,32 @@ class FruitController extends AppController
         return $decryptedData;
     }
 
+    public function add_fruit_form()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $typeFruit = $_POST['type_fruit'];
+
+            if (empty($typeFruit)) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Invalid form data']);
+                exit;
+            }
+
+            $fruit = new Fruit($typeFruit, 0);
+            $fruitRepository = new FruitRepository();
+            $result = $fruitRepository->addFruit($fruit);
+
+            header('Content-Type: application/json');
+            if ($result) {
+                echo json_encode(['status' => 'success', 'message' => 'Fruit added successfully']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to add fruit.']);
+            }
+            exit;
+        }
+    }
+
+
 }
 
 

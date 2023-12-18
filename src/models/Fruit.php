@@ -5,6 +5,7 @@ class Fruit
     private $idFruit;
     private $typeFruit;
     private $priceFruit;
+
     public function __construct($typeFruit, $priceFruit)
     {
         $this->typeFruit = $typeFruit;
