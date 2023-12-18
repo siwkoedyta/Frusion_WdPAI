@@ -3,8 +3,16 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../models/Box.php';
 require_once __DIR__ . '/../repository/BoxRepository.php';
 
+
 class BoxController extends AppController
 {
+    private $message = [];
+    private $boxRepository;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->boxRepository = new BoxRepository();
+    }
 
     public function boxes() {
         if (!$this->isUserLoggedIn()) {
@@ -13,8 +21,9 @@ class BoxController extends AppController
             exit();
         }
 
+        $boxes = $this->boxRepository->getAllBoxes();
         $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('boxes', ['email' => $decryptedEmail]);
+        $this->render('boxes', ['email' => $decryptedEmail,'boxes' => $boxes]);
     }
 
     private function isUserLoggedIn() {
@@ -51,8 +60,27 @@ class BoxController extends AppController
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Failed to add box']);
             }
+
             exit;
         }
+    }
+
+    public function remove_boxes_form(){
+        // Assuming you have a method to check if the user is logged in
+        if (!$this->isUserLoggedIn()) {
+            // Handle authentication error or redirect
+            // For example:
+            $this->render('login'); // Redirect to login page
+            return;
+        }
+
+        // Assuming you have a method to get the decrypted email
+        $decryptedEmail = $this->getDecryptedEmail();
+
+        // Assuming you have a method to get the list of available boxes from the repository
+        $boxes = $this->BoxRepository->getAllBoxes();
+
+        $this->render('boxes', ['email' => $decryptedEmail, 'boxes' => $boxes]);
     }
 
 }

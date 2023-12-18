@@ -93,14 +93,17 @@
 
                 <div class="pierwsza_kolumna">
                     <div class="prostokat_zielony"><h2 id="naglowek_modala">Boxes</h2></div>
-                    <div class="prostokat_bialy">
-                        <div id="rodzaj_skrzynki">SVZ</div>
-                        <div class="waga_skrzynki_cala">
-                            <div id="waga_skrzynki">1,30</div>
-                            <div id="kilogramy">kg</div>
+                    <?php foreach($boxes as $box): ?>
+                        <div class="prostokat_bialy">
+                            <div id="rodzaj_skrzynki"><?= $box->getTypeBox(); ?></div>
+                            <div class="waga_skrzynki_cala">
+                                <div id="waga_skrzynki"><?= $box->getWeightBox(); ?></div>
+                                <div id="kilogramy">kg</div>
+                            </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
+
     
                 <div class="druga_kolumna">
                     <div class="prostokat">
@@ -109,20 +112,27 @@
                             <input id="box_name" type="text" placeholder="Box name">
                             <input id="box_weight" type="number" placeholder="Box weight">
                         </form>
+
+                        <div id="message">
+                            <?php
+                            if (isset($messages)){
+                                foreach ($messages as $message){
+                                    echo $message;
+                                }
+                            }
+                            ?>
+                        </div>
         
                         <div class="przyciski">
                             <button id="addBoxButton" class="przycisk_add">Add</button>
                         </div>
                     </div>
-        
+
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Remove box</h2>
-                        <form id="removeBoxForm" class="remove_box" action="removBox" method="POST">
+                        <form id="removeBoxForm" class="remove_box" action="removeBox" method="POST">
                             <select id="box" name="box">
                                 <option value="" disabled selected>Box</option>
-                                <!-- Pobierz dynamicznie listę skrzynek i wygeneruj opcje -->
-                                <option value="SVZ">SVZ</option>
-                                <option value="M5">M5</option>
                             </select>
                         </form>
         

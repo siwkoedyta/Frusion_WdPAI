@@ -91,17 +91,17 @@
 
             <div class="zawartosc_strony_kolumny">
 
-
-
                 <div class="pierwsza_kolumna">
                     <div class="prostokat_zielony"><h2 id="naglowek_modala">Fruit list</h2></div>
-                    <div class="prostokat_bialy">
-                        <div id="rodzaj_owocu">Raspbeerry</div>
-                        <div class="cena_owocu_cala">
-                            <div id="cena_owocu">3,40</div>
-                            <div id="złotówki">zł</div>
+                    <?php foreach($fruits as $fruit): ?>
+                        <div class="prostokat_bialy">
+                            <div id="rodzaj_skrzynki"><?= $fruit->getTypeFruit(); ?></div>
+                            <div class="waga_skrzynki_cala">
+                                <div id="waga_skrzynki"><?= $fruit->getPriceFruit(); ?></div>
+                                <div id="złotówki">zł</div>
+                            </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
     
                 <div class="druga_kolumna">

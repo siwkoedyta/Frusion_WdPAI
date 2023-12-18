@@ -16,7 +16,6 @@ Routing::get('panel_klienta', 'SecurityController');
 Routing::get('change_password', 'ChangePasswordController');
 Routing::post('change_password_form', 'ChangePasswordController');
 
-
 Routing::get('panel_glowny', 'SecurityController');
 
 Routing::get('add_client', 'AddClientController');
@@ -24,8 +23,10 @@ Routing::post('add_client_form', 'AddClientController');
 
 Routing::get('boxes', 'BoxController');
 Routing::post('add_boxes_form', 'BoxController');
+Routing::get('remove_boxes_form', 'BoxController');
 
-Routing::get('fruit_list', 'SecurityController');
+Routing::get('fruit_list', 'FruitController');
+
 Routing::get('status_frusion', 'SecurityController');
 
 Routing::get('FileNotFound', 'ErrorController');

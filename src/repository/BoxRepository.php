@@ -22,13 +22,32 @@ class BoxRepository extends Repository{
             $box['weightBox']
         );
     }
+
+    public function getAllBoxes(): array
+    {
+        $boxes = [];
+        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Box"');
+
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($result as $box) {
+            $boxes[] = new Box(
+                $box['typeBox'],
+                $box['weightBox']
+            );
+        }
+
+        return $boxes;
+    }
     public function addBoxes(Box $box): bool
     {
         try {
             $stmt = $this->database->connect()->prepare('
-    INSERT INTO public."Box" ("typeBox", "weightBox") 
-    VALUES (:typeBox, :weightBox)
-');
+                INSERT INTO public."Box" ("typeBox", "weightBox") 
+                VALUES (:typeBox, :weightBox)
+            ');
 
             $typeBox = $box->getTypeBox();
             $weightBox = $box->getWeightBox();

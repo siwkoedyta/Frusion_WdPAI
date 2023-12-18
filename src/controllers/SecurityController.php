@@ -141,7 +141,6 @@ class SecurityController extends AppController {
         }
     }
 
-
     public function panel_glowny() {
         // Sprawdź, czy użytkownik jest zalogowany
         if (!$this->isUserLoggedIn()) {
@@ -167,17 +166,6 @@ class SecurityController extends AppController {
 
         $decryptedEmail = $this->getDecryptedEmail();
         $this->render('panel_klienta', ['email' => $decryptedEmail]);
-    }
-
-    public function fruit_list() {
-        if (!$this->isUserLoggedIn()) {
-            $url = "http://$_SERVER[HTTP_HOST]";
-            header("Location: {$url}/panel_logowania", true, 303);
-            exit();
-        }
-
-        $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('fruit_list', ['email' => $decryptedEmail]);
     }
 
     public function status_frusion() {
