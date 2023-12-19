@@ -16,22 +16,43 @@ class FruitController extends AppController
         $this->fruitRepository = new FruitRepository();
     }
 
-    public function fruit_list() {
+    public function fruit_list($messages = [])
+    {
         if (!$this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
-            header("Location: {$url}/panel_logowania", true, 303);
+            header("Location: $url/panel_logowania", true, 303);
             exit();
         }
 
-        $fruits = $this->fruitRepository->getAllFruit();
-        $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('fruit_list', ['email' => $decryptedEmail, 'fruits' => $fruits]);
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case "GET":
+                $this->renderFruitList();
+                break;
+            case "POST":
+                switch ($_POST['type']) {
+                    case "addFruit":
+                        $this->handleAddFruit();
+                        break;
+                    case "removeFruit":
+                        $this->handleRemoveFruit();
+                        break;
+                }
+                break;
+        }
     }
 
     private function isUserLoggedIn()
     {
         return isset($_COOKIE['logged_user']);
     }
+
+    private function renderFruitList($fields = [])
+    {
+        $fruits = $this->fruitRepository->getAllFruit();
+        $decryptedEmail = $this->getDecryptedEmail();
+        $this->render('fruit_list', ['email' => $decryptedEmail, 'fruits' => $fruits] + $fields);
+    }
+
 
     private function getDecryptedEmail()
     {
@@ -44,32 +65,45 @@ class FruitController extends AppController
         return $decryptedData;
     }
 
-    public function add_fruit_form()
+    private function handleAddFruit()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $typeFruit = $_POST['type_fruit'];
+        $typeFruit = $_POST['typeFruit'];
 
-            if (empty($typeFruit)) {
-                header('Content-Type: application/json');
-                echo json_encode(['status' => 'error', 'message' => 'Invalid form data']);
-                exit;
-            }
-
-            $fruit = new Fruit($typeFruit, 0);
-            $fruitRepository = new FruitRepository();
-            $result = $fruitRepository->addFruit($fruit);
-
-            header('Content-Type: application/json');
-            if ($result) {
-                echo json_encode(['status' => 'success', 'message' => 'Fruit added successfully']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to add fruit.']);
-            }
+        if (empty($typeFruit)) {
+            $this->renderFruitList(["addFruitMsg" => "Fruit name invalid"]);
             exit;
         }
+
+        $fruit = new Fruit($typeFruit, 0);
+        $fruitRepository = new FruitRepository();
+        $result = $fruitRepository->addFruit($fruit);
+
+        if ($result) {
+            $message = 'Fruit added successfully.';
+        } else {
+            $message = 'Failed to add fruit.';
+        }
+        $this->renderFruitList(["addFruitMsg" => $message]);
     }
 
+    public function handleRemoveFruit()
+    {
+        $typeFruit = $_POST['typeFruit'];
 
+        if (empty($typeFruit)) {
+            $this->renderFruitList(["removeFruitMsg" => "Fruit name invalid"]);
+            exit;
+        }
+
+        $result = $this->fruitRepository->removeFruit($typeFruit);
+
+        if ($result) {
+            $message = 'Fruit removed successfully.';
+        } else {
+            $message = 'Failed to remove fruit.';
+        }
+        $this->renderFruitList(["removeFruitMsg" => $message]);
+    }
 }
 
 

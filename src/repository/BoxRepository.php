@@ -41,6 +41,20 @@ class BoxRepository extends Repository{
 
         return $boxes;
     }
+    public function getAllBoxNames(): array
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT "typeBox"
+        FROM public."Box"
+    ');
+
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        return $result;
+    }
+
     public function addBoxes(Box $box): bool
     {
         try {

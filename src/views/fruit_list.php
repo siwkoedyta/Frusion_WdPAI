@@ -57,10 +57,6 @@
                 </li>
             </ul>
 
-            <script src="/public/js/sidebar.js"></script>
-            <script src="/public/js/otworz_panel_boczny.js"></script>
-            <script src="/public/js/zamknij_panel_boczny.js"></script>
-            <script defer src="/public/js/add_fruit.js"></script>
         </div>
 
 
@@ -120,46 +116,51 @@
                         </form>
         
                         <div class="przyciski">
-                            <button class="przycisk_add" id="przycisk_set_the_price">Add</button>
+                            <button class="przycisk_add" id="setFruitPriceButton">Add</button>
                         </div>
                     </div>
         
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Add fruit</h2>
-                        <form class="addFruitForm" class="add_fruit" action="addFruit" method="post">
-                            <input id="type_fruit" type="text" placeholder="Name of the fruit">
+                        <form class="addFruitForm" action="fruit_list" method="post">
+                            <input name="type" value="addFruit" type="hidden">
+                            <input name="typeFruit" type="text" placeholder="Name of the fruit">
+
+                            <div id="message">
+                                <?php if (isset($addFruitMsg)) echo $addFruitMsg; ?>
+                            </div>
+
+                            <div class="przyciski">
+                                <button type="submit" class="przycisk_add">Add</button>
+                            </div>
                         </form>
-
-                        <div id="message">
-                            <?php
-                            if (isset($messages)){
-                                foreach ($messages as $message){
-                                    echo $message;
-                                }
-                            }
-                            ?>
-                        </div>
-
-                        <div class="przyciski">
-                            <button id="addFruitButton" class="przycisk_add">Add</button>
-                        </div>
                     </div>
 
-        
+
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Remove fruit</h2>
-                        <form class="add_fruit">
-                            <select id="name_of_the_fruit" name="Name of the fruit">
-                                <option value="" disabled selected>Name of the fruit</option>
-                                <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                                <option value="Raspbeerry">Raspbeerry</option>
-                                <option value="Strawberry">Strawberry</option>
+                        <form class="remove_fruit" id="removeFruitForm" action="fruit_list" method="post">
+                            <input name="type" value="removeFruit" type="hidden">
+                            <select name="typeFruit">
+                                <?php
+                                    $fruitRepository = new FruitRepository();
+                                    $fruitNames = $fruitRepository->getAllFruitNames();
+                                    foreach ($fruitNames as $fruitName) {
+                                        echo '<option value="' . $fruitName . '">' . $fruitName . '</option>';
+                                    }
+                                ?>
                             </select>
+
+                            <div id="message">
+                                <?php if (isset($removeFruitMsg)) echo $removeFruitMsg; ?>
+                            </div>
+
+                            <div class="przyciski">
+                                <button type="submit" class="przycisk_remove">Remove</button>
+                            </div>
                         </form>
 
-                        <div class="przyciski">
-                            <button class="przycisk_remove" id="przycisk_remove_fruit">Remove</button>
-                        </div>
+
                     </div>
 
                     
@@ -170,5 +171,12 @@
         </div>
         
     </div>
+
+    <script src="/public/js/sidebar.js"></script>
+    <script src="/public/js/otworz_panel_boczny.js"></script>
+    <script src="/public/js/zamknij_panel_boczny.js"></script>
+<!--    <script defer src="/public/js/add_fruit.js"></script>-->
+<!--    <script defer src="/public/js/remove_fruit.js"></script>-->
+
 </body>
 </html>

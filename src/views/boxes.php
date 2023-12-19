@@ -133,6 +133,13 @@
                         <form id="removeBoxForm" class="remove_box" action="removeBox" method="POST">
                             <select id="box" name="box">
                                 <option value="" disabled selected>Box</option>
+                                <?php
+                                $boxRepository = new BoxRepository();
+                                $boxNames = $boxRepository->getAllBoxNames();
+                                foreach ($boxNames as $boxName) {
+                                    echo '<option value="' . $boxName . '">' . $boxName . '</option>';
+                                }
+                                ?>
                             </select>
                         </form>
         
