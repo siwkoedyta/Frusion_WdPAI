@@ -72,10 +72,8 @@ class FruitRepository extends Repository
         try {
             $stmt = $this->database->connect();
 
-            // Start a transaction to ensure atomicity
             $stmt->beginTransaction();
 
-            // Insert into "Fruit" table
             $stmtFruit = $stmt->prepare('
             INSERT INTO public."Fruit" ("typeFruit") 
             VALUES (:typeFruit)
@@ -85,26 +83,22 @@ class FruitRepository extends Repository
             $stmtFruit->bindParam(':typeFruit', $typeFruit, PDO::PARAM_STR);
             $stmtFruit->execute();
 
-            // Get the last inserted ID (idFruit)
             $idFruit = $stmt->lastInsertId();
 
-            // Insert into "FruitPrices" table with a default price of 0
             $stmtPrice = $stmt->prepare('
             INSERT INTO public."FruitPrices" ("idFruit", "price", "datePrice") 
             VALUES (:idFruit, :price, CURRENT_DATE)
         ');
 
-            $defaultPrice = 0.0; // Set your default price here
+            $defaultPrice = 0.0;
             $stmtPrice->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
             $stmtPrice->bindParam(':price', $defaultPrice, PDO::PARAM_STR);
             $stmtPrice->execute();
 
-            // Commit the transaction
             $stmt->commit();
 
             return true; // Success
         } catch (PDOException $e) {
-            // Rollback the transaction in case of an error
             $stmt = $this->database->connect();
             $stmt->rollBack();
 
@@ -119,10 +113,8 @@ class FruitRepository extends Repository
         try {
             $stmt = $this->database->connect();
 
-            // Start a transaction to ensure atomicity
             $stmt->beginTransaction();
 
-            // Get the idFruit for the given fruitName
             $stmtGetId = $stmt->prepare('
             SELECT "idFruit"
             FROM public."Fruit"
@@ -135,14 +127,12 @@ class FruitRepository extends Repository
             $idFruitResult = $stmtGetId->fetch(PDO::FETCH_ASSOC);
 
             if (!$idFruitResult) {
-                // Fruit not found
                 $stmt->rollBack();
                 return false;
             }
 
             $idFruit = $idFruitResult['idFruit'];
 
-            // Delete records from FruitPrices table
             $stmtDeletePrices = $stmt->prepare('
             DELETE FROM public."FruitPrices"
             WHERE "idFruit" = :idFruit
@@ -151,7 +141,6 @@ class FruitRepository extends Repository
             $stmtDeletePrices->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
             $stmtDeletePrices->execute();
 
-            // Delete record from Fruit table
             $stmtDeleteFruit = $stmt->prepare('
             DELETE FROM public."Fruit"
             WHERE "idFruit" = :idFruit
@@ -160,12 +149,59 @@ class FruitRepository extends Repository
             $stmtDeleteFruit->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
             $stmtDeleteFruit->execute();
 
-            // Commit the transaction
             $stmt->commit();
 
             return true; // Success
         } catch (PDOException $e) {
-            // Rollback the transaction in case of an error
+            $stmt = $this->database->connect();
+            $stmt->rollBack();
+
+            echo "Error: " . $e->getMessage();
+            return false; // Error
+        }
+    }
+
+    public function setFruitPrice(string $typeFruit, float $newPrice): bool
+    {
+        try {
+            $stmt = $this->database->connect();
+
+            $stmt->beginTransaction();
+
+            // Get the ID of the fruit
+            $stmtGetId = $stmt->prepare('
+                SELECT "idFruit"
+                FROM public."Fruit"
+                WHERE "typeFruit" = :typeFruit
+            ');
+
+            $stmtGetId->bindParam(':typeFruit', $typeFruit, PDO::PARAM_STR);
+            $stmtGetId->execute();
+
+            $idFruitResult = $stmtGetId->fetch(PDO::FETCH_ASSOC);
+
+            if (!$idFruitResult) {
+                $stmt->rollBack();
+                return false;
+            }
+
+            $idFruit = $idFruitResult['idFruit'];
+
+            // Update the price
+            $stmtUpdatePrice = $stmt->prepare('
+                UPDATE public."FruitPrices"
+                SET "price" = :newPrice
+                WHERE "idFruit" = :idFruit
+            ');
+
+            $stmtUpdatePrice->bindParam(':newPrice', $newPrice, PDO::PARAM_STR);
+            $stmtUpdatePrice->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
+            $stmtUpdatePrice->execute();
+
+            $stmt->commit();
+
+            return true; // Success
+        } catch (PDOException $e) {
             $stmt = $this->database->connect();
             $stmt->rollBack();
 

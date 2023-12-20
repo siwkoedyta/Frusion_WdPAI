@@ -36,6 +36,9 @@ class FruitController extends AppController
                     case "removeFruit":
                         $this->handleRemoveFruit();
                         break;
+                    case "setPrice":
+                        $this->handleSetPrice();
+                        break;
                 }
                 break;
         }
@@ -74,6 +77,12 @@ class FruitController extends AppController
             exit;
         }
 
+        $existingFruits = $this->fruitRepository->getAllFruitNames();
+        if (in_array($typeFruit, $existingFruits)) {
+            $this->renderFruitList(["addFruitMsg" => "Fruit already exists"]);
+            exit;
+        }
+
         $fruit = new Fruit($typeFruit, 0);
         $fruitRepository = new FruitRepository();
         $result = $fruitRepository->addFruit($fruit);
@@ -103,6 +112,27 @@ class FruitController extends AppController
             $message = 'Failed to remove fruit.';
         }
         $this->renderFruitList(["removeFruitMsg" => $message]);
+    }
+
+    private function handleSetPrice()
+    {
+        $typeFruit = $_POST['typeFruitSet'];
+        $newPrice = $_POST['newPrice'];
+
+        if (empty($typeFruit) || !is_numeric($newPrice)) {
+            $this->renderFruitList(["setPriceMsg" => "Invalid input"]);
+            exit;
+        }
+
+        // Update the price
+        $result = $this->fruitRepository->setFruitPrice($typeFruit, $newPrice);
+
+        if ($result) {
+            $message = 'Price updated successfully.';
+        } else {
+            $message = 'Failed to update price.';
+        }
+        $this->renderFruitList(["setPriceMsg" => $message]);
     }
 }
 

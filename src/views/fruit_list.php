@@ -105,19 +105,29 @@
 
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Set the price</h2>
-                        <form class="set_the_price">
-                            <select id="name_of_the_fruit" name="Name of the fruit">
+                        <form class="set_the_price" action="fruit_list" method="post">
+                            <input name="type" value="setPrice" type="hidden">
+                            <select name="typeFruitSet">
                                 <option value="" disabled selected>Name of the fruit</option>
-                                <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                                <option value="Raspbeerry">Raspbeerry</option>
-                                <option value="Strawberry">Strawberry</option>
+                                <?php
+                                $fruitRepository = new FruitRepository();
+                                $fruitNames = $fruitRepository->getAllFruitNames();
+                                foreach ($fruitNames as $fruitName) {
+                                    echo '<option value="' . $fruitName . '">' . $fruitName . '</option>';
+                                }
+                                ?>
                             </select>
-                            <input id="price" type="number" placeholder="Price">
+                            <input id="price" name ="newPrice" type="number" placeholder="Price">
+
+                            <div id="message">
+                                <?php if (isset($setPriceMsg)) echo $setPriceMsg; ?>
+                            </div>
+
+                            <div class="przyciski">
+                                <button type="submit" class="przycisk_add" id="setFruitPriceButton">Change</button>
+                            </div>
                         </form>
-        
-                        <div class="przyciski">
-                            <button class="przycisk_add" id="setFruitPriceButton">Add</button>
-                        </div>
+
                     </div>
         
                     <div class="prostokat">
@@ -142,6 +152,7 @@
                         <form class="remove_fruit" id="removeFruitForm" action="fruit_list" method="post">
                             <input name="type" value="removeFruit" type="hidden">
                             <select name="typeFruit">
+                                <option value="" disabled selected>Name of the fruit</option>
                                 <?php
                                     $fruitRepository = new FruitRepository();
                                     $fruitNames = $fruitRepository->getAllFruitNames();
