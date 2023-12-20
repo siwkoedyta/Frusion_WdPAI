@@ -58,24 +58,77 @@ class BoxRepository extends Repository{
     public function addBoxes(Box $box): bool
     {
         try {
-            $stmt = $this->database->connect()->prepare('
-                INSERT INTO public."Box" ("typeBox", "weightBox") 
-                VALUES (:typeBox, :weightBox)
-            ');
+            $stmt = $this->database->connect();
+
+            $stmt->beginTransaction();
+
+            $stmtInsertBox = $stmt->prepare('
+            INSERT INTO public."Box" ("typeBox", "weightBox") 
+            VALUES (:typeBox, :weightBox)
+        ');
 
             $typeBox = $box->getTypeBox();
             $weightBox = $box->getWeightBox();
 
-            $stmt->bindParam(':typeBox', $typeBox, PDO::PARAM_STR);
-            $stmt->bindParam(':weightBox', $weightBox, PDO::PARAM_INT);  // Corrected binding
+            $stmtInsertBox->bindParam(':typeBox', $typeBox, PDO::PARAM_STR);
+            $stmtInsertBox->bindParam(':weightBox', $weightBox, PDO::PARAM_INT);  // Corrected binding
 
-            $stmt->execute();
+            $stmtInsertBox->execute();
 
-            return true; // Sukces
+            $stmt->commit();
+
+            return true; // Success
         } catch (PDOException $e) {
-            // Obsługa błędów
+            $stmt = $this->database->connect();
+            $stmt->rollBack();
+
             echo "Error: " . $e->getMessage();
-            return false; // Błąd
+            return false; // Error
+        }
+    }
+
+    public function removeBox(string $boxName): bool
+    {
+        try {
+            $stmt = $this->database->connect();
+
+            $stmt->beginTransaction();
+
+            $stmtGetId = $stmt->prepare('
+            SELECT "idBox"
+            FROM public."Box"
+            WHERE "typeBox" = :boxName
+        ');
+
+            $stmtGetId->bindParam(':boxName', $boxName, PDO::PARAM_STR);
+            $stmtGetId->execute();
+
+            $idBoxResult = $stmtGetId->fetch(PDO::FETCH_ASSOC);
+
+            if (!$idBoxResult) {
+                $stmt->rollBack();
+                return false;
+            }
+
+            $idBox = $idBoxResult['idBox'];
+
+            $stmtDeleteBox = $stmt->prepare('
+            DELETE FROM public."Box"
+            WHERE "idBox" = :idBox
+        ');
+
+            $stmtDeleteBox->bindParam(':idBox', $idBox, PDO::PARAM_INT);
+            $stmtDeleteBox->execute();
+
+            $stmt->commit();
+
+            return true; // Success
+        } catch (PDOException $e) {
+            $stmt = $this->database->connect();
+            $stmt->rollBack();
+
+            echo "Error: " . $e->getMessage();
+            return false; // Error
         }
     }
 

@@ -58,7 +58,6 @@
             <script src="/public/js/sidebar.js"></script>
             <script src="/public/js/otworz_panel_boczny.js"></script>
             <script src="/public/js/zamknij_panel_boczny.js"></script>
-            <script src="/public/js/add_box.js"></script>
 
         </div>
 
@@ -108,30 +107,26 @@
                 <div class="druga_kolumna">
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Add box</h2>
-                        <form id="addBoxForm" class="add_box" action="addBoxes" method="post">
-                            <input id="box_name" type="text" placeholder="Box name">
-                            <input id="box_weight" type="number" placeholder="Box weight">
-                        </form>
+                        <form id="addBoxForm" class="add_box" action="boxes" method="POST">
+                            <input name="type" value="addBox" type="hidden">
+                            <input name="box_name" id="box_name" type="text" placeholder="Box name">
+                            <input name="box_weight" id="box_weight" type="number" placeholder="Box weight">
 
-                        <div id="message">
-                            <?php
-                            if (isset($messages)){
-                                foreach ($messages as $message){
-                                    echo $message;
-                                }
-                            }
-                            ?>
-                        </div>
-        
-                        <div class="przyciski">
-                            <button id="addBoxButton" class="przycisk_add">Add</button>
-                        </div>
+                            <div id="message">
+                                <?php if (isset($addBoxMsg)) echo $addBoxMsg; ?>
+                            </div>
+
+                            <div class="przyciski">
+                                <button id="addBoxButton" class="przycisk_add">Add</button>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="prostokat">
                         <h2 id="naglowek_modala">Remove box</h2>
-                        <form id="removeBoxForm" class="remove_box" action="removeBox" method="POST">
-                            <select id="box" name="box">
+                        <form id="removeBoxForm" class="remove_box" action="boxes" method="POST">
+                            <input name="type" value="removeBox" type="hidden">
+                            <select name="boxRemove">
                                 <option value="" disabled selected>Box</option>
                                 <?php
                                 $boxRepository = new BoxRepository();
@@ -141,11 +136,16 @@
                                 }
                                 ?>
                             </select>
+
+                            <div id="message">
+                                <?php if (isset($removeBoxMsg)) echo $removeBoxMsg; ?>
+                            </div>
+
+                            <div class="przyciski">
+                                <button type="submit" class="przycisk_remove">Remove</button>
+                            </div>
                         </form>
-        
-                        <div class="przyciski">
-                            <button class="przycisk_remove" id="removeBoxButton">Remove</button>
-                        </div>
+
                     </div>
                 </div>
     

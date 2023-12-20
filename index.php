@@ -22,7 +22,7 @@ Routing::get('add_client', 'AddClientController');
 Routing::post('add_client_form', 'AddClientController');
 
 Routing::get('boxes', 'BoxController');
-Routing::post('add_boxes_form', 'BoxController');
+Routing::post('boxes', 'BoxController');
 
 Routing::get('fruit_list', 'FruitController');
 Routing::post('fruit_list', 'FruitController');

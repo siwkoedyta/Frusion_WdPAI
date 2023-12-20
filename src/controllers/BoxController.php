@@ -13,17 +13,29 @@ class BoxController extends AppController
         parent::__construct();
         $this->boxRepository = new BoxRepository();
     }
-
-    public function boxes() {
+    public function boxes($messages = [])
+    {
         if (!$this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
-            header("Location: {$url}/panel_logowania", true, 303);
+            header("Location: $url/panel_logowania", true, 303);
             exit();
         }
 
-        $boxes = $this->boxRepository->getAllBoxes();
-        $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('boxes', ['email' => $decryptedEmail,'boxes' => $boxes]);
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case "GET":
+                $this->renderBoxList();
+                break;
+            case "POST":
+                switch ($_POST['type']) {
+                    case "addBox":
+                        $this->handleAddBox();
+                        break;
+                    case "removeBox":
+                        $this->handleRemoveBox();
+                        break;
+                }
+                break;
+        }
     }
 
     private function isUserLoggedIn() {
@@ -38,31 +50,62 @@ class BoxController extends AppController
 
         return $decryptedData;
     }
-    public function add_boxes_form()
+
+
+    public function renderBoxList($fields = []) {
+        $boxes = $this->boxRepository->getAllBoxes();
+        $decryptedEmail = $this->getDecryptedEmail();
+        $this->render('boxes', ['email' => $decryptedEmail,'boxes' => $boxes]+ $fields);
+    }
+
+    public function handleAddBox()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $typeBox = $_POST['box_name'];
-            $weightBox = $_POST['box_weight'];
+        $typeBox = $_POST['box_name'];
+        $weightBox = $_POST['box_weight'];
 
-            if (empty($typeBox) || empty($weightBox)) {
-                header('Content-Type: application/json');
-                echo json_encode(['status' => 'error', 'message' => 'Invalid form data']);
-                exit;
-            }
-
-            $box = new Box($typeBox, $weightBox);
-            $boxRepository = new BoxRepository();
-            $result = $boxRepository->addBoxes($box);
-
-            header('Content-Type: application/json');
-            if ($result) {
-                echo json_encode(['status' => 'success', 'message' => 'Box added successfully']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to add box']);
-            }
-
+        if (empty($typeBox) || empty($weightBox)) {
+            $this->renderBoxList(["addBoxMsg" => "Invalid form data"]);
             exit;
         }
+
+        $existingBoxes = $this->boxRepository->getAllBoxNames();
+        if (in_array($typeBox, $existingBoxes)) {
+            $this->renderBoxList(["addBoxMsg" => "Box already exists"]);
+            exit;
+        }
+
+        $box = new Box($typeBox, $weightBox);
+        $boxRepository = new BoxRepository();
+        $result = $boxRepository->addBoxes($box);
+
+
+        if ($result) {
+            $message = 'Box added successfully.';
+        } else {
+            $message = 'Failed to add box.';
+        }
+        $this->renderBoxList(["addBoxMsg" => $message]);
+
+    }
+
+    public function handleRemoveBox()
+    {
+        $typeBox = $_POST['boxRemove'];
+
+        if (empty($typeBox)) {
+            $this->renderBoxList(["removeBoxMsg" => "Box name invalid"]);
+            exit;
+        }
+
+        $result = $this->boxRepository->removeBox($typeBox);
+
+        if ($result) {
+            $message = 'Box removed successfully.';
+        } else {
+            $message = 'Failed to remove box.';
+        }
+        $this->renderBoxList(["removeBoxMsg" => $message]);
+
     }
 
 }

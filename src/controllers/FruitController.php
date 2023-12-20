@@ -48,15 +48,6 @@ class FruitController extends AppController
     {
         return isset($_COOKIE['logged_user']);
     }
-
-    private function renderFruitList($fields = [])
-    {
-        $fruits = $this->fruitRepository->getAllFruit();
-        $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('fruit_list', ['email' => $decryptedEmail, 'fruits' => $fruits] + $fields);
-    }
-
-
     private function getDecryptedEmail()
     {
         $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
@@ -66,6 +57,12 @@ class FruitController extends AppController
         $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
 
         return $decryptedData;
+    }
+    private function renderFruitList($fields = [])
+    {
+        $fruits = $this->fruitRepository->getAllFruit();
+        $decryptedEmail = $this->getDecryptedEmail();
+        $this->render('fruit_list', ['email' => $decryptedEmail, 'fruits' => $fruits] + $fields);
     }
 
     private function handleAddFruit()
