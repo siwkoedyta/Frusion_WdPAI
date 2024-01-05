@@ -21,19 +21,9 @@ class User {
         return $this->idUser;
     }
 
-    public function setIdUser($idUser): void
-    {
-        $this->idUser = $idUser;
-    }
-
     public function getFirstName()
     {
         return $this->firstName;
-    }
-
-    public function setFirstName($firstName): void
-    {
-        $this->firstName = $firstName;
     }
 
     public function getLastName()
@@ -41,19 +31,9 @@ class User {
         return $this->lastName;
     }
 
-    public function setLastName($lastName): void
-    {
-        $this->lastName = $lastName;
-    }
-
     public function getEmail()
     {
         return $this->email;
-    }
-
-    public function setEmail($email): void
-    {
-        $this->email = $email;
     }
 
     public function getPassword()

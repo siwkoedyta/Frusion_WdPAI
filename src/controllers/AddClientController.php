@@ -2,16 +2,42 @@
 require_once 'AppController.php';
 
 class AddClientController extends AppController{
-    public function add_client() {
+    private $message = [];
+    private $userRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userRepository = new UserRepository();
+    }
+    public function add_client($messages = [])
+    {
         if (!$this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/panel_logowania", true, 303);
             exit();
         }
 
-        $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('add_client', ['email' => $decryptedEmail]);
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case "GET":
+                $this->renderClients();
+                break;
+            case "POST":
+                switch ($_POST['type']) {
+                    case "addClient":
+                        $this->handleAddClient();
+                        break;
+                }
+                break;
+        }
     }
+
+    private function renderClients($fields = [])
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+        $this->render('add_client', ['email' => $decryptedEmail] + $fields);
+    }
+
     private function isUserLoggedIn() {
         return isset($_COOKIE['logged_user']);
     }
@@ -25,33 +51,34 @@ class AddClientController extends AppController{
         return $decryptedData;
     }
 
-    public function add_client_form() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'];
-            $lastName = $_POST['last_name'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+    public function handleAddClient() {
 
-            if (empty($name) || empty($lastName) || empty($email) || empty($password)) {
-                header('Content-Type: application/json');
-                echo json_encode(['status' => 'error', 'message' => 'Invalid form data']);
-                exit;
-            }
+        $firstName = $_POST['first_name'];
+        $lastName = $_POST['last_name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-            $user = new User($name, $lastName, $email, $hashedPassword);
-            $userRepository = new UserRepository();
-            $result = $userRepository->addClient($user);
-
-            header('Content-Type: application/json');
-            if ($result) {
-                echo json_encode(['status' => 'success','message' => 'User added.']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to add user.']);
-            }
+        if (empty($firstName) || empty($lastName) || empty($email) || empty($password)) {
+            $this->renderClients(["addUserMsg" => "Invalid form data"]);
             exit;
         }
+
+        $userEmailExists = $this->userRepository->userEmailExists($email);
+        if ($userEmailExists) {
+            $this->renderClients(["addUserMsg" => "User already exists"]);
+            exit;
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $result = $this->userRepository->addClient($firstName,$lastName,$email,$hashedPassword);
+
+        if ($result) {
+            $message = 'User added successfully.';
+        } else {
+            $message = 'Failed to add user.';
+        }
+        $this->renderClients(["addUserMsg" => $message]);
+
     }
 
 }

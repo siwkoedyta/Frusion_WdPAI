@@ -73,7 +73,6 @@
             <script src="/public/js/sidebar.js"></script>
             <script src="/public/js/otworz_panel_boczny.js"></script>
             <script src="/public/js/zamknij_panel_boczny.js"></script>
-            <script src="/public/js/add_client.js"></script>
 
         </div>
 
@@ -109,26 +108,23 @@
 
                 <div class="prostokat_add_client">
                     <h2 id="naglowek_modala">Add client</h2>
-                    <form id="addUserForm" class="add_client_strona" action="addClient" method="post">
-                        <input id="name" type="text" placeholder="First Name">
-                        <input id="last_name" type="text" placeholder="Last Name">
-                        <input id="email" type="email" placeholder="E-mail">
-                        <input id="password" type="password" placeholder="Password">
+                    <form class="add_client" action="add_client" method="POST">
+                        <input name="type" value="addClient" type="hidden">
+                        <input name="first_name" type="text" placeholder="First Name">
+                        <input name="last_name" type="text" placeholder="Last Name">
+                        <input name="email" type="email" placeholder="E-mail">
+                        <input name="password" type="password" placeholder="Password">
+
+                        <div id="message">
+                            <?php if (isset($addUserMsg)) echo $addUserMsg; ?>
+                        </div>
+
+                        <div class="przyciski">
+                            <button type="submit" class="przycisk_add">Add</button>
+                        </div>
                     </form>
 
-                    <div id="message">
-                        <?php
-                        if (isset($messages)){
-                            foreach ($messages as $message){
-                                echo $message;
-                            }
-                        }
-                        ?>
-                    </div>
 
-                    <div class="przyciski">
-                        <button id="addUserButton" class="przycisk_add">Add</button>
-                    </div>
                 </div>
             </div>
 

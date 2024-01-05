@@ -54,7 +54,6 @@
         <script src="/public/js/sidebar.js"></script>
         <script src="/public/js/otworz_panel_boczny.js"></script>
         <script src="/public/js/zamknij_panel_boczny.js"></script>
-        <script src="/public/js/change_password.js"></script>
 
     </div>
 
@@ -93,25 +92,22 @@
 
                 <div class="prostokat_add_client">
                     <h2 id="naglowek_modala">Change password</h2>
-                    <form id="changePasswordForm" class="add_client_strona" action="change_password" method="post">
-                        <input id="current_password" type="password" placeholder="Current password">
-                        <input id="new_password" type="password" placeholder="New password">
-                        <input id="repeat_new_password" type="password" placeholder="Repeat new password">
+                    <form class="add_client_strona" action="change_password" method="post">
+                        <input name="type" value="changePassword" type="hidden">
+                        <input name="current_password" type="password" placeholder="Current password">
+                        <input name="new_password" type="password" placeholder="New password">
+                        <input name="repeat_new_password" type="password" placeholder="Repeat new password">
+
+                        <div id="message">
+                            <?php if (isset($changePasswordMsg)) echo $changePasswordMsg; ?>
+                        </div>
+
+                        <div class="przyciski">
+                            <button type="submit" class="przycisk_add">Change</button>
+                        </div>
                     </form>
 
-                    <div id="message">
-                        <?php
-                        if (isset($messages)){
-                            foreach ($messages as $message){
-                                echo $message;
-                            }
-                        }
-                        ?>
-                    </div>
 
-                    <div class="przyciski">
-                        <button id="changePasswordButton" class="przycisk_add">Change</button>
-                    </div>
                 </div>
             </div>
 

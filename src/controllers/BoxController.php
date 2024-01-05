@@ -59,8 +59,7 @@ class BoxController extends AppController
         $this->render('boxes', ['email' => $decryptedEmail,'boxes' => $boxes]+ $fields);
     }
 
-    public function handleAddBox()
-    {
+    public function handleAddBox(){
         $typeBox = $_POST['box_name'];
         $weightBox = $_POST['box_weight'];
 
@@ -85,8 +84,7 @@ class BoxController extends AppController
 
     }
 
-    public function handleRemoveBox()
-    {
+    public function handleRemoveBox(){
         $idBox = $_POST['idBox'];
 
         if (empty($idBox)) {

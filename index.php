@@ -14,13 +14,13 @@ Routing::post('panel_rejerstracji', 'SecurityController');
 Routing::get('panel_klienta', 'SecurityController');
 
 Routing::get('change_password', 'ChangePasswordController');
-Routing::post('change_password_form', 'ChangePasswordController');
+Routing::post('change_password', 'ChangePasswordController');
 
 Routing::get('panel_glowny', 'HomeController');
 Routing::post('panel_glowny', 'HomeController');
 
 Routing::get('add_client', 'AddClientController');
-Routing::post('add_client_form', 'AddClientController');
+Routing::post('add_client', 'AddClientController');
 
 Routing::get('boxes', 'BoxController');
 Routing::post('boxes', 'BoxController');

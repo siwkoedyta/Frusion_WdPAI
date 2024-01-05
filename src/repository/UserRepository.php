@@ -75,49 +75,80 @@ class UserRepository extends Repository
             $userData['password']
         );
     }
-    public function addClient(User $user): bool
+    public function addClient(string $firstName,string $lastName, string $email, string $password): bool
     {
         try {
-            $stmt = $this->database->connect()->prepare('
+            $stmt = $this->database->connect();
+
+            $stmt->beginTransaction();
+
+            $stmtInsertUser = $this->database->connect()->prepare('
             INSERT INTO public."User" ("firstName", "lastName", "email", "password") 
             VALUES (:firstName, :lastName, :email, :password)
         ');
 
-            $stmt->bindValue(':firstName', $user->getFirstName(), PDO::PARAM_STR);
-            $stmt->bindValue(':lastName', $user->getLastName(), PDO::PARAM_STR);
-            $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
-            $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
+            $stmtInsertUser->bindValue(':firstName', $firstName, PDO::PARAM_STR);
+            $stmtInsertUser->bindValue(':lastName', $lastName, PDO::PARAM_STR);
+            $stmtInsertUser->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmtInsertUser->bindValue(':password', $password, PDO::PARAM_STR);
 
-            $stmt->execute();
+            $stmtInsertUser->execute();
+
+            $stmt->commit();
 
             return true; // Sukces
         } catch (PDOException $e) {
-            // Obsługa błędów
+            $stmt = $this->database->connect();
+            $stmt->rollBack();
+
             echo "Error: " . $e->getMessage();
-            return false; // Błąd
+            return false; // Error
         }
     }
 
-    public function updateUser(User $user): bool
+    public function userEmailExists(string $userEmail): bool
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT *
+        FROM public."User" u
+        WHERE u."email" = :userEmail
+    ');
+
+        $stmt->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
+    }
+
+    public function setUserPassword(string $email, $password): bool
     {
         try {
-            $stmt = $this->database->connect()->prepare('
-            UPDATE public."User" 
-            SET "password" = :password
-            WHERE "email" = :email
-        ');
+            $stmt = $this->database->connect();
 
-            $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
-            $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
+            $stmt->beginTransaction();
 
-            $stmt->execute();
+            $stmtSetUserPassword = $stmt->prepare('
+                UPDATE public."User" 
+                SET "password" = :newPassword
+                WHERE "email" = :newEmail
+            ');
+
+            $stmtSetUserPassword->bindValue(':newPassword',$password, PDO::PARAM_STR);
+            $stmtSetUserPassword->bindValue(':newEmail', $email, PDO::PARAM_STR);
+            $stmtSetUserPassword->execute();
+
+            $stmt->commit();
 
             return true; // Sukces
         } catch (PDOException $e) {
-            // Obsługa błędów
+            $stmt = $this->database->connect();
+            $stmt->rollBack();
+
+            // Handle the error
             echo "Error: " . $e->getMessage();
-            return false; // Błąd
+            return false; // Error
         }
     }
+
 
 }

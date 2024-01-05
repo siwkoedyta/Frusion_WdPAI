@@ -109,15 +109,15 @@
                         <h2 id="naglowek_modala">Add box</h2>
                         <form id="addBoxForm" class="add_box" action="boxes" method="POST">
                             <input name="type" value="addBox" type="hidden">
-                            <input name="box_name" id="box_name" type="text" placeholder="Box name">
-                            <input name="box_weight" id="box_weight" type="number" step=".05" placeholder="Box weight">
+                            <input name="box_name"  type="text" placeholder="Box name">
+                            <input name="box_weight"  type="number" step=".05" placeholder="Box weight">
 
                             <div id="message">
                                 <?php if (isset($addBoxMsg)) echo $addBoxMsg; ?>
                             </div>
 
                             <div class="przyciski">
-                                <button id="addBoxButton" class="przycisk_add">Add</button>
+                                <button type="submit" class="przycisk_add">Add</button>
                             </div>
                         </form>
                     </div>

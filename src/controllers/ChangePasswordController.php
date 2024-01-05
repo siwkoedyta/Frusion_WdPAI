@@ -4,15 +4,32 @@ require_once 'AppController.php';
 
 class ChangePasswordController extends AppController
 {
-    public function change_password() {
+    private $message = [];
+    private $userRepository;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userRepository = new UserRepository();
+    }
+    public function change_password($messages = []) {
         if (!$this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/change_password", true, 303);
             exit();
         }
 
-        $decryptedEmail = $this->getDecryptedEmail();
-        $this->render('change_password', ['email' => $decryptedEmail]);
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case "GET":
+                $this->renderChangePassword();
+                break;
+            case "POST":
+                switch ($_POST['type']) {
+                    case "changePassword":
+                        $this->handleChangePassword();
+                        break;
+                }
+                break;
+        }
     }
 
     private function isUserLoggedIn()
@@ -31,52 +48,47 @@ class ChangePasswordController extends AppController
         return $decryptedData;
     }
 
-    public function change_password_form() {
-        // Sprawdź czy formularz został wysłany
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Odczytaj dane z formularza
-            $currentPassword = $_POST['current_password'];
-            $newPassword = $_POST['new_password'];
-            $repeatNewPassword = $_POST['repeat_new_password'];
+    private function renderChangePassword($fields = [])
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+        $this->render('change_password', ['email' => $decryptedEmail] + $fields);
+    }
 
-            // Dodaj walidację (przykładowe sprawdzenie, należy dostosować do potrzeb)
-            if (empty($currentPassword) || empty($newPassword) || empty($repeatNewPassword)) {
-                // Handle validation error, for example:
-                header('Content-Type: application/json');
-                echo json_encode(['status' => 'error', 'message' => 'Invalid form data']);
-                exit;
-            }
+    public function handleChangePassword() {
+        $currentPassword = $_POST['current_password'];
+        $newPassword = $_POST['new_password'];
+        $repeatNewPassword = $_POST['repeat_new_password'];
 
-            $userRepository = new UserRepository();
-            $decryptedEmail = $this->getDecryptedEmail();
-            $existingUser = $userRepository->getUser($decryptedEmail);
-
-            if (!$existingUser || !password_verify($currentPassword, $existingUser->getPassword())) {
-                // Handle invalid current password, for example:
-                header('Content-Type: application/json');
-                echo json_encode(['status' => 'error', 'message' => 'Invalid current password']);
-                exit;
-            }
-
-            // Sprawdź, czy nowe hasło i powtórzone nowe hasło są identyczne
-            if ($newPassword !== $repeatNewPassword) {
-                // Handle validation error, for example:
-                header('Content-Type: application/json');
-                echo json_encode(['status' => 'error', 'message' => 'Passwords do not match']);
-                exit;
-            }
-
-            // Aktualizacja hasła
-            $hashedNewPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-            $existingUser->setPassword($hashedNewPassword);
-            $userRepository->updateUser($existingUser);
-
-
-            header('Content-Type: application/json');
-            echo json_encode(['status' => 'success','message' => 'Password has been changed']);
+        if (empty($currentPassword) || empty($newPassword) || empty($repeatNewPassword)) {
+            $this->renderChangePassword(["changePasswordMsg" => "Invalid form data"]);
             exit;
         }
 
+        $userRepository = new UserRepository();
+        $decryptedEmail = $this->getDecryptedEmail();
+        $existingUser = $userRepository->getUser($decryptedEmail);
+
+        if (!$existingUser || !password_verify($currentPassword, $existingUser->getPassword())) {
+            $this->renderChangePassword(["changePasswordMsg" => "Invalid current password"]);
+            exit;
+        }
+
+        if ($newPassword !== $repeatNewPassword) {
+            $this->renderChangePassword(["changePasswordMsg" => "Passwords do not match"]);
+            exit;
+        }
+
+        $hashedNewPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $existingUser->setPassword($hashedNewPassword);
+
+        $result = $this->userRepository->setUserPassword($decryptedEmail,$hashedNewPassword);
+
+        if ($result) {
+            $message = 'Password has been changed.';
+        } else {
+            $message ="Password hasn't been changed.";
+        }
+        $this->renderChangePassword(["changePasswordMsg" => $message]);
     }
 
 }
