@@ -21,10 +21,58 @@ class UserRepository extends Repository
         }
 
         return new User(
+            $user['idUser'],
             $user['firstName'],
             $user['lastName'],
             $user['email'],
             $user['password']
+        );
+    }
+    public function getUserById(int $userId): ?User
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT * FROM public."User" WHERE "idUser" = :userId
+    ');
+
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($userData === false) {
+            return null;
+        }
+
+        return new User(
+            $userData['idUser'],
+            $userData['firstName'],
+            $userData['lastName'],
+            $userData['email'],
+            $userData['password']
+        );
+    }
+    public function getUserByFirstLastName($firstName, $lastName): ?User
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT * FROM public."User" WHERE "firstName" = :firstName AND "lastName" = :lastName
+        ');
+
+        $stmt->bindParam(':firstName', $firstName, PDO::PARAM_STR);
+        $stmt->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($userData === false) {
+            return null;
+        }
+
+        return new User(
+            $userData['idUser'],
+            $userData['firstName'],
+            $userData['lastName'],
+            $userData['email'],
+            $userData['password']
         );
     }
     public function addClient(User $user): bool

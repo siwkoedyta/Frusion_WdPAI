@@ -74,15 +74,13 @@ class FruitController extends AppController
             exit;
         }
 
-        $existingFruits = $this->fruitRepository->getAllFruitNames();
-        if (in_array($typeFruit, $existingFruits)) {
+        $fruitTypeExists = $this->fruitRepository->fruitTypeExists($typeFruit);
+        if ($fruitTypeExists) {
             $this->renderFruitList(["addFruitMsg" => "Fruit already exists"]);
             exit;
         }
 
-        $fruit = new Fruit($typeFruit, 0);
-        $fruitRepository = new FruitRepository();
-        $result = $fruitRepository->addFruit($fruit);
+        $result = $this->fruitRepository->addFruit($typeFruit);
 
         if ($result) {
             $message = 'Fruit added successfully.';
@@ -94,14 +92,14 @@ class FruitController extends AppController
 
     public function handleRemoveFruit()
     {
-        $typeFruit = $_POST['typeFruit'];
+        $idFruit = $_POST['idFruit'];
 
-        if (empty($typeFruit)) {
+        if (empty($idFruit)) {
             $this->renderFruitList(["removeFruitMsg" => "Fruit name invalid"]);
             exit;
         }
 
-        $result = $this->fruitRepository->removeFruit($typeFruit);
+        $result = $this->fruitRepository->removeFruit($idFruit);
 
         if ($result) {
             $message = 'Fruit removed successfully.';
@@ -113,16 +111,16 @@ class FruitController extends AppController
 
     private function handleSetPrice()
     {
-        $typeFruit = $_POST['typeFruitSet'];
+        $idFruit = $_POST['idFruit'];
         $newPrice = $_POST['newPrice'];
 
-        if (empty($typeFruit) || !is_numeric($newPrice)) {
+        if (empty($idFruit) || !is_numeric($newPrice)) {
             $this->renderFruitList(["setPriceMsg" => "Invalid input"]);
             exit;
         }
 
         // Update the price
-        $result = $this->fruitRepository->setFruitPrice($typeFruit, $newPrice);
+        $result = $this->fruitRepository->setFruitPrice($idFruit, $newPrice);
 
         if ($result) {
             $message = 'Price updated successfully.';

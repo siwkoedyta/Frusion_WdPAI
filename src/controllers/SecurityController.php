@@ -129,22 +129,6 @@ class SecurityController extends AppController {
         }
     }
 
-    public function panel_glowny() {
-        // Sprawdź, czy użytkownik jest zalogowany
-        if (!$this->isUserLoggedIn()) {
-            // Użytkownik nie jest zalogowany, przekieruj go na stronę logowania
-            $url = "http://$_SERVER[HTTP_HOST]";
-            header("Location: {$url}/panel_logowania", true, 303);
-            exit();
-        }
-
-        // Odczytaj zdeszyfrowany email
-        $decryptedEmail = $this->getDecryptedEmail();
-
-        // Kontynuuj wyświetlanie strony panel_glowny
-        $this->render('panel_glowny', ['email' => $decryptedEmail]);
-    }
-
     public function panel_klienta() {
         if (!$this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";

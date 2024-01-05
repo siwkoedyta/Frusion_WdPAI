@@ -18,6 +18,7 @@ class BoxRepository extends Repository{
         }
 
         return new Box(
+            $box['idBox'],
             $box['typeBox'],
             $box['weightBox']
         );
@@ -34,6 +35,7 @@ class BoxRepository extends Repository{
 
         foreach ($result as $box) {
             $boxes[] = new Box(
+                $box['idBox'],
                 $box['typeBox'],
                 $box['weightBox']
             );
@@ -41,21 +43,41 @@ class BoxRepository extends Repository{
 
         return $boxes;
     }
-    public function getAllBoxNames(): array
+    public function getBoxById(int $idBox): ?Box
     {
         $stmt = $this->database->connect()->prepare('
-        SELECT "typeBox"
-        FROM public."Box"
-    ');
+            SELECT * FROM public."Box" WHERE "idBox" = :idBox
+        ');
 
+        $stmt->bindParam(':idBox', $idBox, PDO::PARAM_INT);
         $stmt->execute();
 
-        $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        $box = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $result;
+        if ($box === false) {
+            return null;
+        }
+
+        return new Box(
+            $box['idBox'],
+            $box['typeBox'],
+            $box['weightBox']
+        );
     }
 
-    public function addBoxes(Box $box): bool
+    public function boxNameExists($boxType): bool
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT * FROM public."Box" WHERE "typeBox" = :boxType
+        ');
+
+        $stmt->bindParam(':boxType', $boxType, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
+    }
+
+    public function addBoxes($typeBox, $weightBox): bool
     {
         try {
             $stmt = $this->database->connect();
@@ -66,9 +88,6 @@ class BoxRepository extends Repository{
             INSERT INTO public."Box" ("typeBox", "weightBox") 
             VALUES (:typeBox, :weightBox)
         ');
-
-            $typeBox = $box->getTypeBox();
-            $weightBox = $box->getWeightBox();
 
             $stmtInsertBox->bindParam(':typeBox', $typeBox, PDO::PARAM_STR);
             $stmtInsertBox->bindParam(':weightBox', $weightBox, PDO::PARAM_INT);  // Corrected binding
@@ -87,30 +106,12 @@ class BoxRepository extends Repository{
         }
     }
 
-    public function removeBox(string $boxName): bool
+    public function removeBox(string $idBox): bool
     {
         try {
             $stmt = $this->database->connect();
 
             $stmt->beginTransaction();
-
-            $stmtGetId = $stmt->prepare('
-            SELECT "idBox"
-            FROM public."Box"
-            WHERE "typeBox" = :boxName
-        ');
-
-            $stmtGetId->bindParam(':boxName', $boxName, PDO::PARAM_STR);
-            $stmtGetId->execute();
-
-            $idBoxResult = $stmtGetId->fetch(PDO::FETCH_ASSOC);
-
-            if (!$idBoxResult) {
-                $stmt->rollBack();
-                return false;
-            }
-
-            $idBox = $idBoxResult['idBox'];
 
             $stmtDeleteBox = $stmt->prepare('
             DELETE FROM public."Box"

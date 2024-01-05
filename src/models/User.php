@@ -1,18 +1,29 @@
 <?php
 
 class User {
+    private $idUser;
     private $firstName;
     private $lastName;
     private $email;
     private $password;
 
 
-    public function __construct($firstName, $lastName, $email, $password)
+    public function __construct($idUser, $firstName, $lastName, $email, $password)
     {
+        $this->idUser = $idUser;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
         $this->password = $password;
+    }
+    public function getIdUser()
+    {
+        return $this->idUser;
+    }
+
+    public function setIdUser($idUser): void
+    {
+        $this->idUser = $idUser;
     }
 
     public function getFirstName()

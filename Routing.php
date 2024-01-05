@@ -7,6 +7,7 @@ require_once 'src/controllers/AddClientController.php';
 require_once 'src/controllers/ChangePasswordController.php';
 require_once 'src/controllers/BoxController.php';
 require_once 'src/controllers/FruitController.php';
+require_once 'src/controllers/HomeController.php';
 
 
 class Routing{

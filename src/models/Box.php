@@ -5,8 +5,9 @@ class Box
     private $typeBox;
     private $weightBox;
 
-    public function __construct($typeBox, $weightBox)
+    public function __construct($idBox, $typeBox, $weightBox)
     {
+        $this->idBox = $idBox;
         $this->typeBox = $typeBox;
         $this->weightBox = $weightBox;
     }

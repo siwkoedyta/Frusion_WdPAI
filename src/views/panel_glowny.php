@@ -115,29 +115,6 @@
 
                     <div class="prostokat">
                         <div id="summary">Summary</div>
-
-                        <div class="prostokat_bialy">
-                            <div class="wartość_nazwa_owocu">Raspbeerry</div>
-                            <div class="kontener_cena_waga_skrzynki">
-                                <div class="kontener_skrzynki_cena">
-                                    <div class="kontener_cena">
-                                        <div id="price">Price:</div>
-                                        <div id="wartość_ceny">3,40</div>
-                                        <div id="zł">zł</div>
-                                    </div>
-                                    <div class="kontener_skrzynki">
-                                        <div id="boxes">Boxes:</div>
-                                        <div id="wartość_skrzynek">124</div>
-                                        <div id="rodzaj_skrzynki_wykaz">SVZ</div>
-                                    </div>
-                                </div>
-                                <div class="kontener_waga">
-                                    <div id="wartość_waga">1020,30</div>
-                                    <div id="kg">kg</div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="prostokat_bialy">
                             <div class="wartość_nazwa_owocu">Raspbeerry</div>
                             <div class="kontener_cena_waga_skrzynki">
@@ -167,36 +144,50 @@
 
                 <div class="pierwsza_kolumna">
 
+                    <?php
+                    $transactionRepository = new TransactionRepository();
+                    $transactions = $transactionRepository->getAllTransactions();
 
-                    <div class="prostokat_pola_rekordu">
-                        <div class="lewa_strona">
-                            <div id="imie_nazwisko">Edyta Siwko</div>
-                            <div class="waga_cena">
-                                <div class="cala_waga">
-                                    <div id="waga">24,50</div>
-                                    <div id="kilogramy">kg</div>
+                    $userRepository = new UserRepository();
+                    $fruitRepository = new FruitRepository();
+                    $boxRepository = new BoxRepository();
+                    foreach($transactions as $transaction):
+                        $user = $userRepository->getUserById($transaction->getIdUser());
+                        $fruit = $fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
+                        $box = $boxRepository->getBoxById($transaction->getIdTypeBox());
+                        ?>
+
+                        <div class="prostokat_pola_rekordu">
+                            <div class="lewa_strona">
+                                <div id="imie_nazwisko"><?= $user->getFirstName() . ' ' . $user->getLastName(); ?></div>
+                                <div class="waga_cena">
+                                    <div class="cala_waga">
+                                        <div id="waga"><?= $transaction->getWeight(); ?></div>
+                                        <div id="kilogramy">kg</div>
+                                    </div>
+                                    <div class="cala_cena">
+                                        <div id="mnoznik">x</div>
+
+                                        <div id="wartość_ceny"><?= $fruit->getPriceFruit(); ?></div>
+                                        <div id="złoty_cena">zł</div>
+                                    </div>
                                 </div>
-                                <div class="cala_cena">
-                                    <div id="mnoznik">x</div>
-                                    <div id="wartość_ceny">3,40</div>
-                                    <div id="złoty_cena">zł</div>
+                                <div class="cale_skrzynki">
+                                    <div id="ilosc_skrzynek"><?= $transaction->getNumberOfBoxes(); ?></div>
+                                    <div id="rodzaj_skrzynki_rekord"><?= $box->getTypeBox(); ?></div>
                                 </div>
                             </div>
-                            <div class="cale_skrzynki">
-                                <div id="ilosc_skrzynek">5</div>
-                                <div id="rodzaj_skrzynki_rekord">SVZ</div>
+                            <div class="prawa_strona">
+                                <div class="prostokat_zielony">
+                                    <div class="cala_wartosc">
+                                        <div id="wartość_kwoty"><?= $transaction->getAmount(); ?></div>
+                                        <div id="złoty_wartosc">zł</div>
+                                    </div>
+                                </div>
+                                <div id="nazwa_owoca"><?= $fruit->getTypeFruit(); ?></div>
                             </div>
                         </div>
-                        <div class="prawa_strona">
-                            <div class="prostokat_zielony">
-                                <div class="cala_wartosc">
-                                    <div id="wartość_kwoty">83,30</div>
-                                    <div id="złoty_wartosc">zł</div>
-                                </div>
-                            </div>
-                            <div id="nazwa_owoca">raspberry</div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
 
 
                 </div>
@@ -205,31 +196,48 @@
             <!-- Okienko modalne -->
             <div id="myModal" class="modal">
                 <div class="modal-content">
-                    <span class="close" id="closeModal">&times;</span>
                     <h2 id="naglowek_modala">Buy fruit</h2>
 
-                    <form class="kup_owoc">
-                        <input id="username" type="text" placeholder="Username">
-                        <select id="fruit" name="fruit" placeholder="Fruit">
+                    <form class="kup_owoc" action="panel_glowny" method="post">
+                        <input name="type" value="addTransaction" type="hidden">
+
+                        <input name="first_name" id="first_name" type="text" placeholder="First Name">
+                        <input name="last_name" id="last_name" type="text" placeholder="Last Name">
+                        <select name="id_fruit">
                             <option value="" disabled selected>Fruit</option>
-                            <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                            <option value="raspberry">Raspbeerry</option>
-                            <option value="strawberry">Strawberry</option>
+                            <?php
+                            $fruitRepository = new FruitRepository();
+                            $fruits = $fruitRepository->getAllFruit();
+                            foreach ($fruits as $fruit) {
+                                echo '<option value="' . $fruit->getIdFruit() . '">' . $fruit->getTypeFruit() . '</option>';
+                            }
+                            ?>
                         </select>
-                        <input id="weight" type="number" placeholder="Weight">
-                        <select id="box" name="box">
+                        <input name="weight_modal" id="weight" type="number" placeholder="Weight">
+                        <select name="id_box">
                             <option value="" disabled selected>Box</option>
-                            <!-- Pobierz dynamicznie listę owoców i wygeneruj opcje -->
-                            <option value="SVZ">SVZ</option>
-                            <option value="M5">M5</option>
+                            <?php
+                            $boxRepository = new BoxRepository();
+                            $boxes = $boxRepository->getAllBoxes();
+                            foreach ($boxes as $box) {
+                                echo '<option value="' . $box->getIdBox() . '">' . $box->getTypeBox() . '</option>';
+                            }
+                            ?>
                         </select>
-                        <input id="Number of boxes" type="number" placeholder="Number of boxes">
+                        <input name="number_of_boxes_modal" id="Number of boxes" type="number" placeholder="Number of boxes">
+
+                        <div id="message">
+                            <?php if (isset($addTransactionMsg)) echo $addTransactionMsg; ?>
+                        </div>
+
+                        <div class="przyciski">
+                            <button type="submit" class="przycisk_add">Add</button>
+                        </div>
                     </form>
 
-                    <div class="przyciski">
-                        <button class="przycisk_add">Add</button>
-                        <button class="przycisk_cancel">Cancel</button>
-                    </div>
+                    <button class="przycisk_cancel">Cancel</button>
+
+
 
 
                 </div>

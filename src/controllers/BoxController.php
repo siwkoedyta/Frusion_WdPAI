@@ -8,6 +8,7 @@ class BoxController extends AppController
 {
     private $message = [];
     private $boxRepository;
+
     public function __construct()
     {
         parent::__construct();
@@ -68,16 +69,12 @@ class BoxController extends AppController
             exit;
         }
 
-        $existingBoxes = $this->boxRepository->getAllBoxNames();
-        if (in_array($typeBox, $existingBoxes)) {
+        $boxNameExists = $this->boxRepository->boxNameExists($typeBox);
+        if ($boxNameExists) {
             $this->renderBoxList(["addBoxMsg" => "Box already exists"]);
             exit;
         }
-
-        $box = new Box($typeBox, $weightBox);
-        $boxRepository = new BoxRepository();
-        $result = $boxRepository->addBoxes($box);
-
+        $result = $this->boxRepository->addBoxes($typeBox, $weightBox);
 
         if ($result) {
             $message = 'Box added successfully.';
@@ -90,14 +87,14 @@ class BoxController extends AppController
 
     public function handleRemoveBox()
     {
-        $typeBox = $_POST['boxRemove'];
+        $idBox = $_POST['idBox'];
 
-        if (empty($typeBox)) {
+        if (empty($idBox)) {
             $this->renderBoxList(["removeBoxMsg" => "Box name invalid"]);
             exit;
         }
 
-        $result = $this->boxRepository->removeBox($typeBox);
+        $result = $this->boxRepository->removeBox($idBox);
 
         if ($result) {
             $message = 'Box removed successfully.';

@@ -4,11 +4,14 @@ class Fruit
 {
     private $idFruit;
     private $typeFruit;
+    private $priceId;
     private $priceFruit;
 
-    public function __construct($typeFruit, $priceFruit)
+    public function __construct($idFruit, $typeFruit, $priceId, $priceFruit)
     {
+        $this->idFruit = $idFruit;
         $this->typeFruit = $typeFruit;
+        $this->priceId = $priceId;
         $this->priceFruit = $priceFruit;
     }
 
@@ -17,20 +20,14 @@ class Fruit
         return $this->idFruit;
     }
 
-    public function setIdFruit($idFruit): void
-    {
-        $this->idFruit = $idFruit;
-    }
-
-
     public function getTypeFruit()
     {
         return $this->typeFruit;
     }
 
-    public function setTypeFruit($typeFruit): void
+    public function getPriceId()
     {
-        $this->typeFruit = $typeFruit;
+        return $this->priceId;
     }
 
     public function getPriceFruit()
@@ -42,6 +39,5 @@ class Fruit
     {
         $this->priceFruit = $priceFruit;
     }
-
 
 }

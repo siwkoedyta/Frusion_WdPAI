@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // Elementy formularza modalnego
     const modal = document.getElementById("myModal");
     const buyFruitBtn = document.getElementById("buy_fruit");
-    const addBtn = document.querySelector(".przycisk_add");
 
     // Elementy formularza
-    const usernameInput = document.getElementById("username");
+    const firstNameInput = document.getElementById("first_name");
+    const lastNameInput = document.getElementById("last_name");
     const fruitSelect = document.getElementById("fruit");
     const weightInput = document.getElementById("weight");
     const boxSelect = document.getElementById("box");
@@ -19,16 +19,10 @@ document.addEventListener("DOMContentLoaded", function() {
         clearFormFields();
     });
 
-    // Obsługa przycisku "Add"
-    addBtn.addEventListener("click", function() {
-        // Tutaj możesz dodać logikę obsługi przycisku "Add"
-        // Po dodaniu danych zamknij okno modalne
-        modal.style.display = "none";
-    });
-
     // Funkcja do czyszczenia pól formularza
     function clearFormFields() {
-        usernameInput.value = "";
+        firstNameInput.value = "";
+        lastNameInput.value = "";
         fruitSelect.value = "";
         weightInput.value = "";
         boxSelect.value = "";

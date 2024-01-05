@@ -22,6 +22,7 @@ class AdminRepository extends Repository
         }
 
         return new Admin(
+            $admin['idAdmin'],
             $admin['email'],
             $admin['password'],
             $admin['phone'],

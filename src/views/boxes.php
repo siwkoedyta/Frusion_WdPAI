@@ -110,7 +110,7 @@
                         <form id="addBoxForm" class="add_box" action="boxes" method="POST">
                             <input name="type" value="addBox" type="hidden">
                             <input name="box_name" id="box_name" type="text" placeholder="Box name">
-                            <input name="box_weight" id="box_weight" type="number" placeholder="Box weight">
+                            <input name="box_weight" id="box_weight" type="number" step=".05" placeholder="Box weight">
 
                             <div id="message">
                                 <?php if (isset($addBoxMsg)) echo $addBoxMsg; ?>
@@ -126,13 +126,13 @@
                         <h2 id="naglowek_modala">Remove box</h2>
                         <form id="removeBoxForm" class="remove_box" action="boxes" method="POST">
                             <input name="type" value="removeBox" type="hidden">
-                            <select name="boxRemove">
+                            <select name="idBox">
                                 <option value="" disabled selected>Box</option>
                                 <?php
                                 $boxRepository = new BoxRepository();
-                                $boxNames = $boxRepository->getAllBoxNames();
-                                foreach ($boxNames as $boxName) {
-                                    echo '<option value="' . $boxName . '">' . $boxName . '</option>';
+                                $boxes = $boxRepository->getAllBoxes();
+                                foreach ($boxes as $box) {
+                                    echo '<option value="' . $box->getIdBox() . '">' . $box->getTypeBox() . '</option>';
                                 }
                                 ?>
                             </select>

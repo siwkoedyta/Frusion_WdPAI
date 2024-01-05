@@ -107,17 +107,17 @@
                         <h2 id="naglowek_modala">Set the price</h2>
                         <form class="set_the_price" action="fruit_list" method="post">
                             <input name="type" value="setPrice" type="hidden">
-                            <select name="typeFruitSet">
+                            <select name="idFruit">
                                 <option value="" disabled selected>Name of the fruit</option>
                                 <?php
                                 $fruitRepository = new FruitRepository();
-                                $fruitNames = $fruitRepository->getAllFruitNames();
-                                foreach ($fruitNames as $fruitName) {
-                                    echo '<option value="' . $fruitName . '">' . $fruitName . '</option>';
+                                $fruits = $fruitRepository->getAllFruit();
+                                foreach ($fruits as $fruit) {
+                                    echo '<option value="' . $fruit->getIdFruit() . '">' . $fruit->getTypeFruit() . '</option>';
                                 }
                                 ?>
                             </select>
-                            <input id="price" name ="newPrice" type="number" placeholder="Price">
+                            <input id="price" name ="newPrice" type="number" step=".01" placeholder="Price">
 
                             <div id="message">
                                 <?php if (isset($setPriceMsg)) echo $setPriceMsg; ?>
@@ -151,14 +151,14 @@
                         <h2 id="naglowek_modala">Remove fruit</h2>
                         <form class="remove_fruit" id="removeFruitForm" action="fruit_list" method="post">
                             <input name="type" value="removeFruit" type="hidden">
-                            <select name="typeFruit">
+                            <select name="idFruit">
                                 <option value="" disabled selected>Name of the fruit</option>
                                 <?php
-                                    $fruitRepository = new FruitRepository();
-                                    $fruitNames = $fruitRepository->getAllFruitNames();
-                                    foreach ($fruitNames as $fruitName) {
-                                        echo '<option value="' . $fruitName . '">' . $fruitName . '</option>';
-                                    }
+                                $fruitRepository = new FruitRepository();
+                                $fruits = $fruitRepository->getAllFruit();
+                                foreach ($fruits as $fruit) {
+                                    echo '<option value="' . $fruit->getIdFruit() . '">' . $fruit->getTypeFruit() . '</option>';
+                                }
                                 ?>
                             </select>
 
@@ -186,8 +186,6 @@
     <script src="/public/js/sidebar.js"></script>
     <script src="/public/js/otworz_panel_boczny.js"></script>
     <script src="/public/js/zamknij_panel_boczny.js"></script>
-<!--    <script defer src="/public/js/add_fruit.js"></script>-->
-<!--    <script defer src="/public/js/remove_fruit.js"></script>-->
 
 </body>
 </html>

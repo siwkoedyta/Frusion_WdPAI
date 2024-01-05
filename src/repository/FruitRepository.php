@@ -8,7 +8,7 @@ class FruitRepository extends Repository
     public function getFruit(int $fruitId): ?Fruit
     {
         $stmt = $this->database->connect()->prepare('
-        SELECT f."typeFruit", p."price"
+        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
         FROM public."Fruit" f
         LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
         WHERE f."idFruit" = :fruitId
@@ -24,8 +24,10 @@ class FruitRepository extends Repository
         }
 
         return new Fruit(
+            $fruit['idFruit'],
             $fruit['typeFruit'],
-            $fruit['priceFruit']
+            $fruit['idPrice'],
+            $fruit['price']
         );
     }
 
@@ -33,7 +35,7 @@ class FruitRepository extends Repository
     {
         $fruits = [];
         $stmt = $this->database->connect()->prepare('
-        SELECT f."idFruit", f."typeFruit", p."price"
+        SELECT f."idFruit", f."typeFruit",  p."idPrice", p."price"
         FROM public."Fruit" f
         LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
     ');
@@ -44,7 +46,9 @@ class FruitRepository extends Repository
 
         foreach ($result as $fruit) {
             $fruits[] = new Fruit(
+                $fruit['idFruit'],
                 $fruit['typeFruit'],
+                $fruit['idPrice'],
                 $fruit['price']
             );
         }
@@ -52,22 +56,47 @@ class FruitRepository extends Repository
         return $fruits;
     }
 
-    public function getAllFruitNames(): array
+    public function getFruitByPriceId(int $priceId): ?Fruit
     {
         $stmt = $this->database->connect()->prepare('
-        SELECT "typeFruit"
-        FROM public."Fruit"
+        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
+        FROM public."Fruit" f
+        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+        WHERE p."idPrice" = :priceId
     ');
 
+        $stmt->bindParam(':priceId', $priceId, PDO::PARAM_INT);
         $stmt->execute();
 
-        $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        $fruitData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $result;
+        if ($fruitData === false) {
+            return null;
+        }
+
+        return new Fruit(
+            $fruitData['idFruit'],
+            $fruitData['typeFruit'],
+            $fruitData['idPrice'],
+            $fruitData['price']
+        );
     }
 
+    public function fruitTypeExists($fruitType): bool
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT *
+        FROM public."Fruit" f
+        WHERE f."typeFruit" = :fruitType
+    ');
 
-    public function addFruit(Fruit $fruit): bool
+        $stmt->bindParam(':fruitType', $fruitType, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
+    }
+
+    public function addFruit($typeFruit): bool
     {
         try {
             $stmt = $this->database->connect();
@@ -79,8 +108,8 @@ class FruitRepository extends Repository
             VALUES (:typeFruit)
         ');
 
-            $typeFruit = $fruit->getTypeFruit();
             $stmtFruit->bindParam(':typeFruit', $typeFruit, PDO::PARAM_STR);
+
             $stmtFruit->execute();
 
             $idFruit = $stmt->lastInsertId();
@@ -108,30 +137,12 @@ class FruitRepository extends Repository
         }
     }
 
-    public function removeFruit(string $fruitName): bool
+    public function removeFruit(string $idFruit): bool
     {
         try {
             $stmt = $this->database->connect();
 
             $stmt->beginTransaction();
-
-            $stmtGetId = $stmt->prepare('
-            SELECT "idFruit"
-            FROM public."Fruit"
-            WHERE "typeFruit" = :fruitName
-        ');
-
-            $stmtGetId->bindParam(':fruitName', $fruitName, PDO::PARAM_STR);
-            $stmtGetId->execute();
-
-            $idFruitResult = $stmtGetId->fetch(PDO::FETCH_ASSOC);
-
-            if (!$idFruitResult) {
-                $stmt->rollBack();
-                return false;
-            }
-
-            $idFruit = $idFruitResult['idFruit'];
 
             $stmtDeletePrices = $stmt->prepare('
             DELETE FROM public."FruitPrices"
@@ -161,31 +172,12 @@ class FruitRepository extends Repository
         }
     }
 
-    public function setFruitPrice(string $typeFruit, float $newPrice): bool
+    public function setFruitPrice(string $idFruit, float $newPrice): bool
     {
         try {
             $stmt = $this->database->connect();
 
             $stmt->beginTransaction();
-
-            // Get the ID of the fruit
-            $stmtGetId = $stmt->prepare('
-                SELECT "idFruit"
-                FROM public."Fruit"
-                WHERE "typeFruit" = :typeFruit
-            ');
-
-            $stmtGetId->bindParam(':typeFruit', $typeFruit, PDO::PARAM_STR);
-            $stmtGetId->execute();
-
-            $idFruitResult = $stmtGetId->fetch(PDO::FETCH_ASSOC);
-
-            if (!$idFruitResult) {
-                $stmt->rollBack();
-                return false;
-            }
-
-            $idFruit = $idFruitResult['idFruit'];
 
             // Update the price
             $stmtUpdatePrice = $stmt->prepare('
