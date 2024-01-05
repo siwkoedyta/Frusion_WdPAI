@@ -136,25 +136,31 @@
 
 
                 </div>
-                
+
                 <div class="trzecie_kolumny">
                     <div class="trzecia_kolumna">
                         <h1 class="naglowek_summary_status">Boxes</h1>
-    
                         <div class="prostokat_bialy_zielony">
                             <div id="ALL">ALL</div>
-                            <div id="ilosc_skrzynek_summary">2234</div>
+                            <div id="ilosc_skrzynek_summary"><?= isset($allBoxesSum) ? $allBoxesSum : 0; ?></div>
                         </div>
-                        
-                        <div class="prostokat_bialy">
-                            <div id="rodzaj_skrzynki">SVZ</div>
-                            <div class="ilosc_skrzynki_cala">
-                                <div id="ilosc_skrzynki">133</div>
-                            </div>
-                        </div>
-    
-    
+
+                        <?php foreach ($boxes as $box): ?>
+                            <?php
+                            $sumForCurrentBox = isset($boxesSum[$box->getTypeBox()]) ? $boxesSum[$box->getTypeBox()] : 0;
+                            if ($sumForCurrentBox > 0):
+                                ?>
+                                <div class="prostokat_bialy">
+                                    <div id="rodzaj_skrzynki"><?= $box->getTypeBox(); ?></div>
+                                    <div class="ilosc_skrzynki_cala">
+                                        <div><?= $sumForCurrentBox; ?></div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
                     </div>
+                </div>
                     
                     <div class="trzecia_kolumna">
                         <h1 class="naglowek_summary_status">Ammount</h1>

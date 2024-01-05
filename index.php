@@ -28,7 +28,7 @@ Routing::post('boxes', 'BoxController');
 Routing::get('fruit_list', 'FruitController');
 Routing::post('fruit_list', 'FruitController');
 
-Routing::get('status_frusion', 'SecurityController');
+Routing::get('status_frusion', 'StatusFrusionController');
 
 Routing::get('FileNotFound', 'ErrorController');
 Routing::post('wyloguj', 'SecurityController');

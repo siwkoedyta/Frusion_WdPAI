@@ -180,7 +180,7 @@
                             <div class="prawa_strona">
                                 <div class="prostokat_zielony">
                                     <div class="cala_wartosc">
-                                        <div id="wartość_kwoty"><?= $transaction->getAmount(); ?></div>
+                                        <div id="wartość_kwoty"><?= number_format($transaction->getAmount(), 2, ',', ' '); ?></div>
                                         <div id="złoty_wartosc">zł</div>
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@
                             }
                             ?>
                         </select>
-                        <input name="weight_modal" id="weight" type="number" placeholder="Weight">
+                        <input name="weight_modal" id="weight" type="number" step="0.01" placeholder="Weight">
                         <select name="id_box">
                             <option value="" disabled selected>Box</option>
                             <?php
