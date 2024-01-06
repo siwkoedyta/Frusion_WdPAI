@@ -30,6 +30,31 @@ class FruitRepository extends Repository
             $fruit['price']
         );
     }
+    public function getFruitByPriceId(int $priceId): ?Fruit
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
+        FROM public."Fruit" f
+        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+        WHERE p."idPrice" = :priceId
+    ');
+
+        $stmt->bindParam(':priceId', $priceId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $fruitData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($fruitData === false) {
+            return null;
+        }
+
+        return new Fruit(
+            $fruitData['idFruit'],
+            $fruitData['typeFruit'],
+            $fruitData['idPrice'],
+            $fruitData['price']
+        );
+    }
 
     public function getAllFruit(): array
     {
@@ -56,31 +81,7 @@ class FruitRepository extends Repository
         return $fruits;
     }
 
-    public function getFruitByPriceId(int $priceId): ?Fruit
-    {
-        $stmt = $this->database->connect()->prepare('
-        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
-        FROM public."Fruit" f
-        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
-        WHERE p."idPrice" = :priceId
-    ');
 
-        $stmt->bindParam(':priceId', $priceId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $fruitData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($fruitData === false) {
-            return null;
-        }
-
-        return new Fruit(
-            $fruitData['idFruit'],
-            $fruitData['typeFruit'],
-            $fruitData['idPrice'],
-            $fruitData['price']
-        );
-    }
 
     public function fruitTypeExists($fruitType): bool
     {

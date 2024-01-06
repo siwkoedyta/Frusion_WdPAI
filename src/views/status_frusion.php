@@ -161,25 +161,34 @@
 
                     </div>
                 </div>
-                    
-                    <div class="trzecia_kolumna">
-                        <h1 class="naglowek_summary_status">Ammount</h1>
-    
-                        <div class="prostokat_bialy_zielony">
-                            <div id="ALL">ALL</div>
-                            <div class="calkowita_wartosc">
-                                <div id="wartosc_dnia">13245,20</div>
-                                <div id="kilogramy">zł</div>
-                            </div>
+
+
+                <div class="trzecia_kolumna">
+                    <h1 class="naglowek_summary_status">Ammount</h1>
+
+                    <div class="prostokat_bialy_zielony">
+                        <div id="ALL">ALL</div>
+                        <div class="calkowita_wartosc">
+                            <div id="wartosc_dnia"><?= isset($fruitsAmountSum) ? array_sum($fruitsAmountSum) : 0; ?></div>
+                            <div id="kilogramy">zł</div>
                         </div>
-    
-                        <div class="prostokat_bialy">
-                            <div id="rodzaj_owoca">Raspberry</div>
-                            <div class="calkowita_wartosc">
-                                <div id="wartosc_dnia_jeden_owoc">1253,20</div>
-                                <div id="kilogramy">zł</div>
+                    </div>
+
+                    <?php foreach ($fruits as $fruit): ?>
+                        <?php
+                        $amountForCurrentFruit = isset($fruitsAmountSum[$fruit->getTypeFruit()]) ? $fruitsAmountSum[$fruit->getTypeFruit()] : 0;
+                        if ($amountForCurrentFruit > 0):
+                            ?>
+                            <div class="prostokat_bialy">
+                                <div id="rodzaj_owoca"><?= $fruit->getTypeFruit(); ?></div>
+                                <div class="calkowita_wartosc">
+                                    <div id="wartosc_dnia_jeden_owoc"><?= number_format($amountForCurrentFruit, 2); ?></div>
+                                    <div id="kilogramy">zł</div>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
     
             
                     </div>

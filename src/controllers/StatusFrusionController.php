@@ -3,6 +3,7 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../repository/StatusFrusionRepository.php';
 require_once __DIR__ . '/../repository/TransactionRepository.php';
 require_once __DIR__ . '/../repository/BoxRepository.php';
+require_once __DIR__ . '/../repository/FruitRepository.php';
 
 class StatusFrusionController extends AppController
 {
@@ -10,6 +11,8 @@ class StatusFrusionController extends AppController
     private $statusFrusionRepository;
     private $transactionRepository;
     private $boxRepository;
+    private $fruitRepository;
+
 
     public function __construct()
     {
@@ -17,6 +20,8 @@ class StatusFrusionController extends AppController
         $this->statusFrusionRepository = new StatusFrusionRepository();
         $this->transactionRepository = new TransactionRepository();
         $this->boxRepository = new BoxRepository();
+        $this->fruitRepository = new FruitRepository();
+
     }
 
     public function status_frusion($messages = [])
@@ -55,10 +60,11 @@ class StatusFrusionController extends AppController
         $decryptedEmail = $this->getDecryptedEmail();
 
         $transactions = $this->transactionRepository->getAllTransactions();
-
         $boxes = $this->boxRepository->getAllBoxes();
+        $fruits = $this->fruitRepository->getAllFruit();
 
         $boxesSum = [];
+        $fruitsAmountSum = [];
 
         foreach ($transactions as $transaction) {
             $boxType = $this->boxRepository->getBoxById($transaction->getIdTypeBox())->getTypeBox();
@@ -68,9 +74,26 @@ class StatusFrusionController extends AppController
             } else {
                 $boxesSum[$boxType] += $transaction->getNumberOfBoxes();
             }
+
+            $fruit = $this->fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
+            if ($fruit !== null) {
+                $fruitName = $fruit->getTypeFruit();
+                if (!isset($fruitsAmountSum[$fruitName])) {
+                    $fruitsAmountSum[$fruitName] = $transaction->getAmount();
+                } else {
+                    $fruitsAmountSum[$fruitName] += $transaction->getAmount();
+                }
+            }
         }
 
-        $fields += ['email' => $decryptedEmail, 'allBoxesSum' => array_sum($boxesSum), 'boxes' => $boxes, 'boxesSum' => $boxesSum];
+        $fields += [
+            'email' => $decryptedEmail,
+            'allBoxesSum' => array_sum($boxesSum),
+            'boxes' => $boxes,
+            'boxesSum' => $boxesSum,
+            'fruits' => $fruits,
+            'fruitsAmountSum' => $fruitsAmountSum,
+        ];
 
         $this->render('status_frusion', $fields);
     }
