@@ -55,6 +55,31 @@ class FruitRepository extends Repository
             $fruitData['price']
         );
     }
+    public function getFruitByName(string $fruitName): ?Fruit
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
+        FROM public."Fruit" f
+        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+        WHERE f."typeFruit" = :fruitName
+    ');
+
+        $stmt->bindParam(':fruitName', $fruitName, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $fruitData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($fruitData === false) {
+            return null;
+        }
+
+        return new Fruit(
+            $fruitData['idFruit'],
+            $fruitData['typeFruit'],
+            $fruitData['idPrice'],
+            $fruitData['price']
+        );
+    }
 
     public function getAllFruit(): array
     {
@@ -80,8 +105,6 @@ class FruitRepository extends Repository
 
         return $fruits;
     }
-
-
 
     public function fruitTypeExists($fruitType): bool
     {

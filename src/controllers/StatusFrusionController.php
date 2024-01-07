@@ -65,14 +65,15 @@ class StatusFrusionController extends AppController
 
         $boxesSum = [];
         $fruitsAmountSum = [];
+        $fruitsWeightSum = [];
 
         foreach ($transactions as $transaction) {
-            $boxType = $this->boxRepository->getBoxById($transaction->getIdTypeBox())->getTypeBox();
+            $box = $this->boxRepository->getBoxById($transaction->getIdTypeBox())->getTypeBox();
 
-            if (!isset($boxesSum[$boxType])) {
-                $boxesSum[$boxType] = $transaction->getNumberOfBoxes();
+            if (!isset($boxesSum[$box])) {
+                $boxesSum[$box] = $transaction->getNumberOfBoxes();
             } else {
-                $boxesSum[$boxType] += $transaction->getNumberOfBoxes();
+                $boxesSum[$box] += $transaction->getNumberOfBoxes();
             }
 
             $fruit = $this->fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
@@ -83,9 +84,17 @@ class StatusFrusionController extends AppController
                 } else {
                     $fruitsAmountSum[$fruitName] += $transaction->getAmount();
                 }
+
+                // Accumulate the total weight for each fruit
+                if (!isset($fruitsWeightSum[$fruitName])) {
+                    $fruitsWeightSum[$fruitName] = $transaction->getWeight();
+                } else {
+                    $fruitsWeightSum[$fruitName] += $transaction->getWeight();
+                }
             }
         }
 
+// The code block you provided outside the main loop
         $fields += [
             'email' => $decryptedEmail,
             'allBoxesSum' => array_sum($boxesSum),
@@ -93,7 +102,9 @@ class StatusFrusionController extends AppController
             'boxesSum' => $boxesSum,
             'fruits' => $fruits,
             'fruitsAmountSum' => $fruitsAmountSum,
+            'fruitsWeightSum' => $fruitsWeightSum,
         ];
+
 
         $this->render('status_frusion', $fields);
     }

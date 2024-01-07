@@ -109,30 +109,43 @@
             <div class="zawartosc_strony_kolumny">
 
                 <div class="pierwsza_kolumna">
+
                     <h1 class="naglowek_summary_status">Weight</h1>
-                    
-                    <div class="prostokat_bialy_status">
-                        <div class="wartość_nazwa_owocu">Raspbeerry</div>
-                        <div class="kontener_cena_waga_skrzynki">
-                            <div class="kontener_skrzynki_cena">
-                                <div class="kontener_cena">
-                                    <div id="price">Price:</div>
-                                    <div id="wartość_ceny">3,40</div>
-                                    <div id="zł">zł</div>
+
+                    <?php
+                    $transactionRepository = new TransactionRepository();
+                    $transactions = $transactionRepository->getAllTransactions();
+
+                    $fruitRepository = new FruitRepository();
+                    $boxRepository = new BoxRepository();
+                    foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
+                        $fruit = $fruitRepository->getFruitByName($fruitName);
+                        ?>
+                        <div class="prostokat_bialy_status">
+                            <div class="wartość_nazwa_owocu"><?= $fruitName ?></div>
+                            <div class="kontener_cena_waga_skrzynki">
+                                <div class="kontener_skrzynki_cena">
+                                    <div class="kontener_cena">
+
+                                        <div id="price">Price:</div>
+                                        <div id="wartość_ceny"><?= $price = $fruit->getPriceFruit();?></div>
+                                        <div id="zł">zł</div>
+                                    </div>
+                                    <div class="kontener_skrzynki">
+                                        <div id="boxes">Boxes:</div>
+                                        <div id="wartość_skrzynek">test</div>
+                                        <div id="rodzaj_skrzynki_wykaz">test</div>
+                                    </div>
                                 </div>
-                                <div class="kontener_skrzynki">
-                                    <div id="boxes">Boxes:</div>
-                                    <div id="wartość_skrzynek">124</div>
-                                    <div id="rodzaj_skrzynki_wykaz">SVZ</div>
+                                <div class="kontener_waga">
+                                    <div id="wartość_waga"><?= $totalWeight; ?></div>
+                                    <div id="kg">kg</div>
                                 </div>
                             </div>
-                            <div class="kontener_waga">
-                                <div id="wartość_waga">1020,30</div>
-                                <div id="kg">kg</div>
                         </div>
-                        </div>
-                    </div>
-
+                        <?php
+                    }
+                    ?>
 
 
                 </div>
