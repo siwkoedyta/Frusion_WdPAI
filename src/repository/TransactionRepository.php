@@ -35,27 +35,18 @@ class TransactionRepository extends Repository
     public function getTransactionsForAdmin($idAdmin): array
     {
         $transactions = [];
-        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idAdmin" = :adminId');
+        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idAdmin" = :idAdmin');
 
-        $stmt->bindParam(':adminId', $idAdmin, PDO::PARAM_INT);
-        $stmt->execute();
+        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
+        return $this->extracted($stmt, $transactions);
+    }
+    public function getTransactionsForUser($idUser): array
+    {
+        $transactions = [];
+        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idUser" = :idUser');
 
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($result as $transactionData) {
-            $transactions[] = new Transaction(
-                $transactionData['idUser'],
-                $transactionData['idAdmin'],
-                $transactionData['weight_with_boxes'],
-                $transactionData['idBox'],
-                $transactionData['numberOfBoxes'],
-                $transactionData['idPrice'],
-                $transactionData['transactionDate'],
-                $transactionData['weight'],
-                $transactionData['amount']
-            );
-        }
-        return $transactions;
+        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        return $this->extracted($stmt, $transactions);
     }
 
     public function addTransaction($idUser, $idAdmin, $weightWithBoxes, $idBox, $numberOfBoxes, $idPrice, $transactionDate, $weight, $amount): bool
@@ -99,5 +90,32 @@ class TransactionRepository extends Repository
 
             return false; // Error
         }
+    }
+
+    /**
+     * @param $stmt
+     * @param array $transactions
+     * @return array
+     */
+    public function extracted($stmt, array $transactions): array
+    {
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($result as $transactionData) {
+            $transactions[] = new Transaction(
+                $transactionData['idUser'],
+                $transactionData['idAdmin'],
+                $transactionData['weight_with_boxes'],
+                $transactionData['idBox'],
+                $transactionData['numberOfBoxes'],
+                $transactionData['idPrice'],
+                $transactionData['transactionDate'],
+                $transactionData['weight'],
+                $transactionData['amount']
+            );
+        }
+        return $transactions;
     }
 }

@@ -9,6 +9,7 @@ require_once 'src/controllers/BoxController.php';
 require_once 'src/controllers/FruitController.php';
 require_once 'src/controllers/HomeController.php';
 require_once 'src/controllers/StatusFrusionController.php';
+require_once 'src/controllers/ClientPanelController.php';
 
 
 class Routing{

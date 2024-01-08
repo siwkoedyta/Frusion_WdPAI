@@ -97,17 +97,38 @@
                     <div class="prostokat">
                         <div id="summary">Summary</div>
 
+                        <?php
+                        $transactionRepository = new TransactionRepository();
+                        $idUser = $this->getLoggedInUserId();
+                        $transactions = $transactionRepository->getTransactionsForUser($idUser);
+
+                        $fruitRepository = new FruitRepository();
+                        $boxRepository = new BoxRepository();
+
+                        $clientPanelController = new ClientPanelController();
+                        $data = $clientPanelController->collectDataClientPanel();
+
+                        $transactions = $data['transactions'];
+                        $fruitsWeightSum = $data['fruitsWeightSum'];
+
+
+                        foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
+                            $fruit = $fruitRepository->getFruitByName($fruitName);
+                            $amountForCurrentFruit = $fruitsAmountSum[$fruit->getTypeFruit()] ?? 0;
+                            $totalWeightForCurrentFruit = $data['fruitsWeightSum'][$fruitName] ?? 0;
+                            $valueForCurrentFruit = $amountForCurrentFruit / $totalWeightForCurrentFruit;
+                        ?>
                         <div class="prostokat_pola_rekordu">
                             <div class="lewa_strona">
-                                <div id="nazwa_owoca_klient">raspberry</div>
+                                <div id="nazwa_owoca_klient"><?= $fruitName ?></div>
                                 <div class="waga_cena">
                                     <div class="cala_waga">
-                                        <div id="waga_suma">224,50</div>
+                                        <div id="waga_suma"><?= $totalWeight; ?></div>
                                         <div id="kilogramy">kg</div>
                                     </div>
                                     <div class="cala_cena">
                                         <div id="mnoznik">x</div>
-                                        <div id="wartość_ceny_srednia">3,40</div>
+                                        <div id="wartość_ceny_srednia"><?= number_format($valueForCurrentFruit, 2); ?></div>
                                         <div id="złoty_cena">zł</div>
                                     </div>
                                 </div>
@@ -115,13 +136,15 @@
                             <div class="prawa_strona">
                                 <div class="prostokat_zielony">
                                     <div class="cala_wartosc">
-                                        <div id="wartość_kwoty">83,30</div>
+                                        <div id="wartość_kwoty"><?= number_format($amountForCurrentFruit, 2); ?></div>
                                         <div id="złoty_wartosc">zł</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+                            <?php
+                        }
+                        ?>
 
         
                     </div>
@@ -130,36 +153,48 @@
 
                 <div class="pierwsza_kolumna">
 
+                    <?php
+                    $transactionRepository = new TransactionRepository();
+                    $idUser = $this->getLoggedInUserId();
+                    $transactions = $transactionRepository->getTransactionsForUser($idUser);
 
+                    $userRepository = new UserRepository();
+                    $fruitRepository = new FruitRepository();
+                    $boxRepository = new BoxRepository();
+                    foreach($transactions as $transaction):
+                    $user = $userRepository->getUserById($transaction->getIdUser());
+                    $fruit = $fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
+                    $box = $boxRepository->getBoxById($transaction->getIdTypeBox());
+                    ?>
                     <div class="prostokat_pola_rekordu">
                         <div class="lewa_strona">
-                            <div id="nazwa_owoca_klient">raspberry</div>
+                            <div id="nazwa_owoca_klient"><?= $fruit->getTypeFruit(); ?></div>
                             <div class="waga_cena">
                                 <div class="cala_waga">
-                                    <div id="waga_suma">24,50</div>
+                                    <div id="waga_suma"><?= $transaction->getWeight(); ?></div>
                                     <div id="kilogramy">kg</div>
                                 </div>
                                 <div class="cala_cena">
                                     <div id="mnoznik">x</div>
-                                    <div id="wartość_ceny">3,40</div>
+                                    <div id="wartość_ceny"><?= $fruit->getPriceFruit(); ?></div>
                                     <div id="złoty_cena">zł</div>
                                 </div>
                             </div>
                             <div class="cale_skrzynki">
-                                <div id="ilosc_skrzynek">5</div>
-                                <div id="rodzaj_skrzynki_rekord">SVZ</div>
+                                <div id="ilosc_skrzynek"><?= $transaction->getNumberOfBoxes(); ?></div>
+                                <div id="rodzaj_skrzynki_rekord"><?= $box->getTypeBox(); ?></div>
                             </div>
                         </div>
                         <div class="prawa_strona">
                             <div class="prostokat_zielony">
                                 <div class="cala_wartosc">
-                                    <div id="wartość_kwoty">83,30</div>
+                                    <div id="wartość_kwoty"><?= number_format($transaction->getAmount(), 2, ',', ' '); ?></div>
                                     <div id="złoty_wartosc">zł</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    <?php endforeach; ?>
                    
                 </div>
             </div>

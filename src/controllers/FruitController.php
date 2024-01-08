@@ -3,6 +3,8 @@
 require_once 'AppController.php';
 require_once __DIR__ . '/../models/Fruit.php';
 require_once __DIR__ . '/../repository/FruitRepository.php';
+require_once __DIR__ . '/../repository/TransactionRepository.php';
+
 
 
 class FruitController extends AppController
