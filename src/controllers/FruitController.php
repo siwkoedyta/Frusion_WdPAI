@@ -62,7 +62,7 @@ class FruitController extends AppController
     }
     private function renderFruitList($fields = [])
     {
-        $fruits = $this->fruitRepository->getAllFruit();
+        $fruits = $this->fruitRepository->getAllFruitForAdmin();
         $decryptedEmail = $this->getDecryptedEmail();
         $this->render('fruit_list', ['email' => $decryptedEmail, 'fruits' => $fruits] + $fields);
     }
@@ -76,9 +76,12 @@ class FruitController extends AppController
             exit;
         }
 
-        $fruitTypeExists = $this->fruitRepository->fruitTypeExists($typeFruit);
+        $loggedInAdminId = $this->fruitRepository->getLoggedInAdminId();
+
+        $fruitTypeExists = $this->fruitRepository->fruitTypeExistsForAdmin($typeFruit, $loggedInAdminId);
+
         if ($fruitTypeExists) {
-            $this->renderFruitList(["addFruitMsg" => "Fruit already exists"]);
+            $this->renderFruitList(["addFruitMsg" => "Fruit already exists for this admin"]);
             exit;
         }
 
@@ -89,6 +92,7 @@ class FruitController extends AppController
         } else {
             $message = 'Failed to add fruit.';
         }
+
         $this->renderFruitList(["addFruitMsg" => $message]);
     }
 

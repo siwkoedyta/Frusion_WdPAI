@@ -57,13 +57,19 @@ class ClientPanelController extends AppController
         return $decryptedData;
     }
 
-
+    private function renderClientPanel($fields = [])
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+        $idUser = $this->getLoggedInUserId();
+        $transactions = $this->transactionRepository->getTransactionsForAdmin($idUser);
+        $this->render('panel_klienta', ['email' => $decryptedEmail] + $fields);
+    }
     public function collectDataClientPanel()
     {
-        $idUser = $this->getLoggedInUserId();
-        $transactions = $this->transactionRepository->getTransactionsForUser($idUser);
+        $idAdmin = $this->getLoggedInUserId();
+        $transactions = $this->transactionRepository->getTransactionsForUser($idAdmin);
         $boxes = $this->boxRepository->getAllBoxes();
-        $fruits = $this->fruitRepository->getAllFruit();
+        $fruits = $this->fruitRepository->getAllFruitForAdmin();
 
         $boxesSum = [];
         $fruitsAmountSum = [];
@@ -114,11 +120,12 @@ class ClientPanelController extends AppController
         ];
     }
 
-    private function renderClientPanel($fields = [])
+    private function renderStatusFrusion($fields = [])
     {
         $decryptedEmail = $this->getDecryptedEmail();
 
         $data = $this->collectDataClientPanel();
+
         $fields += [
             'email' => $decryptedEmail,
             'allBoxesSum' => array_sum($data['boxesSum']),
@@ -129,8 +136,10 @@ class ClientPanelController extends AppController
             'fruitsWeightSum' => $data['fruitsWeightSum'],
             'boxesSumForFruits' => $data['boxesSumForFruits'],
         ];
-        $this->render('panel_klienta', $fields);
+
+        $this->render('status_frusion', $fields);
     }
+
 
     public function getLoggedInUserId()
     {

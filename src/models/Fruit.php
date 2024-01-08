@@ -6,13 +6,16 @@ class Fruit
     private $typeFruit;
     private $priceId;
     private $priceFruit;
+    private $idAdmin;
 
-    public function __construct($idFruit, $typeFruit, $priceId, $priceFruit)
+
+    public function __construct($idFruit, $typeFruit, $priceId, $priceFruit, $idAdmin)
     {
         $this->idFruit = $idFruit;
         $this->typeFruit = $typeFruit;
         $this->priceId = $priceId;
         $this->priceFruit = $priceFruit;
+        $this->idAdmin = $idAdmin;
     }
 
     public function getIdFruit()
@@ -38,6 +41,11 @@ class Fruit
     public function setPriceFruit($priceFruit): void
     {
         $this->priceFruit = $priceFruit;
+    }
+
+    public function getIdAdmin()
+    {
+        return $this->idAdmin;
     }
 
 }

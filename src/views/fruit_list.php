@@ -111,7 +111,7 @@
                                 <option value="" disabled selected>Name of the fruit</option>
                                 <?php
                                 $fruitRepository = new FruitRepository();
-                                $fruits = $fruitRepository->getAllFruit();
+                                $fruits = $fruitRepository->getAllFruitForAdmin();
                                 foreach ($fruits as $fruit) {
                                     echo '<option value="' . $fruit->getIdFruit() . '">' . $fruit->getTypeFruit() . '</option>';
                                 }
@@ -155,7 +155,7 @@
                                 <option value="" disabled selected>Name of the fruit</option>
                                 <?php
                                 $fruitRepository = new FruitRepository();
-                                $fruits = $fruitRepository->getAllFruit();
+                                $fruits = $fruitRepository->getAllFruitForAdmin();
                                 foreach ($fruits as $fruit) {
                                     echo '<option value="' . $fruit->getIdFruit() . '">' . $fruit->getTypeFruit() . '</option>';
                                 }

@@ -7,14 +7,17 @@ class FruitRepository extends Repository
 {
     public function getFruit(int $fruitId): ?Fruit
     {
+        $loggedInAdminId = $this->getLoggedInAdminId();
+
         $stmt = $this->database->connect()->prepare('
-        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
+        SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
         FROM public."Fruit" f
         LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
-        WHERE f."idFruit" = :fruitId
+        WHERE f."idFruit" = :fruitId AND f."idAdmin" = :loggedInAdminId
     ');
 
         $stmt->bindParam(':fruitId', $fruitId, PDO::PARAM_INT);
+        $stmt->bindParam(':loggedInAdminId', $loggedInAdminId, PDO::PARAM_INT);
         $stmt->execute();
 
         $fruit = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -27,69 +30,82 @@ class FruitRepository extends Repository
             $fruit['idFruit'],
             $fruit['typeFruit'],
             $fruit['idPrice'],
-            $fruit['price']
+            $fruit['price'],
+            $fruit['idAdmin']
         );
     }
     public function getFruitByPriceId(int $priceId): ?Fruit
     {
+        $loggedInAdminId = $this->getLoggedInAdminId();
+
         $stmt = $this->database->connect()->prepare('
-        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
+        SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
         FROM public."Fruit" f
         LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
-        WHERE p."idPrice" = :priceId
+        WHERE p."idPrice" = :priceId AND f."idAdmin" = :loggedInAdminId
     ');
 
         $stmt->bindParam(':priceId', $priceId, PDO::PARAM_INT);
+        $stmt->bindParam(':loggedInAdminId', $loggedInAdminId, PDO::PARAM_INT);
         $stmt->execute();
 
-        $fruitData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $fruit = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($fruitData === false) {
+        if ($fruit === false) {
             return null;
         }
 
         return new Fruit(
-            $fruitData['idFruit'],
-            $fruitData['typeFruit'],
-            $fruitData['idPrice'],
-            $fruitData['price']
+            $fruit['idFruit'],
+            $fruit['typeFruit'],
+            $fruit['idPrice'],
+            $fruit['price'],
+            $fruit['idAdmin']
         );
     }
     public function getFruitByName(string $fruitName): ?Fruit
     {
+        $loggedInAdminId = $this->getLoggedInAdminId();
+
         $stmt = $this->database->connect()->prepare('
-        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price"
+        SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
         FROM public."Fruit" f
         LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
-        WHERE f."typeFruit" = :fruitName
+        WHERE f."typeFruit" = :fruitName AND f."idAdmin" = :loggedInAdminId
     ');
 
         $stmt->bindParam(':fruitName', $fruitName, PDO::PARAM_STR);
+        $stmt->bindParam(':loggedInAdminId', $loggedInAdminId, PDO::PARAM_INT);
         $stmt->execute();
 
-        $fruitData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $fruit = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($fruitData === false) {
+        if ($fruit === false) {
             return null;
         }
 
         return new Fruit(
-            $fruitData['idFruit'],
-            $fruitData['typeFruit'],
-            $fruitData['idPrice'],
-            $fruitData['price']
+            $fruit['idFruit'],
+            $fruit['typeFruit'],
+            $fruit['idPrice'],
+            $fruit['price'],
+            $fruit['idAdmin']
         );
     }
 
-    public function getAllFruit(): array
+    public function getAllFruitForAdmin(): array
     {
+        $loggedInAdminId = $this->getLoggedInAdminId();
+
         $fruits = [];
         $stmt = $this->database->connect()->prepare('
-        SELECT f."idFruit", f."typeFruit",  p."idPrice", p."price"
+        SELECT f."idFruit", f."typeFruit", p."idPrice", p."price", f."idAdmin"
         FROM public."Fruit" f
         LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+        WHERE f."idAdmin" = :loggedInAdminId
     ');
 
+        $stmt->bindParam(':loggedInAdminId', $loggedInAdminId, PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -99,22 +115,24 @@ class FruitRepository extends Repository
                 $fruit['idFruit'],
                 $fruit['typeFruit'],
                 $fruit['idPrice'],
-                $fruit['price']
+                $fruit['price'],
+                $fruit['idAdmin']
             );
         }
 
         return $fruits;
     }
 
-    public function fruitTypeExists($fruitType): bool
+    public function fruitTypeExistsForAdmin($typeFruit, $adminId): bool
     {
         $stmt = $this->database->connect()->prepare('
         SELECT *
         FROM public."Fruit" f
-        WHERE f."typeFruit" = :fruitType
+        WHERE f."typeFruit" = :fruitType AND f."idAdmin" = :adminId
     ');
 
-        $stmt->bindParam(':fruitType', $fruitType, PDO::PARAM_STR);
+        $stmt->bindParam(':fruitType', $typeFruit, PDO::PARAM_STR);
+        $stmt->bindParam(':adminId', $adminId, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() > 0;
@@ -123,16 +141,18 @@ class FruitRepository extends Repository
     public function addFruit($typeFruit): bool
     {
         try {
+            $loggedInAdminId = $this->getLoggedInAdminId();
             $stmt = $this->database->connect();
 
             $stmt->beginTransaction();
 
             $stmtFruit = $stmt->prepare('
-            INSERT INTO public."Fruit" ("typeFruit") 
-            VALUES (:typeFruit)
+            INSERT INTO public."Fruit" ("typeFruit", "idAdmin") 
+            VALUES (:typeFruit, :idAdmin)
         ');
 
             $stmtFruit->bindParam(':typeFruit', $typeFruit, PDO::PARAM_STR);
+            $stmtFruit->bindParam(':idAdmin', $loggedInAdminId, PDO::PARAM_INT);
 
             $stmtFruit->execute();
 
@@ -225,6 +245,58 @@ class FruitRepository extends Repository
             echo "Error: " . $e->getMessage();
             return false; // Error
         }
+    }
+
+    public function getLoggedInAdminId()
+    {
+        $loggedInAdminId = $this->getDecryptedAdminId();
+        if ($loggedInAdminId) {
+            return $loggedInAdminId;
+        }
+
+        return null;
+    }
+    private function getDecryptedAdminId()
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+        $adminRepository = new AdminRepository();
+        $admin = $adminRepository->getAdmin($decryptedEmail);
+
+        if ($admin) {
+            return $admin->getIdAdmin();
+        }
+
+        return null;
+    }
+
+    public function getLoggedInUserId()
+    {
+        $loggedInUserId = $this->getDecryptedUserId();
+        if ($loggedInUserId) {
+            return $loggedInUserId;
+        }
+
+        return null;
+    }
+    private function getDecryptedUserId()
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+        $userRepository = new UserRepository();
+        $user = $userRepository->getUser($decryptedEmail);
+
+        if ($user) {
+            return $user->getIdUser();
+        }
+
+        return null;
+    }
+    private function getDecryptedEmail() {
+        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
+        $iv = '1234567891011121';
+
+        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
+
+        return $decryptedData;
     }
 
 }

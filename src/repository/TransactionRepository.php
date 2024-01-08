@@ -92,11 +92,6 @@ class TransactionRepository extends Repository
         }
     }
 
-    /**
-     * @param $stmt
-     * @param array $transactions
-     * @return array
-     */
     public function extracted($stmt, array $transactions): array
     {
         $stmt->execute();

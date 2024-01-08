@@ -57,7 +57,7 @@ class StatusFrusionController extends AppController
         $idAdmin = $this->getLoggedInAdminId();
         $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin);
         $boxes = $this->boxRepository->getAllBoxes();
-        $fruits = $this->fruitRepository->getAllFruit();
+        $fruits = $this->fruitRepository->getAllFruitForAdmin();
 
         $boxesSum = [];
         $fruitsAmountSum = [];

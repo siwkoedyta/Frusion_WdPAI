@@ -239,7 +239,7 @@
                             <option value="" disabled selected>Fruit</option>
                             <?php
                             $fruitRepository = new FruitRepository();
-                            $fruits = $fruitRepository->getAllFruit();
+                            $fruits = $fruitRepository->getAllFruitForAdmin();
                             foreach ($fruits as $fruit) {
                                 echo '<option value="' . $fruit->getIdFruit() . '">' . $fruit->getTypeFruit() . '</option>';
                             }
