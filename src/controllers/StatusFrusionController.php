@@ -55,10 +55,8 @@ class StatusFrusionController extends AppController
         return $decryptedData;
     }
 
-    private function renderStatusFrusion($fields = [])
+    private function collectDataForStatusFrusion()
     {
-        $decryptedEmail = $this->getDecryptedEmail();
-
         $transactions = $this->transactionRepository->getAllTransactions();
         $boxes = $this->boxRepository->getAllBoxes();
         $fruits = $this->fruitRepository->getAllFruit();
@@ -66,6 +64,7 @@ class StatusFrusionController extends AppController
         $boxesSum = [];
         $fruitsAmountSum = [];
         $fruitsWeightSum = [];
+        $boxesSumForFruits = [];
 
         foreach ($transactions as $transaction) {
             $box = $this->boxRepository->getBoxById($transaction->getIdTypeBox())->getTypeBox();
@@ -85,27 +84,50 @@ class StatusFrusionController extends AppController
                     $fruitsAmountSum[$fruitName] += $transaction->getAmount();
                 }
 
-                // Accumulate the total weight for each fruit
                 if (!isset($fruitsWeightSum[$fruitName])) {
                     $fruitsWeightSum[$fruitName] = $transaction->getWeight();
                 } else {
                     $fruitsWeightSum[$fruitName] += $transaction->getWeight();
                 }
+
+                if (!isset($boxesSumForFruits[$fruitName][$box])) {
+                    $boxesSumForFruits[$fruitName][$box] = $transaction->getNumberOfBoxes();
+                } else {
+                    $boxesSumForFruits[$fruitName][$box] += $transaction->getNumberOfBoxes();
+                }
+
             }
         }
 
-// The code block you provided outside the main loop
-        $fields += [
-            'email' => $decryptedEmail,
-            'allBoxesSum' => array_sum($boxesSum),
+        return [
+            'transactions' => $transactions,
             'boxes' => $boxes,
-            'boxesSum' => $boxesSum,
             'fruits' => $fruits,
+            'boxesSum' => $boxesSum,
             'fruitsAmountSum' => $fruitsAmountSum,
             'fruitsWeightSum' => $fruitsWeightSum,
+            'boxesSumForFruits' => $boxesSumForFruits,
         ];
+    }
 
+    private function renderStatusFrusion($fields = [])
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+
+        $data = $this->collectDataForStatusFrusion();
+
+        $fields += [
+            'email' => $decryptedEmail,
+            'allBoxesSum' => array_sum($data['boxesSum']),
+            'boxes' => $data['boxes'],
+            'boxesSum' => $data['boxesSum'],
+            'fruits' => $data['fruits'],
+            'fruitsAmountSum' => $data['fruitsAmountSum'],
+            'fruitsWeightSum' => $data['fruitsWeightSum'],
+            'boxesSumForFruits' => $data['boxesSumForFruits'],
+        ];
 
         $this->render('status_frusion', $fields);
     }
+
 }
