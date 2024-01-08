@@ -63,6 +63,34 @@ class FruitRepository extends Repository
             $fruit['idAdmin']
         );
     }
+
+    public function getFruitByPriceIdForUser(int $priceId): ?Fruit
+    {
+
+        $stmt = $this->database->connect()->prepare('
+        SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
+        FROM public."Fruit" f
+        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+        WHERE p."idPrice" = :priceId
+    ');
+
+        $stmt->bindParam(':priceId', $priceId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $fruit = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($fruit === false) {
+            return null;
+        }
+
+        return new Fruit(
+            $fruit['idFruit'],
+            $fruit['typeFruit'],
+            $fruit['idPrice'],
+            $fruit['price'],
+            $fruit['idAdmin']
+        );
+    }
     public function getFruitByName(string $fruitName): ?Fruit
     {
         $loggedInAdminId = $this->getLoggedInAdminId();
@@ -93,6 +121,33 @@ class FruitRepository extends Repository
         );
     }
 
+    public function getFruitByNameForUser(string $fruitName): ?Fruit
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
+        FROM public."Fruit" f
+        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+        WHERE f."typeFruit" = :fruitName
+    ');
+
+        $stmt->bindParam(':fruitName', $fruitName, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $fruit = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($fruit === false) {
+            return null;
+        }
+
+        return new Fruit(
+            $fruit['idFruit'],
+            $fruit['typeFruit'],
+            $fruit['idPrice'],
+            $fruit['price'],
+            $fruit['idAdmin']
+        );
+    }
+
     public function getAllFruitForAdmin(): array
     {
         $loggedInAdminId = $this->getLoggedInAdminId();
@@ -106,6 +161,32 @@ class FruitRepository extends Repository
     ');
 
         $stmt->bindParam(':loggedInAdminId', $loggedInAdminId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($result as $fruit) {
+            $fruits[] = new Fruit(
+                $fruit['idFruit'],
+                $fruit['typeFruit'],
+                $fruit['idPrice'],
+                $fruit['price'],
+                $fruit['idAdmin']
+            );
+        }
+
+        return $fruits;
+    }
+
+    public function getAllFruit(): array
+    {
+        $fruits = [];
+        $stmt = $this->database->connect()->prepare('
+        SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
+        FROM public."Fruit" f
+        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+    ');
+
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -250,6 +331,7 @@ class FruitRepository extends Repository
     public function getLoggedInAdminId()
     {
         $loggedInAdminId = $this->getDecryptedAdminId();
+
         if ($loggedInAdminId) {
             return $loggedInAdminId;
         }
@@ -269,27 +351,6 @@ class FruitRepository extends Repository
         return null;
     }
 
-    public function getLoggedInUserId()
-    {
-        $loggedInUserId = $this->getDecryptedUserId();
-        if ($loggedInUserId) {
-            return $loggedInUserId;
-        }
-
-        return null;
-    }
-    private function getDecryptedUserId()
-    {
-        $decryptedEmail = $this->getDecryptedEmail();
-        $userRepository = new UserRepository();
-        $user = $userRepository->getUser($decryptedEmail);
-
-        if ($user) {
-            return $user->getIdUser();
-        }
-
-        return null;
-    }
     private function getDecryptedEmail() {
         $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
         $iv = '1234567891011121';

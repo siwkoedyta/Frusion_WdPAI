@@ -66,10 +66,10 @@ class ClientPanelController extends AppController
     }
     public function collectDataClientPanel()
     {
-        $idAdmin = $this->getLoggedInUserId();
-        $transactions = $this->transactionRepository->getTransactionsForUser($idAdmin);
+        $idUser = $this->getLoggedInUserId();
+        $transactions = $this->transactionRepository->getTransactionsForUser($idUser);
         $boxes = $this->boxRepository->getAllBoxes();
-        $fruits = $this->fruitRepository->getAllFruitForAdmin();
+        $fruits = $this->fruitRepository->getAllFruit();
 
         $boxesSum = [];
         $fruitsAmountSum = [];
@@ -85,11 +85,12 @@ class ClientPanelController extends AppController
                 $boxesSum[$box] += $transaction->getNumberOfBoxes();
             }
 
-            $fruit = $this->fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
+            $fruit = $this->fruitRepository->getFruitByPriceIdForUser($transaction->getIdPriceFruit());
             if ($fruit !== null) {
                 $fruitName = $fruit->getTypeFruit();
                 if (!isset($fruitsAmountSum[$fruitName])) {
                     $fruitsAmountSum[$fruitName] = $transaction->getAmount();
+
                 } else {
                     $fruitsAmountSum[$fruitName] += $transaction->getAmount();
                 }
@@ -119,27 +120,6 @@ class ClientPanelController extends AppController
             'boxesSumForFruits' => $boxesSumForFruits,
         ];
     }
-
-    private function renderStatusFrusion($fields = [])
-    {
-        $decryptedEmail = $this->getDecryptedEmail();
-
-        $data = $this->collectDataClientPanel();
-
-        $fields += [
-            'email' => $decryptedEmail,
-            'allBoxesSum' => array_sum($data['boxesSum']),
-            'boxes' => $data['boxes'],
-            'boxesSum' => $data['boxesSum'],
-            'fruits' => $data['fruits'],
-            'fruitsAmountSum' => $data['fruitsAmountSum'],
-            'fruitsWeightSum' => $data['fruitsWeightSum'],
-            'boxesSumForFruits' => $data['boxesSumForFruits'],
-        ];
-
-        $this->render('status_frusion', $fields);
-    }
-
 
     public function getLoggedInUserId()
     {

@@ -110,14 +110,15 @@
 
                         $transactions = $data['transactions'];
                         $fruitsWeightSum = $data['fruitsWeightSum'];
-
+                        $fruitsAmountSum = $data['fruitsAmountSum'];
 
                         foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
-                            $fruit = $fruitRepository->getFruitByName($fruitName);
+                            $fruit = $fruitRepository->getFruitByNameForUser($fruitName);
                             $amountForCurrentFruit = $fruitsAmountSum[$fruit->getTypeFruit()] ?? 0;
                             $totalWeightForCurrentFruit = $data['fruitsWeightSum'][$fruitName] ?? 0;
                             $valueForCurrentFruit = $amountForCurrentFruit / $totalWeightForCurrentFruit;
                         ?>
+
                         <div class="prostokat_pola_rekordu">
                             <div class="lewa_strona">
                                 <div id="nazwa_owoca_klient"><?= $fruitName ?></div>
@@ -163,8 +164,9 @@
                     $boxRepository = new BoxRepository();
                     foreach($transactions as $transaction):
                     $user = $userRepository->getUserById($transaction->getIdUser());
-                    $fruit = $fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
+                    $fruit = $fruitRepository->getFruitByPriceIdForUser($transaction->getIdPriceFruit());
                     $box = $boxRepository->getBoxById($transaction->getIdTypeBox());
+
                     ?>
                     <div class="prostokat_pola_rekordu">
                         <div class="lewa_strona">
