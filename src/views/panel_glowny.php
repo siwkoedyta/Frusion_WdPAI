@@ -115,27 +115,57 @@
 
                     <div class="prostokat">
                         <div id="summary">Summary</div>
+
+                        <?php
+                        $transactionRepository = new TransactionRepository();
+                        $transactions = $transactionRepository->getAllTransactions();
+
+                        $fruitRepository = new FruitRepository();
+                        $boxRepository = new BoxRepository();
+
+                        $statusFrusionController = new StatusFrusionController();
+                        $data = $statusFrusionController->collectDataForStatusFrusion();
+
+                        $transactions = $data['transactions'];
+                        $fruitsWeightSum = $data['fruitsWeightSum'];
+                        $boxesSumForFruits = $data['boxesSumForFruits'];
+
+                        foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
+                        $fruit = $fruitRepository->getFruitByName($fruitName);
+                        $boxesForCurrentFruit = $boxesSumForFruits[$fruitName] ?? [];
+
+                        ?>
+
                         <div class="prostokat_bialy">
-                            <div class="wartość_nazwa_owocu">Raspbeerry</div>
+                            <div class="wartość_nazwa_owocu"><?= $fruitName ?></div>
                             <div class="kontener_cena_waga_skrzynki">
                                 <div class="kontener_skrzynki_cena">
                                     <div class="kontener_cena">
                                         <div id="price">Price:</div>
-                                        <div id="wartość_ceny">3,40</div>
+                                        <div id="wartość_ceny"><?= $fruit->getPriceFruit(); ?></div>
                                         <div id="zł">zł</div>
                                     </div>
                                     <div class="kontener_skrzynki">
                                         <div id="boxes">Boxes:</div>
-                                        <div id="wartość_skrzynek">124</div>
-                                        <div id="rodzaj_skrzynki_wykaz">SVZ</div>
+                                        <div id="wartość_skrzynek">
+                                            <?php
+                                            // Użycie implode do połączenia elementów tablicy w ciąg znaków
+                                            echo implode(', ', array_map(function ($boxType, $boxCount) {
+                                                return "$boxCount $boxType";
+                                            }, array_keys($boxesForCurrentFruit), $boxesForCurrentFruit));
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="kontener_waga">
-                                    <div id="wartość_waga">1020,30</div>
+                                    <div id="wartość_waga"><?= $totalWeight; ?></div>
                                     <div id="kg">kg</div>
                                 </div>
                             </div>
                         </div>
+                            <?php
+                        }
+                        ?>
 
 
                     </div>

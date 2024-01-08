@@ -121,7 +121,7 @@
 
                     foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
                         $fruit = $fruitRepository->getFruitByName($fruitName);
-                        $boxesForCurrentFruit = isset($boxesSumForFruits[$fruitName]) ? $boxesSumForFruits[$fruitName] : [];
+                        $boxesForCurrentFruit = $boxesSumForFruits[$fruitName] ?? [];
 
                         ?>
                         <div class="prostokat_bialy_status">

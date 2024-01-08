@@ -1,6 +1,5 @@
 <?php
 require_once 'AppController.php';
-require_once __DIR__ . '/../repository/StatusFrusionRepository.php';
 require_once __DIR__ . '/../repository/TransactionRepository.php';
 require_once __DIR__ . '/../repository/BoxRepository.php';
 require_once __DIR__ . '/../repository/FruitRepository.php';
@@ -8,7 +7,6 @@ require_once __DIR__ . '/../repository/FruitRepository.php';
 class StatusFrusionController extends AppController
 {
     private $message = [];
-    private $statusFrusionRepository;
     private $transactionRepository;
     private $boxRepository;
     private $fruitRepository;
@@ -17,7 +15,6 @@ class StatusFrusionController extends AppController
     public function __construct()
     {
         parent::__construct();
-        $this->statusFrusionRepository = new StatusFrusionRepository();
         $this->transactionRepository = new TransactionRepository();
         $this->boxRepository = new BoxRepository();
         $this->fruitRepository = new FruitRepository();
@@ -55,7 +52,7 @@ class StatusFrusionController extends AppController
         return $decryptedData;
     }
 
-    private function collectDataForStatusFrusion()
+    public function collectDataForStatusFrusion()
     {
         $transactions = $this->transactionRepository->getAllTransactions();
         $boxes = $this->boxRepository->getAllBoxes();
