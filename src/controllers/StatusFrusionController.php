@@ -54,7 +54,8 @@ class StatusFrusionController extends AppController
 
     public function collectDataForStatusFrusion()
     {
-        $transactions = $this->transactionRepository->getAllTransactions();
+        $idAdmin = $this->getLoggedInAdminId();
+        $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin);
         $boxes = $this->boxRepository->getAllBoxes();
         $fruits = $this->fruitRepository->getAllFruit();
 
@@ -125,6 +126,20 @@ class StatusFrusionController extends AppController
         ];
 
         $this->render('status_frusion', $fields);
+    }
+
+    public function getLoggedInAdminId()
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+
+        $adminRepository = new AdminRepository();
+        $admin = $adminRepository->getAdmin($decryptedEmail);
+
+        if ($admin) {
+            return $admin->getIdAdmin();
+        }
+
+        return null;
     }
 
 }

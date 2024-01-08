@@ -118,7 +118,8 @@
 
                         <?php
                         $transactionRepository = new TransactionRepository();
-                        $transactions = $transactionRepository->getAllTransactions();
+                        $idAdmin = $this->getLoggedInAdminId();
+                        $transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
 
                         $fruitRepository = new FruitRepository();
                         $boxRepository = new BoxRepository();
@@ -176,7 +177,8 @@
 
                     <?php
                     $transactionRepository = new TransactionRepository();
-                    $transactions = $transactionRepository->getAllTransactions();
+                    $idAdmin = $this->getLoggedInAdminId();
+                    $transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
 
                     $userRepository = new UserRepository();
                     $fruitRepository = new FruitRepository();

@@ -68,6 +68,8 @@ class HomeController extends AppController
     private function renderHome($fields = [])
     {
         $decryptedEmail = $this->getDecryptedEmail();
+        $idAdmin = $this->getLoggedInAdminId();
+        $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin);
         $this->render('panel_glowny', ['email' => $decryptedEmail] + $fields);
     }
 
@@ -132,7 +134,7 @@ class HomeController extends AppController
         }
         $this->renderHome(["addTransactionMsg" => $message]);
     }
-    private function getLoggedInAdminId()
+    public function getLoggedInAdminId()
     {
         $decryptedEmail = $this->getDecryptedEmail();
 

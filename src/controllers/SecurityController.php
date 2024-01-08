@@ -24,8 +24,7 @@ class SecurityController extends AppController {
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Dodanie administratora do bazy danych
-        $admin = new Admin($email, $hashedPassword, $phone, $frusion_name);
+        $admin = new Admin(null,$email, $hashedPassword, $phone, $frusion_name);
         $AdminRepository->addAdmin($admin);
 
         return $this->render('panel_logowania', ['messages' => ['You\'ve been successfully registered!']]);
@@ -35,20 +34,16 @@ class SecurityController extends AppController {
         $userRepository = new UserRepository();
         $adminRepository = new AdminRepository();
 
-        // Sprawdź, czy użytkownik lub admin są już zalogowani
         if ($this->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
 
-            // Tutaj możesz umieścić swoją logikę do sprawdzania, czy zalogowany użytkownik to admin czy klient
             $decryptedEmail = $this->getDecryptedEmail();
             $foundUser = $userRepository->getUser($decryptedEmail);
             $foundAdmin = $adminRepository->getAdmin($decryptedEmail);
 
             if ($foundUser) {
-                // Przykład: przekieruj na panel klienta, jeśli użytkownik jest zalogowany
                 header("Location: $url/panel_klienta");
             } elseif ($foundAdmin) {
-                // Przykład: przekieruj na panel główny, jeśli admin jest zalogowany
                 header("Location: $url/panel_glowny");
             }
 
@@ -62,10 +57,7 @@ class SecurityController extends AppController {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        // Sprawdź, czy email należy do użytkownika
         $user = $userRepository->getUser($email);
-
-        // Sprawdź, czy email należy do administratora
         $admin = $adminRepository->getAdmin($email);
 
 
@@ -75,8 +67,6 @@ class SecurityController extends AppController {
 
         $url = "http://$_SERVER[HTTP_HOST]";
 
-        //password_verify($password, $user->getPassword())
-        //password_verify($password, $admin->getPassword())
         if ($user && password_verify($password, $user->getPassword())) {
             $this->ustawCiasteczka($user->getEmail());
             header("Location: $url/panel_klienta");
@@ -95,7 +85,6 @@ class SecurityController extends AppController {
         $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
         $iv = '1234567891011121';
 
-        // Deszyfrowanie
         $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
 
         return $decryptedData;
@@ -111,20 +100,17 @@ class SecurityController extends AppController {
     }
 
     private function usunCiasteczka() {
-        setcookie('logged_user', '', time() - 3600, '/'); // Ustaw czas wygaśnięcia na przeszłą datę
+        setcookie('logged_user', '', time() - 3600, '/'); // Czas wygaśnięcia na przeszłą datę
     }
 
     public function wyloguj(){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Usuń ciasteczko logowania
             $this->usunCiasteczka();
 
-            // Przekieruj użytkownika na stronę logowania
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/panel_logowania");
         } else {
-            // Obsługa błędu - nieprawidłowa metoda żądania
-            http_response_code(405); // Method Not Allowed
+            http_response_code(405);
             echo 'Metoda żądania nieprawidłowa';
         }
     }
@@ -139,6 +125,7 @@ class SecurityController extends AppController {
         $decryptedEmail = $this->getDecryptedEmail();
         $this->render('panel_klienta', ['email' => $decryptedEmail]);
     }
+
 
 
 }

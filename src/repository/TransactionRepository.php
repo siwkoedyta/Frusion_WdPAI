@@ -32,11 +32,12 @@ class TransactionRepository extends Repository
         );
     }
 
-    public function getAllTransactions(): array
+    public function getTransactionsForAdmin($idAdmin): array
     {
         $transactions = [];
-        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" ');
+        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idAdmin" = :adminId');
 
+        $stmt->bindParam(':adminId', $idAdmin, PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -54,7 +55,6 @@ class TransactionRepository extends Repository
                 $transactionData['amount']
             );
         }
-
         return $transactions;
     }
 
