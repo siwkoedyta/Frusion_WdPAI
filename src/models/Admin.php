@@ -19,19 +19,10 @@ class Admin
     {
         return $this->idAdmin;
     }
-    public function setIdAdmin($idAdmin): void
-    {
-        $this->idAdmin = $idAdmin;
-    }
 
     public function getEmail()
     {
         return $this->email;
-    }
-
-    public function setEmail($email): void
-    {
-        $this->email = $email;
     }
 
     public function getPassword()
@@ -39,32 +30,14 @@ class Admin
         return $this->password;
     }
 
-    public function setPassword($password): void
-    {
-        $this->password = $password;
-    }
-
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    public function setPhone($phone): void
-    {
-        $this->phone = $phone;
     }
 
     public function getFrusionName()
     {
         return $this->frusionName;
     }
-
-    public function setFrusionName($frusionName): void
-    {
-        $this->frusionName = $frusionName;
-    }
-
-
-
 
 }

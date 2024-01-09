@@ -52,7 +52,8 @@ class AddClientController extends AppController{
             exit;
         }
 
-        $userEmailExists = $this->userRepository->userEmailExists($email);
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
+        $userEmailExists = $this->userRepository->userEmailExistsForAdmin($email,$loggedInAdminId);
         if ($userEmailExists) {
             $this->renderClients(["addUserMsg" => "User already exists"]);
             exit;

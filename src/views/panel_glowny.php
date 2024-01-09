@@ -100,10 +100,16 @@
                     </svg>
                 </div>
             </div>
+
+
             <div class="kalendarz">
+
                 <div class="date-input-container">
                     <input type="date" id="selectedDate" name="selectedDate">
                 </div>
+            </div>
+            <div id="message">
+                <?php if (isset($addTransactionMsg)) echo $addTransactionMsg; ?>
             </div>
 
 
@@ -258,9 +264,7 @@
                         </select>
                         <input name="number_of_boxes_modal" id="Number of boxes" type="number" placeholder="Number of boxes">
 
-                        <div id="message">
-                            <?php if (isset($addTransactionMsg)) echo $addTransactionMsg; ?>
-                        </div>
+
 
                         <div class="przyciski">
                             <button type="submit" class="przycisk_add">Add</button>
@@ -268,9 +272,6 @@
                     </form>
 
                     <button class="przycisk_cancel">Cancel</button>
-
-
-
 
                 </div>
             </div>

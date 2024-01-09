@@ -61,6 +61,11 @@ class HomeController extends AppController
 
     private function handleAddTransaction()
     {
+        if (!isset($_POST['first_name'], $_POST['last_name'], $_POST['id_fruit'], $_POST['weight_modal'], $_POST['id_box'], $_POST['number_of_boxes_modal'])) {
+            $this->renderHome(["addTransactionMsg" => "Incomplete data provided."]);
+            exit;
+        }
+
         $firstName = $_POST['first_name'];
         $lastName = $_POST['last_name'];
         $idFruit = $_POST['id_fruit'];
@@ -68,15 +73,10 @@ class HomeController extends AppController
         $idBox = $_POST['id_box'];
         $numberOfBoxes = intval($_POST['number_of_boxes_modal']);
 
-        if (empty($firstName) || empty($lastName) || empty($idFruit) || empty($weightWithBoxes) || empty($idBox) || empty($numberOfBoxes)) {
-            $this->renderHome(["addTransactionMsg" => "Complete all data."]);
-            exit;
-        }
-
-
-
-        $user = $this->userRepository->getUserByFirstLastName($firstName, $lastName);
-        if(!$user) {
+        $user = $this->userRepository->getUserByFirstName($firstName, $lastName);
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
+        $userEmailExists = $this->userRepository->userEmailExistsForAdmin($user->getEmail(),$loggedInAdminId);
+        if(!$userEmailExists) {
             $this->renderHome(["addTransactionMsg" => "User not found"]);
             exit;
         }

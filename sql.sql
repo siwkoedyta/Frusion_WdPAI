@@ -66,11 +66,16 @@ create table public."Transaction" (
 );
 
 
-create table public."User" (
-                               "idUser" integer primary key not null default nextval('"User_idUser_seq"'::regclass),
-                               "firstName" character varying(255) not null,
-                               "lastName" character varying(255) not null,
-                               email character varying(255) not null,
-                               password character varying(255) not null
+create table "User"
+(
+    "idUser"    serial
+        constraint "idUser"
+            primary key,
+    "firstName" varchar(255) not null,
+    "lastName"  varchar(255) not null,
+    email       varchar(255) not null,
+    password    varchar(255) not null,
+    "idAdmin"   integer
 );
+
 
