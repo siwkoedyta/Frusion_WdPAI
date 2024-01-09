@@ -77,7 +77,6 @@ class FruitController extends AppController
         }
 
         $loggedInAdminId = $this->fruitRepository->getLoggedInAdminId();
-
         $fruitTypeExists = $this->fruitRepository->fruitTypeExistsForAdmin($typeFruit, $loggedInAdminId);
 
         if ($fruitTypeExists) {

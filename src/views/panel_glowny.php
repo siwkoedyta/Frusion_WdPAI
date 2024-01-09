@@ -143,7 +143,7 @@
                                 <div class="kontener_skrzynki_cena">
                                     <div class="kontener_cena">
                                         <div id="price">Price:</div>
-                                        <div id="wartość_ceny"><?= $fruit->getPriceFruit(); ?></div>
+                                        <div id="wartość_ceny"><?= number_format($fruit->getPriceFruit(),2); ?></div>
                                         <div id="zł">zł</div>
                                     </div>
                                     <div class="kontener_skrzynki">
@@ -250,7 +250,7 @@
                             <option value="" disabled selected>Box</option>
                             <?php
                             $boxRepository = new BoxRepository();
-                            $boxes = $boxRepository->getAllBoxes();
+                            $boxes = $boxRepository->getAllBoxesForAdmin();
                             foreach ($boxes as $box) {
                                 echo '<option value="' . $box->getIdBox() . '">' . $box->getTypeBox() . '</option>';
                             }

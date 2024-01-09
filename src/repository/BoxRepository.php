@@ -20,8 +20,32 @@ class BoxRepository extends Repository{
         return new Box(
             $box['idBox'],
             $box['typeBox'],
-            $box['weightBox']
+            $box['weightBox'],
+            $box['idAdmin']
         );
+    }
+    public function getAllBoxesForAdmin(): array
+    {
+        $loggedInAdminId = $this->getLoggedInAdminId();
+
+        $boxes = [];
+        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Box" WHERE "idAdmin" = :loggedInAdminId');
+
+        $stmt->bindParam(':loggedInAdminId', $loggedInAdminId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($result as $box) {
+            $boxes[] = new Box(
+                $box['idBox'],
+                $box['typeBox'],
+                $box['weightBox'],
+                $box['idAdmin']
+            );
+        }
+
+        return $boxes;
     }
 
     public function getAllBoxes(): array
@@ -37,7 +61,8 @@ class BoxRepository extends Repository{
             $boxes[] = new Box(
                 $box['idBox'],
                 $box['typeBox'],
-                $box['weightBox']
+                $box['weightBox'],
+                $box['idAdmin']
             );
         }
 
@@ -61,17 +86,19 @@ class BoxRepository extends Repository{
         return new Box(
             $box['idBox'],
             $box['typeBox'],
-            $box['weightBox']
+            $box['weightBox'],
+            $box['idAdmin']
         );
     }
 
-    public function boxNameExists($boxType): bool
+    public function boxNameExistsForAdmin($boxType,$idAdmin): bool
     {
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public."Box" WHERE "typeBox" = :boxType
+            SELECT * FROM public."Box" WHERE "typeBox" = :boxType AND "idAdmin" = :idAdmin
         ');
 
         $stmt->bindParam(':boxType', $boxType, PDO::PARAM_STR);
+        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() > 0;
@@ -80,17 +107,19 @@ class BoxRepository extends Repository{
     public function addBoxes($typeBox, $weightBox): bool
     {
         try {
+            $loggedInAdminId = $this->getLoggedInAdminId();
             $stmt = $this->database->connect();
 
             $stmt->beginTransaction();
 
             $stmtInsertBox = $stmt->prepare('
-            INSERT INTO public."Box" ("typeBox", "weightBox") 
-            VALUES (:typeBox, :weightBox)
+            INSERT INTO public."Box" ("typeBox", "weightBox","idAdmin") 
+            VALUES (:typeBox, :weightBox, :idAdmin)
         ');
 
             $stmtInsertBox->bindParam(':typeBox', $typeBox, PDO::PARAM_STR);
             $stmtInsertBox->bindParam(':weightBox', $weightBox, PDO::PARAM_INT);  // Corrected binding
+            $stmtInsertBox->bindParam(':idAdmin', $loggedInAdminId, PDO::PARAM_INT);
 
             $stmtInsertBox->execute();
 
@@ -131,6 +160,38 @@ class BoxRepository extends Repository{
             echo "Error: " . $e->getMessage();
             return false; // Error
         }
+    }
+
+    public function getLoggedInAdminId()
+    {
+        $loggedInAdminId = $this->getDecryptedAdminId();
+
+        if ($loggedInAdminId) {
+            return $loggedInAdminId;
+        }
+
+        return null;
+    }
+    private function getDecryptedAdminId()
+    {
+        $decryptedEmail = $this->getDecryptedEmail();
+        $adminRepository = new AdminRepository();
+        $admin = $adminRepository->getAdmin($decryptedEmail);
+
+        if ($admin) {
+            return $admin->getIdAdmin();
+        }
+
+        return null;
+    }
+
+    private function getDecryptedEmail() {
+        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
+        $iv = '1234567891011121';
+
+        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
+
+        return $decryptedData;
     }
 
 

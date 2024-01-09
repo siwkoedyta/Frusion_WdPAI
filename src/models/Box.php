@@ -4,12 +4,14 @@ class Box
     private $idBox;
     private $typeBox;
     private $weightBox;
+    private $idAdmin;
 
-    public function __construct($idBox, $typeBox, $weightBox)
+    public function __construct($idBox, $typeBox, $weightBox, $idAdmin)
     {
         $this->idBox = $idBox;
         $this->typeBox = $typeBox;
         $this->weightBox = $weightBox;
+        $this->idAdmin = $idAdmin;
     }
 
     public function getIdBox()
@@ -22,20 +24,14 @@ class Box
         return $this->typeBox;
     }
 
-    public function setTypeBox($typeBox)
-    {
-        $this->typeBox = $typeBox;
-    }
-
     public function getWeightBox()
     {
         return $this->weightBox;
     }
 
-    public function setWeightBox($weightBox)
+    public function getIdAdmin()
     {
-        $this->weightBox = $weightBox;
+        return $this->idAdmin;
     }
-
 
 }

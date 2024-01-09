@@ -204,16 +204,16 @@ class FruitRepository extends Repository
         return $fruits;
     }
 
-    public function fruitTypeExistsForAdmin($typeFruit, $adminId): bool
+    public function fruitTypeExistsForAdmin($typeFruit, $idAdmin): bool
     {
         $stmt = $this->database->connect()->prepare('
         SELECT *
         FROM public."Fruit" f
-        WHERE f."typeFruit" = :fruitType AND f."idAdmin" = :adminId
+        WHERE f."typeFruit" = :fruitType AND f."idAdmin" = :idAdmin
     ');
 
         $stmt->bindParam(':fruitType', $typeFruit, PDO::PARAM_STR);
-        $stmt->bindParam(':adminId', $adminId, PDO::PARAM_INT);
+        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount() > 0;

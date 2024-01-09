@@ -130,7 +130,7 @@
                                 <option value="" disabled selected>Box</option>
                                 <?php
                                 $boxRepository = new BoxRepository();
-                                $boxes = $boxRepository->getAllBoxes();
+                                $boxes = $boxRepository->getAllBoxesForAdmin();
                                 foreach ($boxes as $box) {
                                     echo '<option value="' . $box->getIdBox() . '">' . $box->getTypeBox() . '</option>';
                                 }

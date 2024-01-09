@@ -131,7 +131,7 @@
                                 <div class="kontener_skrzynki_cena">
                                     <div class="kontener_cena">
                                         <div id="price">Price:</div>
-                                        <div id="wartość_ceny"><?= $fruit->getPriceFruit(); ?></div>
+                                        <div id="wartość_ceny"><?= number_format($fruit->getPriceFruit(),2); ?></div>
                                         <div id="zł">zł</div>
                                     </div>
                                     <div class="kontener_skrzynki">
@@ -191,7 +191,7 @@
                     <div class="prostokat_bialy_zielony">
                         <div id="ALL">ALL</div>
                         <div class="calkowita_wartosc">
-                            <div id="wartosc_dnia"><?= isset($fruitsAmountSum) ? array_sum($fruitsAmountSum) : 0; ?></div>
+                            <div id="wartosc_dnia"><?= number_format(isset($fruitsAmountSum) ? array_sum($fruitsAmountSum) : 0,2); ?></div>
                             <div id="kilogramy">zł</div>
                         </div>
                     </div>

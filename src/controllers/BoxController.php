@@ -54,7 +54,7 @@ class BoxController extends AppController
 
 
     public function renderBoxList($fields = []) {
-        $boxes = $this->boxRepository->getAllBoxes();
+        $boxes = $this->boxRepository->getAllBoxesForAdmin();
         $decryptedEmail = $this->getDecryptedEmail();
         $this->render('boxes', ['email' => $decryptedEmail,'boxes' => $boxes]+ $fields);
     }
@@ -68,7 +68,8 @@ class BoxController extends AppController
             exit;
         }
 
-        $boxNameExists = $this->boxRepository->boxNameExists($typeBox);
+        $loggedInAdminId = $this->boxRepository->getLoggedInAdminId();
+        $boxNameExists = $this->boxRepository->boxNameExistsForAdmin($typeBox,$loggedInAdminId);
         if ($boxNameExists) {
             $this->renderBoxList(["addBoxMsg" => "Box already exists"]);
             exit;

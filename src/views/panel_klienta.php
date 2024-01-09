@@ -178,7 +178,7 @@
                                 </div>
                                 <div class="cala_cena">
                                     <div id="mnoznik">x</div>
-                                    <div id="wartość_ceny"><?= $fruit->getPriceFruit(); ?></div>
+                                    <div id="wartość_ceny"><?= number_format($fruit->getPriceFruit(),2); ?></div>
                                     <div id="złoty_cena">zł</div>
                                 </div>
                             </div>

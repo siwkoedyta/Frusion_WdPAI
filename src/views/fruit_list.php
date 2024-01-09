@@ -90,11 +90,11 @@
 
                 <div class="pierwsza_kolumna">
                     <div class="prostokat_zielony"><h2 id="naglowek_modala">Fruit list</h2></div>
-                    <?php foreach($fruits as $fruit): ?>
+                    <?php foreach ($fruits as $fruit): ?>
                         <div class="prostokat_bialy">
                             <div id="rodzaj_skrzynki"><?= $fruit->getTypeFruit(); ?></div>
                             <div class="waga_skrzynki_cala">
-                                <div id="waga_skrzynki"><?= $fruit->getPriceFruit(); ?></div>
+                                <div id="waga_skrzynki"><?= number_format($fruit->getPriceFruit(), 2); ?></div>
                                 <div id="złotówki">zł</div>
                             </div>
                         </div>
