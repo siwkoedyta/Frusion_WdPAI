@@ -18,6 +18,7 @@ class ClientPanelController extends AppController
     private $boxRepository;
 
     private $userRepository;
+    private $authHelper;
 
     public function __construct()
     {
@@ -26,11 +27,12 @@ class ClientPanelController extends AppController
         $this->fruitRepository = new FruitRepository();
         $this->boxRepository = new BoxRepository();
         $this->userRepository = new UserRepository();
+        $this->authHelper = new AuthHelper();
     }
 
     public function panel_klienta($messages = [])
     {
-        if (!$this->isUserLoggedIn()) {
+        if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/panel_logowania", true, 303);
             exit();
@@ -42,24 +44,21 @@ class ClientPanelController extends AppController
                 break;
         }
     }
-
-    private function isUserLoggedIn()
+    public function getLoggedInUserId()
     {
-        return isset($_COOKIE['logged_user']);
-    }
-    private function getDecryptedEmail()
-    {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
+        $user = $this->userRepository->getUser($decryptedEmail);
 
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
+        if ($user) {
+            return $user->getIdUser();
+        }
 
-        return $decryptedData;
+        return null;
     }
 
     private function renderClientPanel($fields = [])
     {
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $idUser = $this->getLoggedInUserId();
         $transactions = $this->transactionRepository->getTransactionsForAdmin($idUser);
         $this->render('panel_klienta', ['email' => $decryptedEmail] + $fields);
@@ -119,20 +118,6 @@ class ClientPanelController extends AppController
             'fruitsWeightSum' => $fruitsWeightSum,
             'boxesSumForFruits' => $boxesSumForFruits,
         ];
-    }
-
-    public function getLoggedInUserId()
-    {
-        $decryptedEmail = $this->getDecryptedEmail();
-
-        $userRepository = new UserRepository();
-        $user = $userRepository->getUser($decryptedEmail);
-
-        if ($user) {
-            return $user->getIdUser();
-        }
-
-        return null;
     }
 }
 

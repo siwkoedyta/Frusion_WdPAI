@@ -2,12 +2,20 @@
 
 require_once 'Repository.php';
 require_once __DIR__ . '/../models/Fruit.php';
+require_once __DIR__ . '/../controllers/AuthHelper.php';
 
 class FruitRepository extends Repository
 {
+    private $authHelper;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->authHelper = new AuthHelper();
+    }
     public function getFruit(int $fruitId): ?Fruit
     {
-        $loggedInAdminId = $this->getLoggedInAdminId();
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
 
         $stmt = $this->database->connect()->prepare('
         SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
@@ -36,7 +44,7 @@ class FruitRepository extends Repository
     }
     public function getFruitByPriceId(int $priceId): ?Fruit
     {
-        $loggedInAdminId = $this->getLoggedInAdminId();
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
 
         $stmt = $this->database->connect()->prepare('
         SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
@@ -93,7 +101,7 @@ class FruitRepository extends Repository
     }
     public function getFruitByName(string $fruitName): ?Fruit
     {
-        $loggedInAdminId = $this->getLoggedInAdminId();
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
 
         $stmt = $this->database->connect()->prepare('
         SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
@@ -150,7 +158,7 @@ class FruitRepository extends Repository
 
     public function getAllFruitForAdmin(): array
     {
-        $loggedInAdminId = $this->getLoggedInAdminId();
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
 
         $fruits = [];
         $stmt = $this->database->connect()->prepare('
@@ -222,7 +230,7 @@ class FruitRepository extends Repository
     public function addFruit($typeFruit): bool
     {
         try {
-            $loggedInAdminId = $this->getLoggedInAdminId();
+            $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
             $stmt = $this->database->connect();
 
             $stmt->beginTransaction();
@@ -328,36 +336,6 @@ class FruitRepository extends Repository
         }
     }
 
-    public function getLoggedInAdminId()
-    {
-        $loggedInAdminId = $this->getDecryptedAdminId();
 
-        if ($loggedInAdminId) {
-            return $loggedInAdminId;
-        }
-
-        return null;
-    }
-    private function getDecryptedAdminId()
-    {
-        $decryptedEmail = $this->getDecryptedEmail();
-        $adminRepository = new AdminRepository();
-        $admin = $adminRepository->getAdmin($decryptedEmail);
-
-        if ($admin) {
-            return $admin->getIdAdmin();
-        }
-
-        return null;
-    }
-
-    private function getDecryptedEmail() {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
-    }
 
 }

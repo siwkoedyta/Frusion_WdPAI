@@ -6,13 +6,16 @@ class ChangePasswordController extends AppController
 {
     private $message = [];
     private $userRepository;
+    private $authHelper;
+
     public function __construct()
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
+        $this->authHelper = new AuthHelper();
     }
     public function change_password($messages = []) {
-        if (!$this->isUserLoggedIn()) {
+        if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/change_password", true, 303);
             exit();
@@ -32,25 +35,9 @@ class ChangePasswordController extends AppController
         }
     }
 
-    private function isUserLoggedIn()
-    {
-        return isset($_COOKIE['logged_user']);
-    }
-
-    private function getDecryptedEmail()
-    {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        // Deszyfrowanie
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
-    }
-
     private function renderChangePassword($fields = [])
     {
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $this->render('change_password', ['email' => $decryptedEmail] + $fields);
     }
 
@@ -65,7 +52,7 @@ class ChangePasswordController extends AppController
         }
 
         $userRepository = new UserRepository();
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $existingUser = $userRepository->getUser($decryptedEmail);
 
         if (!$existingUser || !password_verify($currentPassword, $existingUser->getPassword())) {

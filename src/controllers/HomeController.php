@@ -16,8 +16,8 @@ class HomeController extends AppController
     private $transactionRepository;
     private $fruitRepository;
     private $boxRepository;
-
     private $userRepository;
+    private $authHelper;
 
     public function __construct()
     {
@@ -26,11 +26,12 @@ class HomeController extends AppController
         $this->fruitRepository = new FruitRepository();
         $this->boxRepository = new BoxRepository();
         $this->userRepository = new UserRepository();
+        $this->authHelper = new AuthHelper();
     }
 
     public function panel_glowny($messages = [])
     {
-        if (!$this->isUserLoggedIn()) {
+        if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: $url/panel_logowania", true, 303);
             exit();
@@ -50,24 +51,9 @@ class HomeController extends AppController
         }
     }
 
-    private function isUserLoggedIn()
-    {
-        return isset($_COOKIE['logged_user']);
-    }
-    private function getDecryptedEmail()
-    {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        // Deszyfrowanie
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
-    }
-
     private function renderHome($fields = [])
     {
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $idAdmin = $this->getLoggedInAdminId();
         $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin);
         $this->render('panel_glowny', ['email' => $decryptedEmail] + $fields);
@@ -136,7 +122,7 @@ class HomeController extends AppController
     }
     public function getLoggedInAdminId()
     {
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
 
         $adminRepository = new AdminRepository();
         $admin = $adminRepository->getAdmin($decryptedEmail);

@@ -7,6 +7,13 @@ require_once __DIR__ .'/../repository/UserRepository.php';
 require_once __DIR__ .'/../repository/AdminRepository.php';
 
 class SecurityController extends AppController {
+    private $authHelper;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->authHelper = new AuthHelper();
+    }
 
     public function panel_rejerstracji()
     {
@@ -34,10 +41,10 @@ class SecurityController extends AppController {
         $userRepository = new UserRepository();
         $adminRepository = new AdminRepository();
 
-        if ($this->isUserLoggedIn()) {
+        if ($this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
 
-            $decryptedEmail = $this->getDecryptedEmail();
+            $decryptedEmail = $this->authHelper->getDecryptedEmail();
             $foundUser = $userRepository->getUser($decryptedEmail);
             $foundAdmin = $adminRepository->getAdmin($decryptedEmail);
 
@@ -76,18 +83,6 @@ class SecurityController extends AppController {
         } else {
             return $this->render('panel_logowania', ['messages' => ['The provided data is incorrect!']]);
         }
-    }
-
-    private function isUserLoggedIn() {
-        return isset($_COOKIE['logged_user']);
-    }
-    private function getDecryptedEmail() {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
     }
 
     private function ustawCiasteczka($email) {

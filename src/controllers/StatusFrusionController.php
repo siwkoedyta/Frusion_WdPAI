@@ -11,6 +11,7 @@ class StatusFrusionController extends AppController
     private $boxRepository;
     private $fruitRepository;
 
+    private $authHelper;
 
     public function __construct()
     {
@@ -18,12 +19,12 @@ class StatusFrusionController extends AppController
         $this->transactionRepository = new TransactionRepository();
         $this->boxRepository = new BoxRepository();
         $this->fruitRepository = new FruitRepository();
-
+        $this->authHelper = new AuthHelper();
     }
 
     public function status_frusion($messages = [])
     {
-        if (!$this->isUserLoggedIn()) {
+        if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/panel_logowania", true, 303);
             exit();
@@ -36,25 +37,9 @@ class StatusFrusionController extends AppController
         }
     }
 
-    private function isUserLoggedIn()
-    {
-        return isset($_COOKIE['logged_user']);
-    }
-
-    private function getDecryptedEmail()
-    {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        // Deszyfrowanie
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
-    }
-
     public function collectDataForStatusFrusion()
     {
-        $idAdmin = $this->getLoggedInAdminId();
+        $idAdmin = $this->authHelper->getLoggedInAdminId();
         $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin);
         $boxes = $this->boxRepository->getAllBoxes();
         $fruits = $this->fruitRepository->getAllFruitForAdmin();
@@ -110,7 +95,7 @@ class StatusFrusionController extends AppController
 
     private function renderStatusFrusion($fields = [])
     {
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
 
         $data = $this->collectDataForStatusFrusion();
 
@@ -127,19 +112,7 @@ class StatusFrusionController extends AppController
 
         $this->render('status_frusion', $fields);
     }
-
-    public function getLoggedInAdminId()
-    {
-        $decryptedEmail = $this->getDecryptedEmail();
-
-        $adminRepository = new AdminRepository();
-        $admin = $adminRepository->getAdmin($decryptedEmail);
-
-        if ($admin) {
-            return $admin->getIdAdmin();
-        }
-
-        return null;
+    public function getAuthHelper() {
+        return $this->authHelper;
     }
-
 }

@@ -8,15 +8,18 @@ class BoxController extends AppController
 {
     private $message = [];
     private $boxRepository;
+    private $authHelper;
+
 
     public function __construct()
     {
         parent::__construct();
         $this->boxRepository = new BoxRepository();
+        $this->authHelper = new AuthHelper();
     }
     public function boxes($messages = [])
     {
-        if (!$this->isUserLoggedIn()) {
+        if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: $url/panel_logowania", true, 303);
             exit();
@@ -39,23 +42,9 @@ class BoxController extends AppController
         }
     }
 
-    private function isUserLoggedIn() {
-        return isset($_COOKIE['logged_user']);
-    }
-    private function getDecryptedEmail() {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        // Deszyfrowanie
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
-    }
-
-
     public function renderBoxList($fields = []) {
         $boxes = $this->boxRepository->getAllBoxesForAdmin();
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $this->render('boxes', ['email' => $decryptedEmail,'boxes' => $boxes]+ $fields);
     }
 

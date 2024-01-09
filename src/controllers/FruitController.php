@@ -5,22 +5,22 @@ require_once __DIR__ . '/../models/Fruit.php';
 require_once __DIR__ . '/../repository/FruitRepository.php';
 require_once __DIR__ . '/../repository/TransactionRepository.php';
 
-
-
 class FruitController extends AppController
 {
     private $message = [];
     private $fruitRepository;
+    private $authHelper;
 
     public function __construct()
     {
         parent::__construct();
         $this->fruitRepository = new FruitRepository();
+        $this->authHelper = new AuthHelper();
     }
 
     public function fruit_list($messages = [])
     {
-        if (!$this->isUserLoggedIn()) {
+        if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: $url/panel_logowania", true, 303);
             exit();
@@ -46,24 +46,11 @@ class FruitController extends AppController
         }
     }
 
-    private function isUserLoggedIn()
-    {
-        return isset($_COOKIE['logged_user']);
-    }
-    private function getDecryptedEmail()
-    {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
 
-        // Deszyfrowanie
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
-    }
     private function renderFruitList($fields = [])
     {
         $fruits = $this->fruitRepository->getAllFruitForAdmin();
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $this->render('fruit_list', ['email' => $decryptedEmail, 'fruits' => $fruits] + $fields);
     }
 
@@ -76,7 +63,7 @@ class FruitController extends AppController
             exit;
         }
 
-        $loggedInAdminId = $this->fruitRepository->getLoggedInAdminId();
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
         $fruitTypeExists = $this->fruitRepository->fruitTypeExistsForAdmin($typeFruit, $loggedInAdminId);
 
         if ($fruitTypeExists) {

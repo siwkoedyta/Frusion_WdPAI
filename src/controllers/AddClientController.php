@@ -4,15 +4,17 @@ require_once 'AppController.php';
 class AddClientController extends AppController{
     private $message = [];
     private $userRepository;
+    private $authHelper;
 
     public function __construct()
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
+        $this->authHelper = new AuthHelper();
     }
     public function add_client($messages = [])
     {
-        if (!$this->isUserLoggedIn()) {
+        if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: {$url}/panel_logowania", true, 303);
             exit();
@@ -34,21 +36,8 @@ class AddClientController extends AppController{
 
     private function renderClients($fields = [])
     {
-        $decryptedEmail = $this->getDecryptedEmail();
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $this->render('add_client', ['email' => $decryptedEmail] + $fields);
-    }
-
-    private function isUserLoggedIn() {
-        return isset($_COOKIE['logged_user']);
-    }
-    private function getDecryptedEmail() {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        // Deszyfrowanie
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
     }
 
     public function handleAddClient() {

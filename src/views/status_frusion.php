@@ -114,7 +114,7 @@
 
                     <?php
                     $transactionRepository = new TransactionRepository();
-                    $idAdmin = $this->getLoggedInAdminId();
+                    $idAdmin = $this->getAuthHelper()->getLoggedInAdminId();
                     $transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
 
                     $fruitRepository = new FruitRepository();

@@ -2,6 +2,13 @@
 require_once 'Repository.php';
 require_once __DIR__ . '/../models/Box.php';
 class BoxRepository extends Repository{
+    private $authHelper;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->authHelper = new AuthHelper();
+    }
     public function getBox(int $boxId): ?Box
     {
         $stmt = $this->database->connect()->prepare('
@@ -26,7 +33,7 @@ class BoxRepository extends Repository{
     }
     public function getAllBoxesForAdmin(): array
     {
-        $loggedInAdminId = $this->getLoggedInAdminId();
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
 
         $boxes = [];
         $stmt = $this->database->connect()->prepare('SELECT * FROM public."Box" WHERE "idAdmin" = :loggedInAdminId');
@@ -107,7 +114,7 @@ class BoxRepository extends Repository{
     public function addBoxes($typeBox, $weightBox): bool
     {
         try {
-            $loggedInAdminId = $this->getLoggedInAdminId();
+            $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
             $stmt = $this->database->connect();
 
             $stmt->beginTransaction();
@@ -160,38 +167,6 @@ class BoxRepository extends Repository{
             echo "Error: " . $e->getMessage();
             return false; // Error
         }
-    }
-
-    public function getLoggedInAdminId()
-    {
-        $loggedInAdminId = $this->getDecryptedAdminId();
-
-        if ($loggedInAdminId) {
-            return $loggedInAdminId;
-        }
-
-        return null;
-    }
-    private function getDecryptedAdminId()
-    {
-        $decryptedEmail = $this->getDecryptedEmail();
-        $adminRepository = new AdminRepository();
-        $admin = $adminRepository->getAdmin($decryptedEmail);
-
-        if ($admin) {
-            return $admin->getIdAdmin();
-        }
-
-        return null;
-    }
-
-    private function getDecryptedEmail() {
-        $encryptionKey = '2w5z8eAF4lLknKmQpSsVvYy3cd9gNjRm';
-        $iv = '1234567891011121';
-
-        $decryptedData = openssl_decrypt($_COOKIE['logged_user'], 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $decryptedData;
     }
 
 
