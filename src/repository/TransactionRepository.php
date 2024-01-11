@@ -40,6 +40,21 @@ class TransactionRepository extends Repository
         $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
         return $this->extracted($stmt, $transactions);
     }
+
+    public function getTransactionsForAdminByDate($idAdmin, $selectedDate)
+    {
+        $transactions = [];
+        $stmt = $this->database->connect()->prepare('
+        SELECT * FROM public."Transaction"
+        WHERE "idAdmin" = :idAdmin AND "transactionDate" = :selectedDate
+    ');
+
+        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
+        $stmt->bindParam(':selectedDate', $selectedDate, PDO::PARAM_STR);
+
+        return $this->extracted($stmt, $transactions);
+    }
+
     public function getTransactionsForUser($idUser): array
     {
         $transactions = [];

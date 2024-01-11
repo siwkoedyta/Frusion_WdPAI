@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="/public/css/sidebar.css">
     <link rel="stylesheet" href="/public/css/okno_modalne_kup_owoc.css">
 
-
-
 </head>
 
 <body class="panel_glowny">
@@ -101,17 +99,24 @@
                 </div>
             </div>
 
-
             <div class="kalendarz">
+                <form id="filterForm" method="POST" action="panel_glowny">
+                    <div class="date-input-container">
+                        <input name="type" value="fillteringByData" type="hidden">
 
-                <div class="date-input-container">
-                    <input type="date" id="selectedDate" name="selectedDate">
-                </div>
+                        <!-- Pole input do wybierania daty -->
+                        <input type="date" id="selectedDate" name="selectedDate">
+                        <!-- Wyświetlanie wybranej daty -->
+                        <span id="displayDate" style="display: none"></span>
+                    </div>
+                </form>
             </div>
+
+
+
             <div id="message">
                 <?php if (isset($addTransactionMsg)) echo $addTransactionMsg; ?>
             </div>
-
 
             <div class="zawartosc_strony_kolumny">
 
@@ -123,9 +128,7 @@
                         <div id="summary">Summary</div>
 
                         <?php
-                        $transactionRepository = new TransactionRepository();
                         $idAdmin = $this->getLoggedInAdminId();
-                        $transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
 
                         $fruitRepository = new FruitRepository();
                         $boxRepository = new BoxRepository();
@@ -133,7 +136,7 @@
                         $statusFrusionController = new StatusFrusionController();
                         $data = $statusFrusionController->collectDataForStatusFrusion();
 
-                        $transactions = $data['transactions'];
+                        //$transactions = $data['transactions'];
                         $fruitsWeightSum = $data['fruitsWeightSum'];
                         $boxesSumForFruits = $data['boxesSumForFruits'];
 
@@ -182,13 +185,12 @@
                 <div class="pierwsza_kolumna">
 
                     <?php
-                    $transactionRepository = new TransactionRepository();
                     $idAdmin = $this->getLoggedInAdminId();
-                    $transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
-
+                    $transactionRepository = new TransactionRepository();
                     $userRepository = new UserRepository();
                     $fruitRepository = new FruitRepository();
                     $boxRepository = new BoxRepository();
+
                     foreach($transactions as $transaction):
                         $user = $userRepository->getUserById($transaction->getIdUser());
                         $fruit = $fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
@@ -289,6 +291,8 @@
 
     <script src="/public/js/przycisk.js"></script>
     <script src="/public/js/obsluga_kalendarza.js"></script>
+
+
 </body>
 
 </html>

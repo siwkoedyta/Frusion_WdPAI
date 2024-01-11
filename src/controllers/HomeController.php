@@ -46,6 +46,9 @@ class HomeController extends AppController
                     case "addTransaction":
                         $this->handleAddTransaction();
                         break;
+                    case "fillteringByData":
+                        $this->renderHome();
+                        break;
                 }
             break;
         }
@@ -55,8 +58,9 @@ class HomeController extends AppController
     {
         $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $idAdmin = $this->getLoggedInAdminId();
-        $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin);
-        $this->render('panel_glowny', ['email' => $decryptedEmail] + $fields);
+        $selectedDate = $_POST['selectedDate'] ?? null;
+        $transactions = $this->transactionRepository->getTransactionsForAdminByDate($idAdmin, $selectedDate);
+        $this->render('panel_glowny', ['email' => $decryptedEmail, 'transactions' => $transactions, 'selectedDate' => $selectedDate] + $fields);
     }
 
     private function handleAddTransaction()
