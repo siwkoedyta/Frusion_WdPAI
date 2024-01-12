@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../models/Transaction.php';
@@ -8,6 +9,7 @@ require_once __DIR__ . '/../repository/TransactionRepository.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 require_once __DIR__ . '/../repository/BoxRepository.php';
 require_once __DIR__ . '/../repository/FruitRepository.php';
+require_once __DIR__ . '/../repository/AdminRepository.php';
 
 
 class HomeController extends AppController
@@ -17,6 +19,8 @@ class HomeController extends AppController
     private $fruitRepository;
     private $boxRepository;
     private $userRepository;
+    private $adminRepository;
+
     private $authHelper;
 
     public function __construct()
@@ -25,6 +29,7 @@ class HomeController extends AppController
         $this->transactionRepository = new TransactionRepository();
         $this->fruitRepository = new FruitRepository();
         $this->boxRepository = new BoxRepository();
+        $this->adminRepository = new AdminRepository();
         $this->userRepository = new UserRepository();
         $this->authHelper = new AuthHelper();
     }
@@ -34,6 +39,13 @@ class HomeController extends AppController
         if (!$this->authHelper->isUserLoggedIn()) {
             $url = "http://$_SERVER[HTTP_HOST]";
             header("Location: $url/panel_logowania", true, 303);
+            exit();
+        }
+
+        // Sprawdź czy istnieje komunikat o pomyślnym dodaniu transakcji
+        if (isset($_GET['addTransactionMsg']) && $_GET['addTransactionMsg'] === 'success') {
+            // Jeśli tak, wyczyść dane POST i przekieruj na stronę główną
+            header("Location: /panel_glowny");
             exit();
         }
 
@@ -50,7 +62,7 @@ class HomeController extends AppController
                         $this->renderHome();
                         break;
                 }
-            break;
+                break;
         }
     }
 
@@ -58,9 +70,27 @@ class HomeController extends AppController
     {
         $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $idAdmin = $this->getLoggedInAdminId();
-        $selectedDate = $_POST['selectedDate'] ?? null;
+        $frusionName = ($this->adminRepository->getAdmin($decryptedEmail))->getFrusionName();
+        $selectedDate = $_POST['selectedDate'] ?? date('Y-m-d');
         $transactions = $this->transactionRepository->getTransactionsForAdminByDate($idAdmin, $selectedDate);
-        $this->render('panel_glowny', ['email' => $decryptedEmail, 'transactions' => $transactions, 'selectedDate' => $selectedDate] + $fields);
+        $data = $this->collectDataForOneDay();
+
+
+        $fields += [
+            'email' => $decryptedEmail,
+            'frusionName' => $frusionName,
+            'allBoxesSum' => array_sum($data['boxesSum']),
+            'boxes' => $data['boxes'],
+            'boxesSum' => $data['boxesSum'],
+            'fruits' => $data['fruits'],
+            'fruitsAmountSum' => $data['fruitsAmountSum'],
+            'fruitsWeightSum' => $data['fruitsWeightSum'],
+            'boxesSumForFruits' => $data['boxesSumForFruits'],
+            'transactions' => $transactions,
+            'selectedDate' => $selectedDate,
+        ];
+
+        $this->render('panel_glowny', $fields);
     }
 
     private function handleAddTransaction()
@@ -117,13 +147,75 @@ class HomeController extends AppController
             $amount
         );
 
+
         if ($result) {
-            $message = 'Transaction added successfully.';
+            // Pomyślnie dodano transakcję, przekieruj użytkownika na inną stronę
+            header("Location: /panel_glowny?addTransactionMsg=success");
+            exit;
         } else {
-            $message = 'Failed to add transaction.';
+            // Błąd podczas dodawania transakcji
+            $this->renderHome(["addTransactionMsg" => 'Failed to add transaction.']);
         }
-        $this->renderHome(["addTransactionMsg" => $message]);
     }
+
+    public function collectDataForOneDay()
+    {
+        $idAdmin = $this->authHelper->getLoggedInAdminId();
+        $selectedDate = $_POST['selectedDate'] ?? null;
+        $transactions = $this->transactionRepository->getTransactionsForAdminByDate($idAdmin, $selectedDate);
+        $boxes = $this->boxRepository->getAllBoxes();
+        $fruits = $this->fruitRepository->getAllFruitForAdmin();
+
+        $boxesSum = [];
+        $fruitsAmountSum = [];
+        $fruitsWeightSum = [];
+        $boxesSumForFruits = [];
+
+        foreach ($transactions as $transaction) {
+            $box = $this->boxRepository->getBoxById($transaction->getIdTypeBox())->getTypeBox();
+
+            if (!isset($boxesSum[$box])) {
+                $boxesSum[$box] = $transaction->getNumberOfBoxes();
+            } else {
+                $boxesSum[$box] += $transaction->getNumberOfBoxes();
+            }
+
+            $fruit = $this->fruitRepository->getFruitByPriceId($transaction->getIdPriceFruit());
+            if ($fruit !== null) {
+                $fruitName = $fruit->getTypeFruit();
+                if (!isset($fruitsAmountSum[$fruitName])) {
+                    $fruitsAmountSum[$fruitName] = $transaction->getAmount();
+                } else {
+                    $fruitsAmountSum[$fruitName] += $transaction->getAmount();
+                }
+
+                if (!isset($fruitsWeightSum[$fruitName])) {
+                    $fruitsWeightSum[$fruitName] = $transaction->getWeight();
+                } else {
+                    $fruitsWeightSum[$fruitName] += $transaction->getWeight();
+                }
+
+                if (!isset($boxesSumForFruits[$fruitName][$box])) {
+                    $boxesSumForFruits[$fruitName][$box] = $transaction->getNumberOfBoxes();
+                } else {
+                    $boxesSumForFruits[$fruitName][$box] += $transaction->getNumberOfBoxes();
+                }
+
+            }
+        }
+
+        return [
+            'transactions' => $transactions,
+            'boxes' => $boxes,
+            'fruits' => $fruits,
+            'boxesSum' => $boxesSum,
+            'fruitsAmountSum' => $fruitsAmountSum,
+            'fruitsWeightSum' => $fruitsWeightSum,
+            'boxesSumForFruits' => $boxesSumForFruits,
+        ];
+    }
+
+
     public function getLoggedInAdminId()
     {
         $decryptedEmail = $this->authHelper->getDecryptedEmail();

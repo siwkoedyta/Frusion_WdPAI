@@ -34,13 +34,49 @@ class StatusFrusionController extends AppController
             case "GET":
                 $this->renderStatusFrusion();
                 break;
+            case "POST":
+                switch ($_POST['type']) {
+                    case "fillteringByDatas":
+                        $this->renderStatusFrusion();
+                        break;
+                }
+                break;
+
         }
+    }
+    private function renderStatusFrusion($fields = [])
+    {
+        $decryptedEmail = $this->authHelper->getDecryptedEmail();
+        $idAdmin = $this->getLoggedInAdminId();
+        $selectedDateStarting = $_POST['selectedDateStarting'] ?? null;
+        $selectedDateEnd = $_POST['selectedDateEnd'] ?? null;
+        $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin, $selectedDateStarting, $selectedDateEnd);
+
+        $data = $this->collectDataForStatusFrusion();
+
+        $fields += [
+            'email' => $decryptedEmail,
+            'allBoxesSum' => array_sum($data['boxesSum']),
+            'boxes' => $data['boxes'],
+            'boxesSum' => $data['boxesSum'],
+            'fruits' => $data['fruits'],
+            'fruitsAmountSum' => $data['fruitsAmountSum'],
+            'fruitsWeightSum' => $data['fruitsWeightSum'],
+            'boxesSumForFruits' => $data['boxesSumForFruits'],
+            'transactions' => $transactions,
+            'selectedDateStarting' => $selectedDateStarting,
+            'selectedDateEnd' => $selectedDateEnd,
+        ];
+
+        $this->render('status_frusion', $fields);
     }
 
     public function collectDataForStatusFrusion()
     {
         $idAdmin = $this->authHelper->getLoggedInAdminId();
-        $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin);
+        $selectedDateStarting = $_POST['selectedDateStarting'] ?? null;
+        $selectedDateEnd = $_POST['selectedDateEnd'] ?? null;
+        $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin, $selectedDateStarting, $selectedDateEnd);
         $boxes = $this->boxRepository->getAllBoxes();
         $fruits = $this->fruitRepository->getAllFruitForAdmin();
 
@@ -93,26 +129,21 @@ class StatusFrusionController extends AppController
         ];
     }
 
-    private function renderStatusFrusion($fields = [])
+    public function getAuthHelper() {
+        return $this->authHelper;
+    }
+
+    public function getLoggedInAdminId()
     {
         $decryptedEmail = $this->authHelper->getDecryptedEmail();
 
-        $data = $this->collectDataForStatusFrusion();
+        $adminRepository = new AdminRepository();
+        $admin = $adminRepository->getAdmin($decryptedEmail);
 
-        $fields += [
-            'email' => $decryptedEmail,
-            'allBoxesSum' => array_sum($data['boxesSum']),
-            'boxes' => $data['boxes'],
-            'boxesSum' => $data['boxesSum'],
-            'fruits' => $data['fruits'],
-            'fruitsAmountSum' => $data['fruitsAmountSum'],
-            'fruitsWeightSum' => $data['fruitsWeightSum'],
-            'boxesSumForFruits' => $data['boxesSumForFruits'],
-        ];
+        if ($admin) {
+            return $admin->getIdAdmin();
+        }
 
-        $this->render('status_frusion', $fields);
-    }
-    public function getAuthHelper() {
-        return $this->authHelper;
+        return null;
     }
 }

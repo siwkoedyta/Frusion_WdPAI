@@ -20,4 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Automatyczne przesłanie formularza po zmianie daty
         document.getElementById('filterForm').submit();
     });
+
+    console.log(storedDate);
 });

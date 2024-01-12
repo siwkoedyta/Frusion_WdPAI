@@ -86,142 +86,142 @@
             </div>
 
             <div class="kalendarze">
-                <div class="kalendarz">
-                    <h1 class="daty">Starting date:</h1>
-                    <div class="kalendarz_data_poczatkowa">
-                        <div class="date-input-container">
-                            <input type="date" id="selectedDate" name="selectedDate">
-                        </div>
-                    </div>
-                </div>
+                <form id="filterForm" method="POST" action="status_frusion">
+                    <input name="type" value="fillteringByDatas" type="hidden">
 
-                <div class="kalendarz" id="drugi_kalendarz">
-                    <h1 class="daty">End date:</h1>
-                    <div class="kalendarz_data_koncowa">
-                        <div class="date-input-container">
-                            <input type="date" id="selectedDate" name="selectedDate">
+                    <div class="kalendarz">
+                        <h1 class="daty">Starting date:</h1>
+                        <div class="kalendarz_data_poczatkowa">
+                            <div class="date-input-container">
+                                <input type="date" id="selectedDateStarting" name="selectedDateStarting" value="<?= isset($selectedDateStarting) ? $selectedDateStarting : ''; ?>">
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="kalendarz" id="drugi_kalendarz">
+                        <h1 class="daty">End date:</h1>
+                        <div class="kalendarz_data_koncowa">
+                            <div class="date-input-container">
+                                <input type="date" id="selectedDateEnd" name="selectedDateEnd" value="<?= isset($selectedDateEnd) ? $selectedDateEnd : ''; ?>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dodane pole ukryte do śledzenia statusu obu dat -->
+                    <input type="hidden" id="datesSelected" name="datesSelected" value="0">
+
+                </form>
             </div>
-
             
             <div class="zawartosc_strony_kolumny">
 
-                <div class="pierwsza_kolumna">
+                    <div class="pierwsza_kolumna">
 
-                    <h1 class="naglowek_summary_status">Weight</h1>
+                        <h1 class="naglowek_summary_status">Weight</h1>
 
-                    <?php
-                    $transactionRepository = new TransactionRepository();
-                    $idAdmin = $this->getAuthHelper()->getLoggedInAdminId();
-                    $transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
+                        <?php
+                        $transactionRepository = new TransactionRepository();
+                        $idAdmin = $this->getAuthHelper()->getLoggedInAdminId();
+                        //$transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
 
-                    $fruitRepository = new FruitRepository();
-                    $boxRepository = new BoxRepository();
+                        $fruitRepository = new FruitRepository();
+                        $boxRepository = new BoxRepository();
 
-                    foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
-                        $fruit = $fruitRepository->getFruitByName($fruitName);
-                        $boxesForCurrentFruit = $boxesSumForFruits[$fruitName] ?? [];
+                        foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
+                            $fruit = $fruitRepository->getFruitByName($fruitName);
+                            $boxesForCurrentFruit = $boxesSumForFruits[$fruitName] ?? [];
 
-                        ?>
-                        <div class="prostokat_bialy_status">
-                            <div class="wartość_nazwa_owocu"><?= $fruitName ?></div>
-                            <div class="kontener_cena_waga_skrzynki">
-                                <div class="kontener_skrzynki_cena">
-                                    <div class="kontener_cena">
-                                        <div id="price">Price:</div>
-                                        <div id="wartość_ceny"><?= number_format($fruit->getPriceFruit(),2); ?></div>
-                                        <div id="zł">zł</div>
-                                    </div>
-                                    <div class="kontener_skrzynki">
-                                        <div id="boxes">Boxes:</div>
-                                        <div id="wartość_skrzynek">
-                                            <?php
-                                            // Użycie implode do połączenia elementów tablicy w ciąg znaków
-                                            echo implode(', ', array_map(function ($boxType, $boxCount) {
-                                                return "$boxCount $boxType";
-                                            }, array_keys($boxesForCurrentFruit), $boxesForCurrentFruit));
-                                            ?>
+                            ?>
+                            <div class="prostokat_bialy_status">
+                                <div class="wartość_nazwa_owocu"><?= $fruitName ?></div>
+                                <div class="kontener_cena_waga_skrzynki">
+                                    <div class="kontener_skrzynki_cena">
+                                        <div class="kontener_cena">
+                                            <div id="price">Price:</div>
+                                            <div id="wartość_ceny"><?= number_format($fruit->getPriceFruit(),2); ?></div>
+                                            <div id="zł">zł</div>
+                                        </div>
+                                        <div class="kontener_skrzynki">
+                                            <div id="boxes">Boxes:</div>
+                                            <div id="wartość_skrzynek">
+                                                <?php
+                                                // Użycie implode do połączenia elementów tablicy w ciąg znaków
+                                                echo implode(', ', array_map(function ($boxType, $boxCount) {
+                                                    return "$boxCount $boxType";
+                                                }, array_keys($boxesForCurrentFruit), $boxesForCurrentFruit));
+                                                ?>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="kontener_waga">
-                                    <div id="wartość_waga"><?= $totalWeight; ?></div>
-                                    <div id="kg">kg</div>
+                                    <div class="kontener_waga">
+                                        <div id="wartość_waga"><?= $totalWeight; ?></div>
+                                        <div id="kg">kg</div>
+                                    </div>
                                 </div>
                             </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+
+                    <div class="trzecie_kolumny">
+                        <div class="trzecia_kolumna">
+                            <h1 class="naglowek_summary_status">Boxes</h1>
+                            <div class="prostokat_bialy_zielony">
+                                <div id="ALL">ALL</div>
+                                <div id="ilosc_skrzynek_summary"><?= isset($allBoxesSum) ? $allBoxesSum : 0; ?></div>
+                            </div>
+
+                            <?php foreach ($boxes as $box): ?>
+                                <?php
+                                $sumForCurrentBox = isset($boxesSum[$box->getTypeBox()]) ? $boxesSum[$box->getTypeBox()] : 0;
+                                if ($sumForCurrentBox > 0):
+                                    ?>
+                                    <div class="prostokat_bialy">
+                                        <div id="rodzaj_skrzynki"><?= $box->getTypeBox(); ?></div>
+                                        <div class="ilosc_skrzynki_cala">
+                                            <div><?= $sumForCurrentBox; ?></div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+
                         </div>
-                        <?php
-                    }
-                    ?>
+                    </div>
 
 
-                </div>
-
-                <div class="trzecie_kolumny">
                     <div class="trzecia_kolumna">
-                        <h1 class="naglowek_summary_status">Boxes</h1>
+                        <h1 class="naglowek_summary_status">Ammount</h1>
+
                         <div class="prostokat_bialy_zielony">
                             <div id="ALL">ALL</div>
-                            <div id="ilosc_skrzynek_summary"><?= isset($allBoxesSum) ? $allBoxesSum : 0; ?></div>
+                            <div class="calkowita_wartosc">
+                                <div id="wartosc_dnia"><?= number_format(isset($fruitsAmountSum) ? array_sum($fruitsAmountSum) : 0,2); ?></div>
+                                <div id="kilogramy">zł</div>
+                            </div>
                         </div>
 
-                        <?php foreach ($boxes as $box): ?>
+                        <?php foreach ($fruits as $fruit): ?>
                             <?php
-                            $sumForCurrentBox = isset($boxesSum[$box->getTypeBox()]) ? $boxesSum[$box->getTypeBox()] : 0;
-                            if ($sumForCurrentBox > 0):
+                            $amountForCurrentFruit = isset($fruitsAmountSum[$fruit->getTypeFruit()]) ? $fruitsAmountSum[$fruit->getTypeFruit()] : 0;
+                            if ($amountForCurrentFruit > 0):
                                 ?>
                                 <div class="prostokat_bialy">
-                                    <div id="rodzaj_skrzynki"><?= $box->getTypeBox(); ?></div>
-                                    <div class="ilosc_skrzynki_cala">
-                                        <div><?= $sumForCurrentBox; ?></div>
+                                    <div id="rodzaj_owoca"><?= $fruit->getTypeFruit(); ?></div>
+                                    <div class="calkowita_wartosc">
+                                        <div id="wartosc_dnia_jeden_owoc"><?= number_format($amountForCurrentFruit, 2); ?></div>
+                                        <div id="kilogramy">zł</div>
                                     </div>
                                 </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
-
                     </div>
-                </div>
-
-
-                <div class="trzecia_kolumna">
-                    <h1 class="naglowek_summary_status">Ammount</h1>
-
-                    <div class="prostokat_bialy_zielony">
-                        <div id="ALL">ALL</div>
-                        <div class="calkowita_wartosc">
-                            <div id="wartosc_dnia"><?= number_format(isset($fruitsAmountSum) ? array_sum($fruitsAmountSum) : 0,2); ?></div>
-                            <div id="kilogramy">zł</div>
-                        </div>
-                    </div>
-
-                    <?php foreach ($fruits as $fruit): ?>
-                        <?php
-                        $amountForCurrentFruit = isset($fruitsAmountSum[$fruit->getTypeFruit()]) ? $fruitsAmountSum[$fruit->getTypeFruit()] : 0;
-                        if ($amountForCurrentFruit > 0):
-                            ?>
-                            <div class="prostokat_bialy">
-                                <div id="rodzaj_owoca"><?= $fruit->getTypeFruit(); ?></div>
-                                <div class="calkowita_wartosc">
-                                    <div id="wartosc_dnia_jeden_owoc"><?= number_format($amountForCurrentFruit, 2); ?></div>
-                                    <div id="kilogramy">zł</div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
-    
-            
-                    </div>
-                </div>
-
 
             </div>
 
-            
-
         </div>
     </div>
+    <script src="/public/js/obsluga_kalendarzy_status_frusion.js"></script>
+
 </body>
 </html>

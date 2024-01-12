@@ -32,14 +32,14 @@ class TransactionRepository extends Repository
         );
     }
 
-    public function getTransactionsForAdmin($idAdmin): array
-    {
-        $transactions = [];
-        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idAdmin" = :idAdmin');
-
-        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
-        return $this->extracted($stmt, $transactions);
-    }
+//    public function getTransactionsForAdmin($idAdmin): array
+//    {
+//        $transactions = [];
+//        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idAdmin" = :idAdmin');
+//
+//        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
+//        return $this->extracted($stmt, $transactions);
+//    }
 
     public function getTransactionsForAdminByDate($idAdmin, $selectedDate)
     {
@@ -51,6 +51,26 @@ class TransactionRepository extends Repository
 
         $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
         $stmt->bindParam(':selectedDate', $selectedDate, PDO::PARAM_STR);
+
+        return $this->extracted($stmt, $transactions);
+    }
+    public function getTransactionsForAdmin($idAdmin, $selectedDateStarting = null, $selectedDateEnd = null)
+    {
+        $transactions = [];
+        $query = 'SELECT * FROM public."Transaction" WHERE "idAdmin" = :idAdmin';
+
+        // Add date range condition to the query if dates are provided
+        if ($selectedDateStarting && $selectedDateEnd) {
+            $query .= ' AND "transactionDate" BETWEEN :selectedDateStarting AND :selectedDateEnd';
+        }
+        $stmt = $this->database->connect()->prepare($query);
+
+        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
+
+        if ($selectedDateStarting && $selectedDateEnd) {
+            $stmt->bindParam(':selectedDateStarting', $selectedDateStarting, PDO::PARAM_STR);
+            $stmt->bindParam(':selectedDateEnd', $selectedDateEnd, PDO::PARAM_STR);
+        }
 
         return $this->extracted($stmt, $transactions);
     }

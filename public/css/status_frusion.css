@@ -97,7 +97,7 @@
     color: #351431;
 }
 
-#selectedDate{
+#selectedDate, #selectedDateEnd, #selectedDateStarting{
     height: 4rem;
     width: 15rem;
 }
@@ -264,7 +264,7 @@
 }
 
 @media (max-width: 600px) {
-    #selectedDate{
+    #selectedDate, #selectedDateEnd, #selectedDateStarting{
         width: 13rem;
         height: 3rem;
         font-size: 1.2rem;

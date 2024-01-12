@@ -89,7 +89,8 @@
                             fill="#351431" />
                     </svg>
                 </div>
-                <h1 id="naglowek_panel">Your Frusion</h1>
+
+                <h1 id="naglowek_panel"><?=htmlspecialchars($frusionName); ?></h1>
                 <div id="hamburgerP">
                     <svg class="hamburger_svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 20" fill="none">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -98,6 +99,13 @@
                     </svg>
                 </div>
             </div>
+<!---->
+<!--            <script>-->
+<!--                window.addEventListener('DOMContentLoaded', function () {-->
+<!--                    // Automatyczne przesłanie formularza przy załadowaniu strony-->
+<!--                    document.getElementById('filterForm').submit();-->
+<!--                });-->
+<!--            </script>-->
 
             <div class="kalendarz">
                 <form id="filterForm" method="POST" action="panel_glowny">
@@ -132,11 +140,11 @@
 
                         $fruitRepository = new FruitRepository();
                         $boxRepository = new BoxRepository();
-
                         $statusFrusionController = new StatusFrusionController();
-                        $data = $statusFrusionController->collectDataForStatusFrusion();
+                        $homeController = new HomeController();
 
-                        //$transactions = $data['transactions'];
+                        $data = $homeController->collectDataForOneDay();
+
                         $fruitsWeightSum = $data['fruitsWeightSum'];
                         $boxesSumForFruits = $data['boxesSumForFruits'];
 
@@ -186,10 +194,7 @@
 
                     <?php
                     $idAdmin = $this->getLoggedInAdminId();
-                    $transactionRepository = new TransactionRepository();
                     $userRepository = new UserRepository();
-                    $fruitRepository = new FruitRepository();
-                    $boxRepository = new BoxRepository();
 
                     foreach($transactions as $transaction):
                         $user = $userRepository->getUserById($transaction->getIdUser());
