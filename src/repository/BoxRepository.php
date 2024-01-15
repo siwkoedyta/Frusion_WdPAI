@@ -78,8 +78,8 @@ class BoxRepository extends Repository{
     public function getBoxById(int $idBox): ?Box
     {
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public."Box" WHERE "idBox" = :idBox
-        ');
+    SELECT * FROM public."vwBoxView" WHERE "idBox" = :idBox
+');
 
         $stmt->bindParam(':idBox', $idBox, PDO::PARAM_INT);
         $stmt->execute();

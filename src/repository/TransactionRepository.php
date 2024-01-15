@@ -32,22 +32,13 @@ class TransactionRepository extends Repository
         );
     }
 
-//    public function getTransactionsForAdmin($idAdmin): array
-//    {
-//        $transactions = [];
-//        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idAdmin" = :idAdmin');
-//
-//        $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
-//        return $this->extracted($stmt, $transactions);
-//    }
-
     public function getTransactionsForAdminByDate($idAdmin, $selectedDate)
     {
         $transactions = [];
         $stmt = $this->database->connect()->prepare('
-        SELECT * FROM public."Transaction"
-        WHERE "idAdmin" = :idAdmin AND "transactionDate" = :selectedDate
-    ');
+            SELECT * FROM public."vwTransactions"
+            WHERE "idAdmin" = :idAdmin AND "transactionDate" = :selectedDate
+        ');
 
         $stmt->bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
         $stmt->bindParam(':selectedDate', $selectedDate, PDO::PARAM_STR);
@@ -57,7 +48,7 @@ class TransactionRepository extends Repository
     public function getTransactionsForAdmin($idAdmin, $selectedDateStarting = null, $selectedDateEnd = null)
     {
         $transactions = [];
-        $query = 'SELECT * FROM public."Transaction" WHERE "idAdmin" = :idAdmin';
+        $query = 'SELECT * FROM public."vwTransactions" WHERE "idAdmin" = :idAdmin';
 
         // Add date range condition to the query if dates are provided
         if ($selectedDateStarting && $selectedDateEnd) {
@@ -75,10 +66,13 @@ class TransactionRepository extends Repository
         return $this->extracted($stmt, $transactions);
     }
 
+
     public function getTransactionsForUser($idUser): array
     {
         $transactions = [];
-        $stmt = $this->database->connect()->prepare('SELECT * FROM public."Transaction" where "idUser" = :idUser');
+        $stmt = $this->database->connect()->prepare('
+            SELECT * FROM public."vwTransactions" WHERE "idUser" = :idUser
+        ');
 
         $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         return $this->extracted($stmt, $transactions);

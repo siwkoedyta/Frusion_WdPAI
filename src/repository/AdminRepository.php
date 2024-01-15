@@ -29,6 +29,17 @@ class AdminRepository extends Repository
             $admin['frusionName']
         );
     }
+    public function adminExists($email): bool
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT COUNT(*) FROM public."Admin" WHERE "email" = :email
+        ');
+
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchColumn() > 0;
+    }
     public function addAdmin(Admin $admin): void
     {
         $stmt = $this->database->connect()->prepare('

@@ -18,11 +18,10 @@ class FruitRepository extends Repository
         $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
 
         $stmt = $this->database->connect()->prepare('
-        SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
-        FROM public."Fruit" f
-        LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
-        WHERE f."idFruit" = :fruitId AND f."idAdmin" = :loggedInAdminId
-    ');
+            SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
+            FROM public."vwFruitView" f
+            WHERE f."idFruit" = :fruitId AND f."idAdmin" = :loggedInAdminId
+');
 
         $stmt->bindParam(':fruitId', $fruitId, PDO::PARAM_INT);
         $stmt->bindParam(':loggedInAdminId', $loggedInAdminId, PDO::PARAM_INT);

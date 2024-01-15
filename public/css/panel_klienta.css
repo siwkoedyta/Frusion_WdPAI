@@ -1,3 +1,16 @@
+#message, .error-message{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    color: red;
+}
+
+.no-valid{
+    border: 1px solid red;
+    border-radius: 2em;
+    box-shadow: 0 0 0.2em red;
+    outline: none;
+}
 #summary{
     padding-bottom: 1rem;
 }

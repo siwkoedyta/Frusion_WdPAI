@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/public/css/boxes.css">
 
 
+
 </head>
 <body class="panel_glowny">
 <div class="kontener" id="desktopContainer">
@@ -92,10 +93,10 @@
 
                 <div class="prostokat_add_client">
                     <h2 id="naglowek_modala">Change password</h2>
-                    <form class="add_client_strona" action="change_password" method="post">
+                    <form id="change_password_form" class="add_client_strona" action="change_password" method="post">
                         <input name="type" value="changePassword" type="hidden">
                         <input name="current_password" type="password" placeholder="Current password">
-                        <input name="new_password" type="password" placeholder="New password">
+                        <input name="new_password" id="new_password" type="password" placeholder="New password">
                         <input name="repeat_new_password" type="password" placeholder="Repeat new password">
 
                         <div id="message">
@@ -123,6 +124,7 @@
 
 
 </div>
+<script defer src="/public/js/change_password.js"></script>
 
 </body>
 </html>

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Admin.php';
 require_once __DIR__ .'/../repository/UserRepository.php';
 require_once __DIR__ .'/../repository/AdminRepository.php';
+require_once __DIR__ .'/../repository/UserRepository.php';
 
 class SecurityController extends AppController {
     private $authHelper;
@@ -18,20 +19,34 @@ class SecurityController extends AppController {
     public function panel_rejerstracji()
     {
         $AdminRepository = new AdminRepository();
+        $UserRepository = new UserRepository();
 
         if (!$this->isPost()) {
             return $this->render('panel_rejerstracji');
         }
 
         $email = isset($_POST['email']) ? $_POST['email'] : null;
+
+        if ($AdminRepository->adminExists($email)) {
+            return $this->render('panel_rejerstracji', ['messages' => ['User with this email already exists!']]);
+        }
+
+        if ($UserRepository->userExists($email)) {
+            return $this->render('panel_rejerstracji', ['messages' => ['Email already exists!']]);
+        }
+
         $password = isset($_POST['password']) ? $_POST['password'] : null;
         $confirmedPassword = isset($_POST['repeat_password']) ? $_POST['repeat_password'] : null;
         $phone = isset($_POST['mobile']) ? $_POST['mobile'] : null;
         $frusion_name = isset($_POST['frusion_name']) ? $_POST['frusion_name'] : null;
 
+        if (!$this->isPasswordValid($password)) {
+            return $this->render('panel_rejerstracji', ['messages' => ['Passwords do not meet the requirements.']]);
+        }
+
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $admin = new Admin(null,$email, $hashedPassword, $phone, $frusion_name);
+        $admin = new Admin(null, $email, $hashedPassword, $phone, $frusion_name);
         $AdminRepository->addAdmin($admin);
 
         return $this->render('panel_logowania', ['messages' => ['You\'ve been successfully registered!']]);
@@ -109,5 +124,8 @@ class SecurityController extends AppController {
             echo 'Metoda żądania nieprawidłowa';
         }
     }
-
+    private function isPasswordValid($password)
+    {
+        return strlen($password) >= 4 && preg_match('/\d/', $password) && preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password);
+    }
 }

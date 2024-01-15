@@ -50,7 +50,6 @@ class StatusFrusionController extends AppController
         $idAdmin = $this->getLoggedInAdminId();
         $selectedDateStarting = $_POST['selectedDateStarting'] ?? null;
         $selectedDateEnd = $_POST['selectedDateEnd'] ?? null;
-        $transactions = $this->transactionRepository->getTransactionsForAdmin($idAdmin, $selectedDateStarting, $selectedDateEnd);
 
         $data = $this->collectDataForStatusFrusion();
 
@@ -63,7 +62,6 @@ class StatusFrusionController extends AppController
             'fruitsAmountSum' => $data['fruitsAmountSum'],
             'fruitsWeightSum' => $data['fruitsWeightSum'],
             'boxesSumForFruits' => $data['boxesSumForFruits'],
-            'transactions' => $transactions,
             'selectedDateStarting' => $selectedDateStarting,
             'selectedDateEnd' => $selectedDateEnd,
         ];

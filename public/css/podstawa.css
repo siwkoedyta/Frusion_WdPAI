@@ -16,10 +16,12 @@ html {
     overflow-y:scroll;
 }
 
+
 #selectedDate, #selectedDateEnd, #selectedDateStarting {
     height: 4rem;
     width: 15rem;
 }
+
 
 #hamburgerL {
     display: none; /* Ukryj przycisk domyślnie */

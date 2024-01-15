@@ -133,6 +133,11 @@ class HomeController extends AppController
 
         $weight = $weightWithBoxes - $boxWeight * $numberOfBoxes;
         $weight = max(0, $weight);
+
+        if ($weight < 0) {
+            $this->renderHome(["addTransactionMsg" => "Weight cannot be less than 0."]);
+            exit;
+        }
         $amount = $weight * $priceFruit;
 
         $result = $this->transactionRepository->addTransaction(
@@ -146,6 +151,7 @@ class HomeController extends AppController
             $weight,
             $amount
         );
+
 
 
         if ($result) {

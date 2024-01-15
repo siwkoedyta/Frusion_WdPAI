@@ -132,6 +132,20 @@ class UserRepository extends Repository
         return $stmt->rowCount() > 0;
     }
 
+    public function userExists(string $email): bool
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT COUNT(*) as count FROM public."User" WHERE "email" = :email
+        ');
+
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result['count'] > 0;
+    }
+
     public function setUserPassword(string $email, $password): bool
     {
         try {

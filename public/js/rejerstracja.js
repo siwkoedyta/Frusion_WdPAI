@@ -24,6 +24,7 @@ function updateErrorMessage(message) {
 
 emailInput.addEventListener('keyup', validateEmail);
 passwordInput.addEventListener('keyup', validatePasswordRequirements);
+confirmedPasswordInput.addEventListener('keyup', validatePasswordRequirements);
 confirmedPasswordInput.addEventListener('keyup', validatePasswordMatch);
 phoneNumberInput.addEventListener('input', formatPhoneNumber);
 phoneNumberInput.addEventListener('keyup', validatePhoneNumberLength);
@@ -52,7 +53,7 @@ function validatePasswordRequirements() {
 
         if (!isValidLength || !hasNumber || !hasSpecialChar) {
             markValidation(passwordInput, false);
-            updateErrorMessage('Min 4 characters, a number, and a special character.');
+            updateErrorMessage('Min 4 characters, at least 1 number, and at least 1 special character.');
         } else {
             markValidation(passwordInput, true);
             updateErrorMessage('');
