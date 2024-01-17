@@ -88,7 +88,7 @@
                 <div class="date-input-container">
                     <form id="filterForm" action="panel_klienta" method="post">
                         <input name="type" value="fillteringByData" type="hidden">
-                        <input type="date" id="selectedDate" name="selectedDate">
+                        <input type="date" id="selectedDate" name="selectedDate" value=<?= $selectedDate ?>>
                         <span id="displayDate" style="display: none"></span>
                     </form>
                 </div>

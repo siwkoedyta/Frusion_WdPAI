@@ -14,3 +14,9 @@ public/uploads/
 
 # Ignoruj plik konfiguracyjny
 config.php
+
+
+#.vscode
+#.idea
+#public/uploads/
+#config.php

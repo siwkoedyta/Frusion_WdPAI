@@ -106,14 +106,12 @@
                         <input name="type" value="fillteringByData" type="hidden">
 
                         <!-- Pole input do wybierania daty -->
-                        <input type="date" id="selectedDate" name="selectedDate">
+                          <input type="date" id="selectedDate" name="selectedDate" value=<?= $selectedDate ?> >
                         <!-- Wyświetlanie wybranej daty -->
-                        <span id="displayDate" style="display: none"></span>
+<!--                        <span id="displayDate" style="display: none"></span>-->
                     </div>
                 </form>
             </div>
-
-
 
             <div id="message">
                 <?php if (isset($addTransactionMsg)) echo $addTransactionMsg; ?>
