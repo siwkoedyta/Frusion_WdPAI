@@ -1,4 +1,16 @@
-.vscode
-.idea
+# Ignoruj pliki tymczasowe
+*~
+
+# Ignoruj katalogi kompilacji
+/bin/
+/obj/
+
+# Ignoruj katalogi związane z IDE
+.vscode/
+.idea/
+
+# Ignoruj katalog z plikami uploadowanymi
 public/uploads/
+
+# Ignoruj plik konfiguracyjny
 config.php
