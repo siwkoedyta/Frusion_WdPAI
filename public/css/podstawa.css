@@ -17,7 +17,7 @@ html {
 }
 
 
-#selectedDate, #selectedDateEnd, #selectedDateStarting {
+#selectedDate, #selectedDateEnd, #selectedDateStarting, #dateInput {
     height: 4rem;
     width: 15rem;
 }
@@ -222,7 +222,7 @@ html {
         color: #351431;
     }
 
-    #selectedDate, #selectedDateEnd, #selectedDateStarting{
+    #selectedDate, #selectedDateEnd, #selectedDateStarting, #dateInput{
         width: 13rem;
         height: 3rem;
         font-size: 1.2rem;

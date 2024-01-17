@@ -57,7 +57,7 @@ class BoxController extends AppController
             exit;
         }
 
-        $loggedInAdminId = $this->boxRepository->getLoggedInAdminId();
+        $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
         $boxNameExists = $this->boxRepository->boxNameExistsForAdmin($typeBox,$loggedInAdminId);
         if ($boxNameExists) {
             $this->renderBoxList(["addBoxMsg" => "Box already exists"]);
@@ -74,7 +74,8 @@ class BoxController extends AppController
 
     }
 
-    public function handleRemoveBox(){
+    public function handleRemoveBox()
+    {
         $idBox = $_POST['idBox'];
 
         if (empty($idBox)) {
@@ -82,16 +83,23 @@ class BoxController extends AppController
             exit;
         }
 
-        $result = $this->boxRepository->removeBox($idBox);
+        $hasTransactions = $this->boxRepository->hasTransactionsForBox($idBox);
 
-        if ($result) {
-            $message = 'Box removed successfully.';
+        if ($hasTransactions) {
+            $message = 'There is a transaction with this box.';
         } else {
-            $message = 'Failed to remove box.';
-        }
-        $this->renderBoxList(["removeBoxMsg" => $message]);
+            $result = $this->boxRepository->removeBox($idBox);
 
+            if ($result) {
+                $message = 'Box removed successfully.';
+            } else {
+                $message = 'Failed to remove box.';
+            }
+        }
+
+        $this->renderBoxList(["removeBoxMsg" => $message]);
     }
+
 
 }
 

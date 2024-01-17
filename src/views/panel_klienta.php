@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/public/css/okno_modalne_kup_owoc.css">
     <link rel="stylesheet" href="/public/css/lewa_kolumna.css">
     <link rel="stylesheet" href="/public/css/panel_klienta.css">
- 
+
 
 
 
@@ -40,7 +40,7 @@
                   </svg>
                 <h1 id="Frusion">Frusion</h1>
             </div>
-    
+
             <ul class="menu">
                 <li id="home" class="active"><a href="panel_klienta">Home</a></li>
                 <li id="change_password"><a href="change_password">Password</a></li>
@@ -57,7 +57,7 @@
         </div>
 
 
-    
+
         <div class="kontent">
             <svg class="falka" xmlns="http://www.w3.org/2000/svg" width="375" height="51" viewBox="0 0 375 51" fill="none">
                 <path d="M296.687 50.9743C355.778 50.2439 370.577 30.0458 429.667 29.307C435.259 29.2371 444 29.307 444 29.307V0H-82.9518C-82.9518 0 -134.392 15.0993 -92.6965 22.8783C-16.7141 37.054 50.9193 15.1162 136.634 22.8783C206.002 29.1601 224.269 51.8693 296.687 50.9743Z" fill="url(#paint0_linear_3_1452)"/>
@@ -86,11 +86,15 @@
 
             <div class="kalendarz">
                 <div class="date-input-container">
-                    <input type="date" id="selectedDate" name="selectedDate">
+                    <form id="filterForm" action="panel_klienta" method="post">
+                        <input name="type" value="fillteringByData" type="hidden">
+                        <input type="date" id="selectedDate" name="selectedDate">
+                        <span id="displayDate" style="display: none"></span>
+                    </form>
                 </div>
             </div>
 
-            
+
             <div class="zawartosc_strony_kolumny">
 
                 <div class="druga_kolumna">
@@ -99,17 +103,14 @@
                         <div id="summary">Summary</div>
 
                         <?php
-                        $transactionRepository = new TransactionRepository();
                         $idUser = $this->getLoggedInUserId();
-                        $transactions = $transactionRepository->getTransactionsForUser($idUser);
 
                         $fruitRepository = new FruitRepository();
                         $boxRepository = new BoxRepository();
-
                         $clientPanelController = new ClientPanelController();
-                        $data = $clientPanelController->collectDataClientPanel();
 
-                        $transactions = $data['transactions'];
+                        $data = $clientPanelController->collectDataClientPanelForOneDay();
+
                         $fruitsWeightSum = $data['fruitsWeightSum'];
                         $fruitsAmountSum = $data['fruitsAmountSum'];
 
@@ -148,7 +149,7 @@
                         }
                         ?>
 
-        
+
                     </div>
                 </div>
 
@@ -158,11 +159,9 @@
                     <?php
                     $transactionRepository = new TransactionRepository();
                     $idUser = $this->getLoggedInUserId();
-                    $transactions = $transactionRepository->getTransactionsForUser($idUser);
 
                     $userRepository = new UserRepository();
-                    $fruitRepository = new FruitRepository();
-                    $boxRepository = new BoxRepository();
+
                     foreach($transactions as $transaction):
                     $user = $userRepository->getUserById($transaction->getIdUser());
                     $fruit = $fruitRepository->getFruitByPriceIdForUser($transaction->getIdPriceFruit());
@@ -198,20 +197,20 @@
                         </div>
                     </div>
                     <?php endforeach; ?>
-                   
+
                 </div>
             </div>
 
-                             
+
 
         </div>
 
-        
+
     </div>
 
-        
-    </div>
 
+    </div>
     <script src="/public/js/obsluga_kalendarza.js"></script>
+
 </body>
 </html>

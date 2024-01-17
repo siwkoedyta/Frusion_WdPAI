@@ -12,6 +12,7 @@ Routing::get('panel_rejerstracji', 'DefaultController');
 Routing::post('panel_rejerstracji', 'SecurityController');
 
 Routing::get('panel_klienta', 'ClientPanelController');
+Routing::post('clientTransactions', 'ClientPanelController');
 
 Routing::get('change_password', 'ChangePasswordController');
 Routing::post('change_password', 'ChangePasswordController');

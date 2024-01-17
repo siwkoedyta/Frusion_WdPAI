@@ -78,6 +78,19 @@ class TransactionRepository extends Repository
         return $this->extracted($stmt, $transactions);
     }
 
+    public function getTransactionsForUserByDate($idUser, $selectedDate): array
+    {
+        $transactions = [];
+        $stmt = $this->database->connect()->prepare('
+        SELECT * FROM public."vwTransactions" WHERE "idUser" = :idUser AND DATE("transactionDate") = :selectedDate
+    ');
+
+        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(':selectedDate', $selectedDate, PDO::PARAM_STR);
+
+        return $this->extracted($stmt, $transactions);
+    }
+
     public function addTransaction($idUser, $idAdmin, $weightWithBoxes, $idBox, $numberOfBoxes, $idPrice, $transactionDate, $weight, $amount): bool
     {
         $stmt = $this->database->connect();

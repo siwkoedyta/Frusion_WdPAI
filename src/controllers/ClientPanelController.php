@@ -42,8 +42,17 @@ class ClientPanelController extends AppController
             case "GET":
                 $this->renderClientPanel();
                 break;
+            case "POST":
+                switch ($_POST['type']) {
+                    case "fillteringByData":
+                        $this->renderClientPanel();
+                        break;
+                }
+                break;
         }
     }
+
+
     public function getLoggedInUserId()
     {
         $decryptedEmail = $this->authHelper->getDecryptedEmail();
@@ -60,13 +69,32 @@ class ClientPanelController extends AppController
     {
         $decryptedEmail = $this->authHelper->getDecryptedEmail();
         $idUser = $this->getLoggedInUserId();
-        $transactions = $this->transactionRepository->getTransactionsForAdmin($idUser);
-        $this->render('panel_klienta', ['email' => $decryptedEmail] + $fields);
+        $transactionsAll = $fields['transactions'] ?? $this->transactionRepository->getTransactionsForUser($idUser);
+        $selectedDate = $_POST['selectedDate'] ?? date('Y-m-d');
+        $transactions = $this->transactionRepository->getTransactionsForUserByDate($idUser, $selectedDate);
+        $data = $this->collectDataClientPanelForOneDay();
+
+        $fields += [
+            'email' => $decryptedEmail,
+            'allBoxesSum' => array_sum($data['boxesSum']),
+            'boxes' => $data['boxes'],
+            'boxesSum' => $data['boxesSum'],
+            'fruits' => $data['fruits'],
+            'fruitsAmountSum' => $data['fruitsAmountSum'],
+            'fruitsWeightSum' => $data['fruitsWeightSum'],
+            'boxesSumForFruits' => $data['boxesSumForFruits'],
+            'transactionsAll' => $transactionsAll,
+            'transactions' => $transactions,
+            'selectedDate' => $selectedDate,
+        ];
+        $this->render('panel_klienta', $fields);
     }
-    public function collectDataClientPanel()
+    public function collectDataClientPanelForOneDay()
     {
+
         $idUser = $this->getLoggedInUserId();
-        $transactions = $this->transactionRepository->getTransactionsForUser($idUser);
+        $selectedDate = $_POST['selectedDate'] ?? date('Y-m-d'); // Użyj dzisiejszej daty, jeśli nie zdefiniowano daty w zapytaniu POST
+        $transactions = $this->transactionRepository->getTransactionsForUserByDate($idUser, $selectedDate);
         $boxes = $this->boxRepository->getAllBoxes();
         $fruits = $this->fruitRepository->getAllFruit();
 
@@ -117,22 +145,8 @@ class ClientPanelController extends AppController
             'fruitsAmountSum' => $fruitsAmountSum,
             'fruitsWeightSum' => $fruitsWeightSum,
             'boxesSumForFruits' => $boxesSumForFruits,
+            'selectedDate' => $selectedDate,
         ];
-    }
-
-    public function search()
-    {
-        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-
-        if ($contentType === "application/json") {
-            $content = trim(file_get_contents("php://input"));
-            $decoded = json_decode($content, true);
-
-            header('Content-type: application/json');
-            http_response_code(200);
-
-            echo json_encode($this->transactionRepository->getTransactionsForAdmin($decoded['search']));
-        }
     }
 }
 

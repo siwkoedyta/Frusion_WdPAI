@@ -169,5 +169,28 @@ class BoxRepository extends Repository{
         }
     }
 
+    public function hasTransactionsForBox(string $idBox): bool
+    {
+        try {
+            $stmt = $this->database->connect();
+
+            $stmtCheckTransactions = $stmt->prepare('
+            SELECT COUNT(*) as "transactionCount"
+            FROM public."Transaction"
+            WHERE "idBox" = :idBox
+        ');
+
+            $stmtCheckTransactions->bindParam(':idBox', $idBox, PDO::PARAM_INT);
+            $stmtCheckTransactions->execute();
+
+            $result = $stmtCheckTransactions->fetch(PDO::FETCH_ASSOC);
+
+            return ($result['transactionCount'] > 0);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false; // Error
+        }
+    }
+
 
 }

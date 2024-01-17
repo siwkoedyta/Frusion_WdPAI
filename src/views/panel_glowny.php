@@ -99,13 +99,6 @@
                     </svg>
                 </div>
             </div>
-<!---->
-<!--            <script>-->
-<!--                window.addEventListener('DOMContentLoaded', function () {-->
-<!--                    // Automatyczne przesłanie formularza przy załadowaniu strony-->
-<!--                    document.getElementById('filterForm').submit();-->
-<!--                });-->
-<!--            </script>-->
 
             <div class="kalendarz">
                 <form id="filterForm" method="POST" action="panel_glowny">
@@ -195,6 +188,7 @@
                     <?php
                     $idAdmin = $this->getLoggedInAdminId();
                     $userRepository = new UserRepository();
+                    $transactionsRepository = new TransactionRepository();
 
                     foreach($transactions as $transaction):
                         $user = $userRepository->getUserById($transaction->getIdUser());

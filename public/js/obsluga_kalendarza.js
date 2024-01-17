@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Sprawdź, czy w localStorage jest już zapisana data
     var storedDate = localStorage.getItem('selectedDate');
+
     if (storedDate) {
         selectedDateInput.value = storedDate;
         displayDate.textContent = storedDate;

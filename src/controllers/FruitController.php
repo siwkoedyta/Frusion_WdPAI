@@ -91,13 +91,20 @@ class FruitController extends AppController
             exit;
         }
 
-        $result = $this->fruitRepository->removeFruit($idFruit);
+        $hasTransactions = $this->fruitRepository->hasTransactionsForFruit($idFruit);
 
-        if ($result) {
-            $message = 'Fruit removed successfully.';
+        if ($hasTransactions) {
+            $message = 'There is a transaction with this fruit.';
         } else {
-            $message = 'Failed to remove fruit.';
+            $result = $this->fruitRepository->removeFruit($idFruit);
+
+            if ($result) {
+                $message = 'Fruit removed successfully.';
+            } else {
+                $message = 'Failed to remove fruit.';
+            }
         }
+
         $this->renderFruitList(["removeFruitMsg" => $message]);
     }
 

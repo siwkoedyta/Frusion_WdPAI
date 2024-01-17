@@ -167,7 +167,7 @@ class HomeController extends AppController
     public function collectDataForOneDay()
     {
         $idAdmin = $this->authHelper->getLoggedInAdminId();
-        $selectedDate = $_POST['selectedDate'] ?? null;
+        $selectedDate = $_POST['selectedDate'] ?? date('Y-m-d'); // Użyj dzisiejszej daty, jeśli nie zdefiniowano daty w zapytaniu POST
         $transactions = $this->transactionRepository->getTransactionsForAdminByDate($idAdmin, $selectedDate);
         $boxes = $this->boxRepository->getAllBoxes();
         $fruits = $this->fruitRepository->getAllFruitForAdmin();
@@ -218,6 +218,7 @@ class HomeController extends AppController
             'fruitsAmountSum' => $fruitsAmountSum,
             'fruitsWeightSum' => $fruitsWeightSum,
             'boxesSumForFruits' => $boxesSumForFruits,
+            'selectedDate' => $selectedDate,
         ];
     }
 

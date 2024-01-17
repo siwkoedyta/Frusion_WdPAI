@@ -18,9 +18,10 @@ class FruitRepository extends Repository
         $loggedInAdminId = $this->authHelper->getLoggedInAdminId();
 
         $stmt = $this->database->connect()->prepare('
-            SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
-            FROM public."vwFruitView" f
-            WHERE f."idFruit" = :fruitId AND f."idAdmin" = :loggedInAdminId
+    SELECT f."idFruit", f."typeFruit", f."idAdmin", p."idPrice", p."price"
+    FROM public."vwFruitView" f
+    LEFT JOIN public."FruitPrices" p ON f."idFruit" = p."idFruit"
+    WHERE f."idFruit" = :fruitId AND f."idAdmin" = :loggedInAdminId
 ');
 
         $stmt->bindParam(':fruitId', $fruitId, PDO::PARAM_INT);
@@ -276,29 +277,57 @@ class FruitRepository extends Repository
 
             $stmt->beginTransaction();
 
-            $stmtDeletePrices = $stmt->prepare('
-            DELETE FROM public."FruitPrices"
-            WHERE "idFruit" = :idFruit
-        ');
+            try {
+                $stmtDeletePrices = $stmt->prepare('
+                DELETE FROM public."FruitPrices"
+                WHERE "idFruit" = :idFruit
+            ');
 
-            $stmtDeletePrices->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
-            $stmtDeletePrices->execute();
+                $stmtDeletePrices->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
+                $stmtDeletePrices->execute();
 
-            $stmtDeleteFruit = $stmt->prepare('
-            DELETE FROM public."Fruit"
-            WHERE "idFruit" = :idFruit
-        ');
+                $stmtDeleteFruit = $stmt->prepare('
+                DELETE FROM public."Fruit"
+                WHERE "idFruit" = :idFruit
+            ');
 
-            $stmtDeleteFruit->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
-            $stmtDeleteFruit->execute();
+                $stmtDeleteFruit->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
+                $stmtDeleteFruit->execute();
 
-            $stmt->commit();
+                // Zakończ transakcję
+                $stmt->commit();
 
-            return true; // Success
+                return true; // Sukces
+            } catch (PDOException $e) {
+                // W przypadku błędu anuluj transakcję
+                $stmt->rollBack();
+                throw $e; // Rzuć ponownie błąd
+            }
         } catch (PDOException $e) {
-            $stmt = $this->database->connect();
-            $stmt->rollBack();
+            echo "Error: " . $e->getMessage();
+            return false; // Błąd
+        }
+    }
 
+    public function hasTransactionsForFruit(string $idFruit): bool
+    {
+        try {
+            $stmt = $this->database->connect();
+
+            $stmtCheckTransactions = $stmt->prepare('
+            SELECT COUNT(*) as "transactionCount"
+            FROM public."Transaction"
+            JOIN public."FruitPrices" ON public."Transaction"."idPrice" = public."FruitPrices"."idPrice"
+            WHERE public."FruitPrices"."idFruit" = :idFruit
+        ');
+
+            $stmtCheckTransactions->bindParam(':idFruit', $idFruit, PDO::PARAM_INT);
+            $stmtCheckTransactions->execute();
+
+            $result = $stmtCheckTransactions->fetch(PDO::FETCH_ASSOC);
+
+            return ($result['transactionCount'] > 0);
+        } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             return false; // Error
         }
