@@ -112,7 +112,7 @@
 
                 </form>
             </div>
-            
+
             <div class="zawartosc_strony_kolumny">
 
                     <div class="pierwsza_kolumna">
@@ -122,15 +122,13 @@
                         <?php
                         $transactionRepository = new TransactionRepository();
                         $idAdmin = $this->getAuthHelper()->getLoggedInAdminId();
-                        //$transactions = $transactionRepository->getTransactionsForAdmin($idAdmin);
-
                         $fruitRepository = new FruitRepository();
                         $boxRepository = new BoxRepository();
 
                         foreach ($fruitsWeightSum as $fruitName => $totalWeight) {
                             $fruit = $fruitRepository->getFruitByName($fruitName);
                             $boxesForCurrentFruit = $boxesSumForFruits[$fruitName] ?? [];
-
+                            $averagePrice = $averagePrices[$fruitName] ?? [];
                             ?>
                             <div class="prostokat_bialy_status">
                                 <div class="wartość_nazwa_owocu"><?= $fruitName ?></div>
@@ -138,14 +136,14 @@
                                     <div class="kontener_skrzynki_cena">
                                         <div class="kontener_cena">
                                             <div id="price">Price:</div>
-                                            <div id="wartość_ceny"><?= number_format($fruit->getPriceFruit(),2); ?></div>
+                                            <div id="wartość_ceny"><?= number_format($averagePrice, 2); ?></div>
                                             <div id="zł">zł</div>
                                         </div>
                                         <div class="kontener_skrzynki">
                                             <div id="boxes">Boxes:</div>
                                             <div id="wartość_skrzynek">
                                                 <?php
-                                                // Użycie implode do połączenia elementów tablicy w ciąg znaków
+                                                // Użycie implode do połączenia elementów tablicy w ciąg  nie znaków
                                                 echo implode(', ', array_map(function ($boxType, $boxCount) {
                                                     return "$boxCount $boxType";
                                                 }, array_keys($boxesForCurrentFruit), $boxesForCurrentFruit));

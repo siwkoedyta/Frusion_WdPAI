@@ -147,6 +147,7 @@ class HomeController extends AppController
             $idBox,
             $numberOfBoxes,
             $fruit->getPriceId(),
+            $priceFruit,
             date('Y-m-d'),
             $weight,
             $amount

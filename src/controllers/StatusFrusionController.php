@@ -62,6 +62,7 @@ class StatusFrusionController extends AppController
             'fruitsAmountSum' => $data['fruitsAmountSum'],
             'fruitsWeightSum' => $data['fruitsWeightSum'],
             'boxesSumForFruits' => $data['boxesSumForFruits'],
+            'averagePrices' => $data['averagePrices'],
             'selectedDateStarting' => $selectedDateStarting,
             'selectedDateEnd' => $selectedDateEnd,
         ];
@@ -82,6 +83,7 @@ class StatusFrusionController extends AppController
         $fruitsAmountSum = [];
         $fruitsWeightSum = [];
         $boxesSumForFruits = [];
+        $averageAmountsPerWeight = []; // New array to store average amounts per weight
 
         foreach ($transactions as $transaction) {
             $box = $this->boxRepository->getBoxById($transaction->getIdTypeBox())->getTypeBox();
@@ -113,6 +115,10 @@ class StatusFrusionController extends AppController
                     $boxesSumForFruits[$fruitName][$box] += $transaction->getNumberOfBoxes();
                 }
 
+                // Calculate average amount per weight
+                $averageAmountsPerWeight[$fruitName] = $fruitsWeightSum[$fruitName] > 0
+                    ? $fruitsAmountSum[$fruitName] / $fruitsWeightSum[$fruitName]
+                    : 0;
             }
         }
 
@@ -124,6 +130,7 @@ class StatusFrusionController extends AppController
             'fruitsAmountSum' => $fruitsAmountSum,
             'fruitsWeightSum' => $fruitsWeightSum,
             'boxesSumForFruits' => $boxesSumForFruits,
+            'averagePrices' => $averageAmountsPerWeight,
         ];
     }
 

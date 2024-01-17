@@ -26,6 +26,7 @@ class TransactionRepository extends Repository
             $transactionData['idBox'],
             $transactionData['numberOfBoxes'],
             $transactionData['idPrice'],
+            $transactionData['priceFruit'],
             $transactionData['transactionDate'],
             $transactionData['weight'],
             $transactionData['amount']
@@ -36,7 +37,7 @@ class TransactionRepository extends Repository
     {
         $transactions = [];
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public."vwTransactions"
+            SELECT * FROM public."vwtransactions"
             WHERE "idAdmin" = :idAdmin AND "transactionDate" = :selectedDate
         ');
 
@@ -48,7 +49,7 @@ class TransactionRepository extends Repository
     public function getTransactionsForAdmin($idAdmin, $selectedDateStarting = null, $selectedDateEnd = null)
     {
         $transactions = [];
-        $query = 'SELECT * FROM public."vwTransactions" WHERE "idAdmin" = :idAdmin';
+        $query = 'SELECT * FROM public."vwtransactions" WHERE "idAdmin" = :idAdmin';
 
         // Add date range condition to the query if dates are provided
         if ($selectedDateStarting && $selectedDateEnd) {
@@ -71,7 +72,7 @@ class TransactionRepository extends Repository
     {
         $transactions = [];
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public."vwTransactions" WHERE "idUser" = :idUser
+            SELECT * FROM public."vwtransactions" WHERE "idUser" = :idUser
         ');
 
         $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
@@ -82,7 +83,7 @@ class TransactionRepository extends Repository
     {
         $transactions = [];
         $stmt = $this->database->connect()->prepare('
-        SELECT * FROM public."vwTransactions" WHERE "idUser" = :idUser AND DATE("transactionDate") = :selectedDate
+        SELECT * FROM public."vwtransactions" WHERE "idUser" = :idUser AND DATE("transactionDate") = :selectedDate
     ');
 
         $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
@@ -91,15 +92,15 @@ class TransactionRepository extends Repository
         return $this->extracted($stmt, $transactions);
     }
 
-    public function addTransaction($idUser, $idAdmin, $weightWithBoxes, $idBox, $numberOfBoxes, $idPrice, $transactionDate, $weight, $amount): bool
+    public function addTransaction($idUser, $idAdmin, $weightWithBoxes, $idBox, $numberOfBoxes, $idPrice, $priceFruit, $transactionDate, $weight, $amount): bool
     {
         $stmt = $this->database->connect();
         try {
             $stmt->beginTransaction();
 
             $stmtTransaction = $stmt->prepare('
-            INSERT INTO public."Transaction" ("idUser", "idAdmin", "weight_with_boxes", "idBox", "numberOfBoxes", "idPrice", "transactionDate", "weight", "amount")
-            VALUES (:idUser, :idAdmin, :weightWithBoxes, :idBox, :numberOfBoxes, :idPrice, :transactionDate, :weight, :amount)
+            INSERT INTO public."Transaction" ("idUser", "idAdmin", "weight_with_boxes", "idBox", "numberOfBoxes", "idPrice", "transactionDate", "weight", "amount", "priceFruit")
+            VALUES (:idUser, :idAdmin, :weightWithBoxes, :idBox, :numberOfBoxes, :idPrice, :transactionDate, :weight, :amount, :priceFruit)
         ');
 
             $stmtTransaction->bindParam(':idUser', $idUser, PDO::PARAM_INT);
@@ -111,6 +112,7 @@ class TransactionRepository extends Repository
             $stmtTransaction->bindParam(':transactionDate', $transactionDate);
             $stmtTransaction->bindParam(':amount', $amount);
             $stmtTransaction->bindParam(':weight', $weight);
+            $stmtTransaction->bindParam(":priceFruit", $priceFruit, PDO::PARAM_STR);
 
             $stmtTransaction->execute();
 
@@ -148,6 +150,7 @@ class TransactionRepository extends Repository
                 $transactionData['idBox'],
                 $transactionData['numberOfBoxes'],
                 $transactionData['idPrice'],
+                $transactionData['priceFruit'],
                 $transactionData['transactionDate'],
                 $transactionData['weight'],
                 $transactionData['amount']

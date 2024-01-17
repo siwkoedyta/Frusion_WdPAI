@@ -9,6 +9,7 @@ class Transaction
     private $idTypeBox;
     private $numberOfBoxes;
     private $idPriceFruit;
+    private $priceFruit;
     private $transactionDate;
     private $weight;
     private $amount;
@@ -20,6 +21,7 @@ class Transaction
         $idTypeBox,
         $numberOfBoxes,
         $idPriceFruit,
+        $priceFruit,
         $transactionDate,
         $weight,
         $amount
@@ -30,6 +32,7 @@ class Transaction
         $this->idTypeBox = $idTypeBox;
         $this->numberOfBoxes = $numberOfBoxes;
         $this->idPriceFruit = $idPriceFruit;
+        $this->priceFruit = $priceFruit;
         $this->transactionDate = $transactionDate;
         $this->weight = $weight;
         $this->amount = $amount;
@@ -80,6 +83,11 @@ class Transaction
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    public function getPriceFruit()
+    {
+        return $this->priceFruit;
     }
 
 }

@@ -207,7 +207,7 @@
                                     <div class="cala_cena">
                                         <div id="mnoznik">x</div>
 
-                                        <div id="wartość_ceny"><?= $fruit->getPriceFruit(); ?></div>
+                                        <div id="wartość_ceny"><?= $transaction->getPriceFruit(); ?></div>
                                         <div id="złoty_cena">zł</div>
                                     </div>
                                 </div>
