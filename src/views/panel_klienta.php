@@ -190,7 +190,7 @@
                         <div class="prawa_strona">
                             <div class="prostokat_zielony">
                                 <div class="cala_wartosc">
-                                    <div id="wartość_kwoty"><?= number_format($transaction->getAmount(), 2, ',', ' '); ?></div>
+                                    <div id="wartość_kwoty"><?= number_format($transaction->getAmount(), 2, '.', ' '); ?></div>
                                     <div id="złoty_wartosc">zł</div>
                                 </div>
                             </div>

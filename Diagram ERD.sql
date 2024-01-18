@@ -237,7 +237,7 @@ CREATE TABLE public."Transaction" (
     "transactionDate" date NOT NULL,
     weight numeric NOT NULL,
     amount numeric NOT NULL,
-    "priceFruit" numeric
+    "priceFruit" numeric NOT NULL
 );
 
 
@@ -279,7 +279,7 @@ CREATE TABLE public."User" (
     "lastName" character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
-    "idAdmin" integer
+    "idAdmin" integer NOT NULL
 );
 
 
