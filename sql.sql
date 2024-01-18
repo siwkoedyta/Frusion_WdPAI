@@ -44,26 +44,35 @@ create table public."FruitPrices" (
                                           match simple on update no action on delete no action
 );
 
-create table public."Transaction" (
-                                      "idTransaction" integer primary key not null default nextval('"Transaction_idTransaction_seq"'::regclass),
-                                      "idUser" integer not null,
-                                      "idAdmin" integer not null,
-                                      weight_with_boxes numeric not null,
-                                      "idBox" integer not null,
-                                      "numberOfBoxes" integer not null,
-                                      "idPrice" integer not null,
-                                      "transactionDate" date not null,
-                                      weight numeric not null,
-                                      amount numeric not null,
-                                      foreign key ("idAdmin") references public."Admin" ("idAdmin")
-                                          match simple on update no action on delete no action,
-                                      foreign key ("idBox") references public."Box" ("idBox")
-                                          match simple on update no action on delete no action,
-                                      foreign key ("idPrice") references public."FruitPrices" ("idPrice")
-                                          match simple on update no action on delete no action,
-                                      foreign key ("idUser") references public."User" ("idUser")
-                                          match simple on update no action on delete no action
+create table "Transaction"
+(
+    "idTransaction"   serial
+        constraint "idTransaction"
+            primary key,
+    "idUser"          integer not null
+        constraint "idUser"
+            references "User"
+            on update cascade on delete cascade,
+    "idAdmin"         integer not null
+        constraint "idAdmin"
+            references "Admin"
+            on update cascade on delete cascade,
+    weight_with_boxes numeric not null,
+    "idBox"           integer not null
+        constraint "idBox"
+            references "Box"
+            on update cascade on delete cascade,
+    "numberOfBoxes"   integer not null,
+    "idPrice"         integer not null
+        constraint "idPrice"
+            references "FruitPrices"
+            on update cascade on delete cascade,
+    "transactionDate" date    not null,
+    weight            numeric not null,
+    amount            numeric not null,
+    "priceFruit"      numeric
 );
+
 
 
 create table "User"
